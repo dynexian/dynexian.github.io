@@ -7,25 +7,26 @@
     <style>
         body { margin: 0; overflow: hidden; background-color: #010103; font-family: 'Courier New', monospace; touch-action: none; }
         
-        /* --- MINIMAL UI OVERLAY --- */
         #ui {
             position: absolute; bottom: 30px; width: 100%; text-align: center;
             color: rgba(255, 255, 255, 0.4); letter-spacing: 3px; font-size: 0.7rem;
             pointer-events: none; z-index: 10;
         }
         
+        /* THE LOADER */
         #loading {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             color: #00ffff; letter-spacing: 6px; font-size: 0.9rem; pointer-events: none;
-            transition: opacity 1s; text-shadow: 0 0 20px #00ffff; z-index: 40;
+            transition: opacity 1s ease; text-shadow: 0 0 20px #00ffff; z-index: 40; opacity: 1;
         }
 
-        /* --- THE MANIFESTO (Welcome Screen) --- */
+        /* THE MANIFESTO (Hidden initially to let loader finish) */
         #welcome-modal {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(1, 1, 3, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 30; transition: opacity 1s ease; padding: 20px; box-sizing: border-box;
+            z-index: 30; transition: opacity 1.5s ease; padding: 20px; box-sizing: border-box;
+            opacity: 0; pointer-events: none;
         }
         .manifesto-box {
             max-width: 450px; text-align: center; color: #fff;
@@ -37,9 +38,8 @@
             font-size: 1.5rem; color: #00ffff; letter-spacing: 4px; margin-bottom: 20px;
             text-shadow: 0 0 15px rgba(0, 255, 255, 0.5); font-weight: normal;
         }
-        .manifesto-box p {
-            font-size: 0.9rem; line-height: 1.8; color: #cccccc; margin-bottom: 30px;
-        }
+        .manifesto-box p { font-size: 0.9rem; line-height: 1.8; color: #cccccc; margin-bottom: 30px; }
+        
         .enter-btn {
             padding: 12px 30px; background: transparent; border: 1px solid #ff0077;
             color: #ff0077; cursor: pointer; font-family: inherit; letter-spacing: 3px;
@@ -47,7 +47,32 @@
         }
         .enter-btn:hover, .enter-btn:active { background: #ff0077; color: #fff; box-shadow: 0 0 20px rgba(255, 0, 119, 0.5); }
 
-        /* --- THE WISH READER --- */
+        /* THE PHILOSOPHY LINK */
+        .subtle-link {
+            display: inline-block; margin-top: 25px; color: #00ffff; 
+            font-size: 0.7rem; letter-spacing: 2px; text-decoration: none; 
+            opacity: 0.6; transition: 0.3s; cursor: pointer; text-transform: uppercase;
+        }
+        .subtle-link:hover { opacity: 1; text-shadow: 0 0 10px #00ffff; }
+
+        /* THE PHILOSOPHY MODAL */
+        #philosophy-modal {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95);
+            width: 90%; max-width: 500px; padding: 35px 25px;
+            background: rgba(5, 5, 10, 0.98); border: 1px solid #00ffff;
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border-radius: 4px; color: #fff; text-align: center;
+            z-index: 35; opacity: 0; pointer-events: none; transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.9);
+        }
+        #philosophy-modal.active { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+        #philosophy-text {
+            font-size: 0.9rem; line-height: 1.8; color: #cccccc; text-align: left;
+            max-height: 50vh; overflow-y: auto; padding-right: 10px; margin-bottom: 20px;
+        }
+        #philosophy-text h2 { color: #00ffff; font-size: 1.2rem; letter-spacing: 3px; text-align: center; margin-bottom: 20px; font-weight: normal;}
+
+        /* THE WISH READER */
         #wish-modal {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95);
             width: 85%; max-width: 350px; padding: 35px 25px;
@@ -59,24 +84,16 @@
         }
         #wish-modal.active { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
         
-        /* SCROLLABLE TEXT UPGRADE */
         #wish-text { 
-            font-size: 1.05rem; 
-            line-height: 1.7; 
-            font-style: italic; 
-            margin-bottom: 25px; 
-            color: #ffffff; 
-            max-height: 40vh; /* Limits height to 40% of screen */
-            overflow-y: auto; /* Enables vertical scrolling */
-            padding-right: 10px; /* Space for the scrollbar */
-            text-align: left; /* Better for long paragraphs */
+            font-size: 1.05rem; line-height: 1.7; font-style: italic; margin-bottom: 25px; color: #ffffff; 
+            max-height: 40vh; overflow-y: auto; padding-right: 10px; text-align: left;
         }
         
-        /* Custom Scrollbar for the Wish Text */
-        #wish-text::-webkit-scrollbar { width: 4px; }
-        #wish-text::-webkit-scrollbar-track { background: rgba(0, 255, 255, 0.1); border-radius: 4px; }
-        #wish-text::-webkit-scrollbar-thumb { background: rgba(255, 0, 119, 0.6); border-radius: 4px; }
-        #wish-text::-webkit-scrollbar-thumb:hover { background: rgba(255, 0, 119, 1); }
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: rgba(0, 255, 255, 0.1); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 0, 119, 0.6); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 0, 119, 1); }
 
         #wish-author { font-size: 0.8rem; font-weight: bold; color: #00ffff; letter-spacing: 3px; text-transform: uppercase; opacity: 0.8; text-align: center; margin-top: 15px; }
         
@@ -93,6 +110,7 @@
             .manifesto-box p { font-size: 0.85rem; }
             #ui { font-size: 0.6rem; letter-spacing: 2px; }
             #wish-text { font-size: 0.95rem; }
+            #philosophy-modal { width: 95%; padding: 25px 15px; }
         }
     </style>
 </head>
@@ -104,10 +122,24 @@
         <div class="manifesto-box">
             <h1>THE LIVING ARCHIVE</h1>
             <p>Thank you for making my day special.<br><br>
-               This tree will stand as digital history long after I am gone. The glowing orbs scattered below are the wishes and blessings you have given me.<br><br>
+               This tree will stand as digital history long after I am gone. The glowing crystals scattered below are the wishes and blessings you have given me.<br><br>
                Rotate the world. Tap the lights. I hope you find yours here.</p>
             <button class="enter-btn" onclick="enterSanctuary(event)">Explore</button>
+            <br>
+            <a class="subtle-link" onclick="openPhilosophy(event)">The Philosophy Behind This</a>
         </div>
+    </div>
+
+    <div id="philosophy-modal">
+        <div id="philosophy-text">
+            <h2>WHY I BUILT THIS</h2>
+            This year, I chose not to post a birthday status or broadcast a countdown. In an age of algorithmic reminders and forced notifications, I wanted to step away from the noise and see what remained.<br><br>
+            What remained were the people who genuinely remembered.<br><br>
+            Only a handful of people reached out today, but every single message was authentic. I didn't want these words to just get lost in a chat history, so I built this Living Archive to preserve them as digital history.<br><br>
+            I initially hesitated to put everyone's messages together in one open space. But I realized this isn't just a webpage—it is a Gallery of Gratitude. Every glowing crystal here represents someone who holds a real space in my life.<br><br>
+            If you are reading this, you are part of my foundation. Thank you.
+        </div>
+        <button class="close-btn" style="border-color: #00ffff; color: #00ffff; background: rgba(0,255,255,0.1);" onclick="closePhilosophy(event)">RETURN</button>
     </div>
 
     <div id="ui">
@@ -137,65 +169,38 @@
         import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
         // --- 0. AUDIO ENGINE (PLACEHOLDERS) ---
-        // Put your mp3 files in the same folder as index.html, or use direct links!
-        const bgMusic = new Audio('background-music.mp3'); // REPLACE THIS
-        bgMusic.loop = true;
-        bgMusic.volume = 0.4;
-
-        const chimeSound = new Audio('chime-sound.mp3'); // REPLACE THIS
-        chimeSound.volume = 0.8;
+        const bgMusic = new Audio('background-music.mp3'); 
+        bgMusic.loop = true; bgMusic.volume = 0.4;
+        const chimeSound = new Audio('chime-sound.mp3'); 
+        chimeSound.volume = 0.4;
 
         window.initAudio = function() {
-            // Start background music when user clicks "Explore"
-            bgMusic.play().catch(e => console.log("Music play prevented by browser:", e));
+            bgMusic.play().catch(e => console.log("Audio not played automatically."));
         }
-
         function playChime() {
-            // Play chime sound when orb is tapped
-            chimeSound.currentTime = 0; // Reset so it plays immediately even if tapped fast
-            chimeSound.play().catch(e => console.log("Chime play prevented:", e));
+            chimeSound.currentTime = 0; 
+            chimeSound.play().catch(e => console.log("Chime not played."));
         }
 
         // --- 1. YOUR CURATED MEMORIES ---
         const wishesDatabase = [
-            { 
-                name: "Neeraj", 
-                text: `Happy Birthday Subham,<br><br>Birthdays should be filled with surprises but your birthday was a surprise itself. Bataya hi nahi aaj bday hai...<br><br>Happy Birthday once again.<br>Have a great day ahead, a great year and life full of opportunities. And don't forget to talk in person with me if you had any problems in life and need anything from me, I said earlier I am there for everyone no matter what.` 
-            },
-            { 
-                name: "Dhananjay", 
-                text: `Happy Birthday, Shubham<br><br>It's crazy to think it’s already been so many years since we first connected and yet, every moment since has felt like a quiet, steady kind of magic. At the beginning i was hesitant to open up to you and then i found it really difficult to accept the fact that someone really wants to be friends with me and genuinely care about me but after that You’ve become more than a friend, you’ve been a safe space, a calm in the chaos, and one of the bestest people I’ve ever known.<br><br>I am now thinking about all those late nights and how you’d listen so deeply, even when you were carrying your own weight in silence. You never make a fuss, never put your struggles out there, but I can see how hard you work, how carefully you build things.<br><br>Not only websites, but also trust, comfort, and connection. You create richness without needing credit, and that says everything about your beautiful heart.<br><br>From going to movies to helping me build portfolios and brilliant websites, you’ve shown up in ways that i cannot describe in words. So today, I hope you will allow me to do something for you. And I hope you feel celebrated, not just for what you do, but for who you are: steady, kind, and deeply loved.<br><br>This year, I wish you peace, joy, and the courage to lean on others the way you’ve always let us lean on you. You deserve every good thing.<br><br>Thank you for being you. Happy Birthday 💙` 
-            },
-            { 
-                name: "Swikruti", 
-                text: `Happy Birthday 🎂 All the best wishes to you on your special day 🤭<br><br>May this year bring you an ample amount of happiness, and all your wishes be fulfilled.<br><br>You can finally be called as being someone from dinosaur age... 🤭 And.... Enjoy your day while you are at it` 
-            },
-            { 
-                name: "Haripriya", 
-                text: `Happiest bdayy shubham!<br><br>God bless you and be happy. May you be showered wid loads of joy and happiness and success.` 
-            },
-            { 
-                name: "Sai", 
-                text: `happy birthdayy ✨` 
-            },
-            { 
-                name: "Simran", 
-                text: `HAPPY BIRTHDAY 🎂 🥳` 
-            },
-            { 
-                name: "Swayam", 
-                text: `happy birthday bhai` 
-            },
-            { 
-                name: "Maternal Family", 
-                text: `Happy birthday and blessings.<br><br>- From your Aunties, Cousin Brother & Sister` 
-            },
-            { 
-                name: "Paternal Family", 
-                text: `Happy birthday wishes and endless blessings.<br><br>- From your Aunt and Grandmother` 
-            }
+            { name: "Neeraj", text: `Happy Birthday Subham,<br><br>Birthdays should be filled with surprises but your birthday was a surprise itself. Bataya hi nahi aaj bday hai...<br><br>I don't know about the course thing situation, I am telling you that was not intentionally said so that nobody would join that and I gained any advantage, I had enrolled my name in that on the first day in confusion, after knowing it will be in hybrid mode and only 30 students would come so I was demotivated. I said not to join in the sense that nobody is taking this seriously and literally the teacher is not teaching just making fun games.<br><br>Sorry if that thing had made you felt bad.<br><br>Happy Birthday once again.<br>Have a great day ahead, a great year and life full of opportunities. And don't forget to talk in person with me if you had any problems in life and need anything from me, I said earlier I am there for everyone no matter what.` },
+            { name: "Dhananjay", text: `Happy Birthday, Shubham<br><br>It's crazy to think it’s already been so many years since we first connected and yet, every moment since has felt like a quiet, steady kind of magic. At the beginning i was hesitant to open up to you and then i found it really difficult to accept the fact that someone really wants to be friends with me and genuinely care about me but after that You’ve become more than a friend, you’ve been a safe space, a calm in the chaos, and one of the bestest people I’ve ever known.<br><br>I am now thinking about all those late nights and how you’d listen so deeply, even when you were carrying your own weight in silence. You never make a fuss, never put your struggles out there, but I can see how hard you work, how carefully you build things.<br><br>Not only websites, but also trust, comfort, and connection. You create richness without needing credit, and that says everything about your beautiful heart.<br><br>From going to movies to helping me build portfolios and brilliant websites, you’ve shown up in ways that i cannot describe in words. So today, I hope you will allow me to do something for you. And I hope you feel celebrated, not just for what you do, but for who you are: steady, kind, and deeply loved.<br><br>This year, I wish you peace, joy, and the courage to lean on others the way you’ve always let us lean on you. You deserve every good thing.<br><br>Thank you for being you. Happy Birthday 💙` },
+            { name: "Swikruti", text: `Happy Birthday 🎂 All the best wishes to you on your special day 🤭<br><br>May this year bring you an ample amount of happiness, and all your wishes be fulfilled.<br><br>You can finally be called as being someone from dinosaur age... 🤭 And.... Enjoy your day while you are at it` },
+            { name: "Haripriya", text: `Happiest bdayy shubham!<br><br>God bless you and be happy. May you be showered wid loads of joy and happiness and success.` },
+            { name: "Sai", text: `happy birthdayy ✨` },
+            { name: "Simran", text: `HAPPY BIRTHDAY 🎂 🥳` },
+            { name: "Swayam", text: `happy birthday bhai` },
+            { name: "Maternal Family", text: `Happy birthday and blessings.<br><br>- From your Aunties, Cousin Brother & Sister` },
+            { name: "Paternal Family", text: `Happy birthday wishes and endless blessings.<br><br>- From your Aunt and Grandmother` },
+            { name: "Nishu", text: `Happy Birthday @Shubham R. Vishwakarma 🎉🎉🎉` },
+            { name: "IoT Lab Teammates", text: `Happy birthday!` },
+            { name: "ED Lab Teammates", text: `Happy birthday!` },
+            { name: "Diploma Buddies", text: `Happy birthday!` },
+            { name: "Stella Mam", text: `Happy birthday!` }
         ];
-        // --- 2. MOBILE DETECTION & OPTIMIZATION ---
+
+        // --- 2. CORE SETUP ---
         const isMobile = window.innerWidth < 768;
         const cameraZ = isMobile ? 68 : 55; 
         const cameraY = isMobile ? 22 : 15;
@@ -245,11 +250,8 @@
         const branchMat = new THREE.MeshStandardMaterial({ color: P.wood, roughness: 0.9, metalness: 0.1 });
 
         const leafGeo = new THREE.CylinderGeometry(0.2, 0, 0.8, 3, 1, false); leafGeo.scale(1, 1, 0.1); leafGeo.translate(0, 0.4, 0);
-        const leafMat = new THREE.MeshPhysicalMaterial({
-            color: P.leaf, emissive: P.leaf, emissiveIntensity: 1.8, roughness: 0.1, metalness: 0.1, side: THREE.DoubleSide
-        });
+        const leafMat = new THREE.MeshPhysicalMaterial({ color: P.leaf, emissive: P.leaf, emissiveIntensity: 1.8, roughness: 0.1, metalness: 0.1, side: THREE.DoubleSide });
 
-        // Organic dark floor
         const floorGeo = new THREE.PlaneGeometry(300, 300);
         const floorMat = new THREE.MeshStandardMaterial({ color: 0x010105, roughness: 0.35, metalness: 0.8, transparent: true, opacity: 0.85 });
         const floor = new THREE.Mesh(floorGeo, floorMat); floor.rotation.x = -Math.PI / 2; floor.position.y = -8.05; scene.add(floor);
@@ -257,7 +259,7 @@
         const grassGeo = new THREE.ConeGeometry(0.06, 1.2, 3); grassGeo.translate(0, 0.6, 0); 
         const grassMat = new THREE.MeshStandardMaterial({ color: P.env, emissive: P.env, emissiveIntensity: 1.0 });
 
-        // --- 6. GENERATE TREE & ROOTS ---
+        // --- 6. GENERATE TREE ---
         let branchData = [], leafData = [], grassData = [];
         let branchMesh, leafMesh, grassMesh;
 
@@ -329,21 +331,29 @@
         grassData.forEach((g, i) => { dummy.position.copy(g.pos); dummy.rotation.copy(g.rot); dummy.scale.setScalar(g.scale); dummy.updateMatrix(); grassMesh.setMatrixAt(i, dummy.matrix); });
         scene.add(grassMesh);
 
-        // --- 7. RENDER THE WISHES & ROOTS ---
+        // --- 7. RENDER WISHES WITH NON-OVERLAP LOGIC ---
         const wishesGroup = new THREE.Group();
         scene.add(wishesGroup);
 
         const orbGeo = new THREE.IcosahedronGeometry(1.2, 1);
-        const orbMat = new THREE.MeshStandardMaterial({
-            color: 0xffffff, emissive: 0x00ffff, emissiveIntensity: 2.0, roughness: 0.1, flatShading: true
-        });
+        const orbMat = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0x00ffff, emissiveIntensity: 2.0, roughness: 0.1, flatShading: true });
 
+        // FLAWLESS SPACING MATH
+        const totalWishes = wishesDatabase.length;
         wishesDatabase.forEach((wish, index) => {
             const mesh = new THREE.Mesh(orbGeo, orbMat);
-            const radius = 8 + Math.random() * 15; 
-            const angle = (index / wishesDatabase.length) * Math.PI * 2 + Math.random();
             
-            mesh.position.set(Math.cos(angle) * radius, -6.5 + Math.random(), Math.sin(angle) * radius);
+            // Distribute evenly around the 360-degree circle
+            const angle = (index / totalWishes) * Math.PI * 2;
+            
+            // Alternate distance to prevent collision (Evens = inner ring, Odds = outer ring)
+            const baseRadius = (index % 2 === 0) ? 8.5 : 15;
+            const radius = baseRadius + (Math.random() * 2.5); // Add slight organic variation
+            
+            // Randomize height slightly
+            const yOffset = -6.8 + (Math.random() * 1.5);
+            
+            mesh.position.set(Math.cos(angle) * radius, yOffset, Math.sin(angle) * radius);
             mesh.userData = { isWish: true, author: wish.name, text: wish.text };
             
             const light = new THREE.PointLight(0x00ffff, 2.0, 8);
@@ -355,7 +365,7 @@
         const rootMat = new THREE.MeshStandardMaterial({ color: 0xffaa00, emissive: 0xff6600, emissiveIntensity: 2.0, roughness: 0.1, flatShading: true });
         const foundationOrb = new THREE.Mesh(rootGeo, rootMat);
         foundationOrb.position.set(0, -8.0, 0); 
-        foundationOrb.userData = { isWish: true, author: "The Roots", text: "My Foundation. Born to Rajesh & Arti Vishwakarma. Rooted in the ancient soils of Utkala. Growing toward the future." };
+        foundationOrb.userData = { isWish: true, author: "The Roots", text: "My Foundation.<br><br>Born to Rajesh & Arti Vishwakarma. Rooted in the ancient soils of Utkala.<br><br>Growing toward the future." };
         const rootLight = new THREE.PointLight(0xff6600, 3.0, 15);
         foundationOrb.add(rootLight); wishesGroup.add(foundationOrb);
 
@@ -368,7 +378,17 @@
         const partMat = new THREE.PointsMaterial({ color: 0x00ffff, size: 1.5, map: glowTex, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false });
         const particles = new THREE.Points(partGeo, partMat); scene.add(particles);
 
-        // --- 8. THE BULLETPROOF GHOST-CLICK FIX ---
+        // --- 8. THE LOADER LOGIC ---
+        setTimeout(() => {
+            document.getElementById('loading').style.opacity = '0';
+            setTimeout(() => {
+                const welcome = document.getElementById('welcome-modal');
+                welcome.style.opacity = '1';
+                welcome.style.pointerEvents = 'auto';
+            }, 800); 
+        }, 1500);
+
+        // --- 9. RAYCASTING ---
         const raycaster = new THREE.Raycaster();
         raycaster.params.Points.threshold = 1.5; 
         const pointer = new THREE.Vector2();
@@ -385,7 +405,8 @@
 
         renderer.domElement.addEventListener('pointerup', (event) => {
             if (document.getElementById('wish-modal').classList.contains('active')) return;
-            if (document.getElementById('welcome-modal').style.display !== 'none' && document.getElementById('welcome-modal').style.opacity !== '0') return;
+            if (document.getElementById('welcome-modal').style.opacity !== '0') return;
+            if (document.getElementById('philosophy-modal').classList.contains('active')) return;
 
             let clientX = event.clientX; let clientY = event.clientY;
             if (event.changedTouches && event.changedTouches.length > 0) { 
@@ -403,10 +424,8 @@
 
             if (intersects.length > 0) {
                 activeOrb = intersects[0].object;
-                
                 playChime();
 
-                // Using innerHTML so the <br> tags render correctly!
                 document.getElementById('wish-text').innerHTML = `"${activeOrb.userData.text}"`;
                 document.getElementById('wish-author').innerText = `- ${activeOrb.userData.author}`;
                 
@@ -424,9 +443,7 @@
                 closeBtn.style.cursor = 'not-allowed';
 
                 setTimeout(() => { 
-                    closeBtn.disabled = false; 
-                    closeBtn.style.opacity = '1';
-                    closeBtn.style.cursor = 'pointer';
+                    closeBtn.disabled = false; closeBtn.style.opacity = '1'; closeBtn.style.cursor = 'pointer';
                 }, 800);
 
                 activeOrb.material.emissiveIntensity = 6.0; 
@@ -439,8 +456,18 @@
             window.initAudio();
             const modal = document.getElementById('welcome-modal');
             modal.style.opacity = '0';
-            setTimeout(() => { modal.style.display = 'none'; }, 1000);
+            modal.style.pointerEvents = 'none';
             controls.autoRotate = true; 
+        }
+
+        window.openPhilosophy = function(event) {
+            if(event) { event.preventDefault(); event.stopPropagation(); }
+            document.getElementById('philosophy-modal').classList.add('active');
+        }
+
+        window.closePhilosophy = function(event) {
+            if(event) { event.preventDefault(); event.stopPropagation(); }
+            document.getElementById('philosophy-modal').classList.remove('active');
         }
 
         window.closeModal = function(event) {
@@ -449,8 +476,7 @@
             if(activeOrb) activeOrb.material.emissiveIntensity = 2.0; 
         }
 
-        // --- 9. ANIMATION LOOP ---
-        document.getElementById('loading').style.opacity = '0';
+        // --- 10. ANIMATION LOOP ---
         const clock = new THREE.Clock();
 
         function animate() {
@@ -481,8 +507,7 @@
                     orb.rotation.y -= 0.005; 
                 } else {
                     orb.position.y += Math.sin(time * 1.5 + i) * 0.008;
-                    orb.rotation.y += 0.01; 
-                    orb.rotation.x += 0.005;
+                    orb.rotation.y += 0.01; orb.rotation.x += 0.005;
                 }
             });
 
@@ -502,8 +527,7 @@
 
         window.addEventListener('resize', () => {
             const isMob = window.innerWidth < 768;
-            camera.position.z = isMob ? 68 : 55; 
-            camera.position.y = isMob ? 22 : 15;
+            camera.position.z = isMob ? 68 : 55; camera.position.y = isMob ? 22 : 15;
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
@@ -511,7 +535,6 @@
         });
 
         animate();
-
     </script>
 </body>
 </html>
