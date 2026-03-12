@@ -1,6 +1,182 @@
-<html>
-<body style="background:#010103; color:#00ffff; text-align:center; font-family:monospace; padding-top:20%;">
-    <h1>Shubham Vishwakarma</h1>
-    <p>Main website coming soon.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shubham's WIP</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background-color: #010103; /* The exact dark color of the artwork */
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .container {
+            text-align: center;
+            z-index: 2;
+            padding: 20px;
+            max-width: 700px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Chibi Art Integration */
+        .chibi-art {
+            max-width: 300px; /* Adjust size here */
+            height: auto;
+            margin-bottom: 20px;
+            /* A subtle cyan glow around the art itself */
+            filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.4));
+        }
+
+        h1 {
+            font-size: 2rem;
+            letter-spacing: 5px;
+            margin-bottom: 15px;
+            color: #00ffff;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            font-weight: normal;
+            text-transform: uppercase;
+        }
+
+        p {
+            color: #cccccc;
+            letter-spacing: 1px;
+            line-height: 1.8;
+            margin-bottom: 35px;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        /* Status Highlight */
+        .status-tag {
+            border: 1px solid #ff0077;
+            color: #ff0077;
+            padding: 3px 8px;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            border-radius: 4px;
+            background: rgba(255, 0, 119, 0.1);
+        }
+
+        /* Button Layout */
+        .button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            transition: all 0.4s ease;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        /* The Archive Button */
+        .archive-btn {
+            border: 1px solid #00ffff;
+            color: #00ffff;
+            background: rgba(0, 255, 255, 0.05);
+        }
+
+        .archive-btn:hover {
+            background: #00ffff;
+            color: #010103;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
+            font-weight: bold;
+        }
+
+        /* The ADHD/Lazy Nudge Button */
+        .nudge-btn {
+            border: 1px solid #ff0077;
+            color: #ff0077;
+            background: transparent;
+        }
+
+        .nudge-btn:hover {
+            background: #ff0077;
+            color: #ffffff;
+            box-shadow: 0 0 25px rgba(255, 0, 119, 0.6);
+        }
+
+        /* Ambient Breathing Glow (Moves behind the container) */
+        .bg-glow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,0,119,0.06) 0%, rgba(0,0,0,0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            pointer-events: none;
+            animation: pulse 4s infinite alternate ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.4; transform: translate(-50%, -50%) scale(0.8); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 1.4rem; letter-spacing: 3px; }
+            p { font-size: 0.85rem; }
+            .button-container { flex-direction: column; gap: 15px; }
+            .chibi-art { max-width: 220px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+
+    <div class="container">
+        <img src="image_0.png" alt="Lost and confused chibi Shubham" class="chibi-art">
+        
+        <h1>Shubham Vishwakarma</h1>
+        <p>
+            Status: <span class="status-tag">Under Construction</span><br><br>
+            Look, I bought this domain with every intention of building a proper, professional portfolio today.<br><br>
+            Then I got side-tracked by <span style="color: #ff0077;">one thing</span> then another then another and now I got <span style="color: #00ffff;">idk many tabs open</span> on my laptop and in my brain hehe. I'll finish this eventually.
+        </p>
+        
+        <div class="button-container">
+            <a href="/archive" class="btn archive-btn">See The Shiny 3D Thing</a>
+            <button class="btn nudge-btn" onclick="nudgeMe()">Nudge Me To Work</button>
+        </div>
+    </div>
+
+    <script>
+        // Random funny alerts when someone clicks the nudge button
+        const excuses = [
+            "Nudge received! Shubham will definitely finish this tomorrow... or next month.",
+            "Alert sent to Shubham's brain. (Warning: Currently hyperfocusing on another random project. Please hold).",
+            "Beep boop. Guilt trip successfully delivered. He's opening VS Code now!",
+            "Message received: 'Stop browsing new domains and write some CSS, Shubham!'",
+            "Nudge successful! Shubham is now feeling 100% more guilty about procrastinating."
+        ];
+
+        function nudgeMe() {
+            const randomExcuse = excuses[Math.floor(Math.random() * excuses.length)];
+            alert(randomExcuse);
+        }
+    </script>
 </body>
 </html>
