@@ -2,132 +2,95 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Shubham's WIP</title>
     <style>
+        :root {
+            --ghost-color: rgba(0, 255, 255, 0.8);
+            --ghost-glow: rgba(0, 255, 255, 0.6);
+            --bg-color: #010103;
+        }
+
         body {
-            margin: 0;
-            height: 100vh;
-            background-color: #010103; /* The exact dark color of the artwork */
-            color: #ffffff;
+            margin: 0; height: 100vh; width: 100vw;
+            background-color: var(--bg-color); color: #ffffff;
             font-family: 'Courier New', Courier, monospace;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            overflow: hidden; cursor: crosshair; 
+            user-select: none; -webkit-user-select: none;
+            touch-action: none; /* Prevents mobile pull-to-refresh */
+            -webkit-tap-highlight-color: transparent; /* Removes blue tap highlight */
         }
         
         .container {
-            text-align: center;
-            z-index: 2;
-            padding: 20px;
-            max-width: 700px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            text-align: center; z-index: 2; padding: 20px;
+            max-width: 700px; display: flex; flex-direction: column;
+            align-items: center; pointer-events: none; /* Lets you click through to background easily */
         }
 
-        /* Chibi Art Integration */
+        /* Re-enable pointer events for buttons inside the container */
+        .container .button-container, .container .status-tag {
+            pointer-events: auto;
+        }
+
         .chibi-art {
-            max-width: 300px; /* Adjust size here */
-            height: auto;
-            margin-bottom: 20px;
-            /* A subtle cyan glow around the art itself */
-            filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.4));
+            max-width: 300px; height: auto; margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(255, 0, 119, 0.4));
+            pointer-events: none;
         }
 
         h1 {
-            font-size: 2rem;
-            letter-spacing: 5px;
-            margin-bottom: 15px;
-            color: #00ffff;
-            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-            font-weight: normal;
-            text-transform: uppercase;
+            font-size: 2rem; letter-spacing: 5px; margin-bottom: 15px;
+            color: #00ffff; text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            font-weight: normal; text-transform: uppercase;
         }
 
         p {
-            color: #cccccc;
-            letter-spacing: 1px;
-            line-height: 1.8;
-            margin-bottom: 35px;
-            font-size: 0.95rem;
-            opacity: 0.9;
+            color: #cccccc; letter-spacing: 1px; line-height: 1.8;
+            margin-bottom: 35px; font-size: 0.95rem; opacity: 0.9;
+            pointer-events: none;
         }
 
-        /* Status Highlight */
         .status-tag {
-            border: 1px solid #ff0077;
-            color: #ff0077;
-            padding: 3px 8px;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            border-radius: 4px;
-            background: rgba(255, 0, 119, 0.1);
+            border: 1px solid #ff0077; color: #ff0077;
+            padding: 3px 8px; text-transform: uppercase;
+            font-size: 0.75rem; letter-spacing: 2px;
+            border-radius: 4px; background: rgba(255, 0, 119, 0.1);
         }
 
-        /* Button Layout */
         .button-container {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
+            display: flex; gap: 20px; justify-content: center;
+            flex-wrap: wrap; z-index: 10;
         }
         
         .btn {
-            display: inline-block;
-            padding: 12px 25px;
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 0.8rem;
-            transition: all 0.4s ease;
-            border-radius: 4px;
-            cursor: pointer;
-            font-family: inherit;
+            display: inline-block; padding: 12px 25px;
+            text-decoration: none; text-transform: uppercase;
+            letter-spacing: 2px; font-size: 0.8rem;
+            transition: all 0.4s ease; border-radius: 4px;
+            cursor: pointer; font-family: inherit; position: relative;
         }
 
-        /* The Archive Button */
-        .archive-btn {
-            border: 1px solid #00ffff;
-            color: #00ffff;
-            background: rgba(0, 255, 255, 0.05);
+        .archive-btn { border: 1px solid #00ffff; color: #00ffff; background: rgba(0, 255, 255, 0.05); }
+        .archive-btn:hover, .archive-btn:active { background: #00ffff; color: #010103; box-shadow: 0 0 25px rgba(0, 255, 255, 0.6); font-weight: bold; }
+
+        .nudge-btn { border: 1px solid #ff0077; color: #ff0077; background: rgba(1, 1, 3, 0.8); }
+        .nudge-btn:hover, .nudge-btn:active { background: #ff0077; color: #ffffff; box-shadow: 0 0 25px rgba(255, 0, 119, 0.6); }
+
+        #guilt-tracker {
+            position: absolute; top: 20px; color: #ff0077;
+            font-size: 0.9rem; letter-spacing: 2px; opacity: 0;
+            transition: opacity 0.5s; text-shadow: 0 0 15px rgba(255, 0, 119, 0.8);
+            pointer-events: none; z-index: 20; font-weight: bold;
         }
 
-        .archive-btn:hover {
-            background: #00ffff;
-            color: #010103;
-            box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
-            font-weight: bold;
-        }
-
-        /* The ADHD/Lazy Nudge Button */
-        .nudge-btn {
-            border: 1px solid #ff0077;
-            color: #ff0077;
-            background: transparent;
-        }
-
-        .nudge-btn:hover {
-            background: #ff0077;
-            color: #ffffff;
-            box-shadow: 0 0 25px rgba(255, 0, 119, 0.6);
-        }
-
-        /* Ambient Breathing Glow (Moves behind the container) */
         .bg-glow {
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(255,0,119,0.06) 0%, rgba(0,0,0,0) 70%);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1;
-            pointer-events: none;
-            animation: pulse 4s infinite alternate ease-in-out;
+            position: absolute; width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(255,0,119,0.05) 0%, rgba(0,0,0,0) 70%);
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 1; pointer-events: none;
+            animation: pulse 5s infinite alternate ease-in-out;
         }
 
         @keyframes pulse {
@@ -135,48 +98,332 @@
             100% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
         }
 
+        .cyber-tab {
+            position: absolute; padding: 10px 15px;
+            background: rgba(10, 15, 30, 0.9);
+            border: 1px solid rgba(0, 255, 255, 0.5);
+            border-top: 3px solid #00ffff; color: #00ffff;
+            font-size: 0.75rem; letter-spacing: 1px;
+            backdrop-filter: blur(8px); border-radius: 6px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+            cursor: grab; z-index: 5; display: flex; align-items: center; gap: 10px; white-space: nowrap;
+            transform-origin: center center;
+            top: 0; left: 0; 
+            touch-action: none; /* Crucial for swiping tabs on mobile */
+        }
+        .cyber-tab:active { cursor: grabbing; box-shadow: 0 15px 30px rgba(0,255,255,0.2); }
+        .tab-close { color: #ff0077; cursor: pointer; font-weight: bold; transition: 0.2s; padding: 5px; }
+        .tab-close:active { text-shadow: 0 0 10px #ff0077; transform: scale(1.2); }
+
+        @keyframes shake {
+            0%, 100% { transform: translate(1px, 1px) rotate(0deg); }
+            20% { transform: translate(-5px, 0px) rotate(2deg); }
+            40% { transform: translate(3px, -3px) rotate(-2deg); }
+            60% { transform: translate(-5px, 3px) rotate(0deg); }
+            80% { transform: translate(-2px, -2px) rotate(2deg); }
+        }
+        .shaking { animation: shake 0.3s; }
+
+        #ghost {
+            position: fixed; top: 0; left: 0;
+            width: 55px; height: 65px;
+            background: var(--ghost-color);
+            border-radius: 30px 30px 15px 15px;
+            cursor: pointer; z-index: 100;
+            box-shadow: 0 0 25px var(--ghost-glow), inset 0 0 15px rgba(255,255,255,0.9), inset 0 -10px 20px rgba(0,0,0,0.2);
+            transform-origin: center bottom;
+            transition: background 0.3s, box-shadow 0.3s;
+            filter: drop-shadow(0 15px 10px rgba(0,0,0,0.4));
+            touch-action: none;
+        }
+
+        #ghost::after {
+            content: ''; position: absolute; bottom: -6px; left: 0;
+            width: 100%; height: 12px;
+            background: radial-gradient(circle at 50% 100%, transparent 5px, var(--ghost-color) 6px);
+            background-size: 18.3px 12px;
+            transition: background 0.3s;
+        }
+
+        .eyes { position: absolute; top: 22px; width: 100%; display: flex; justify-content: space-evenly; }
+        .eye { width: 13px; height: 16px; background: #fff; border-radius: 50%; position: relative; box-shadow: 0 2px 4px rgba(0,0,0,0.4); transition: transform 0.15s ease-out; }
+        .pupil { width: 6px; height: 6px; background: #010103; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+
+        .mouth {
+            position: absolute; top: 40px; left: 50%;
+            transform: translateX(-50%); width: 8px; height: 4px;
+            background: #010103; border-radius: 0 0 10px 10px;
+            transition: all 0.2s; opacity: 0.6;
+        }
+
+        .sweat {
+            position: absolute; top: 5px; right: 5px;
+            width: 8px; height: 12px; background: #ffffff;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            opacity: 0; transition: opacity 0.2s, transform 0.3s;
+            box-shadow: 0 0 5px rgba(255,255,255,0.8);
+        }
+
         @media (max-width: 768px) {
             h1 { font-size: 1.4rem; letter-spacing: 3px; }
-            p { font-size: 0.85rem; }
-            .button-container { flex-direction: column; gap: 15px; }
-            .chibi-art { max-width: 220px; }
+            p { font-size: 0.85rem; margin-bottom: 20px; }
+            .button-container { flex-direction: column; gap: 15px; width: 80%; }
+            .chibi-art { max-width: 180px; } /* Smaller on mobile to leave room for physics toys */
+            .bg-glow { width: 300px; height: 300px; }
+            .cyber-tab { font-size: 0.6rem; padding: 8px 12px; }
+            #ghost { transform: scale(0.85); } /* Slightly smaller ghost for mobile */
         }
     </style>
 </head>
 <body>
 
     <div class="bg-glow"></div>
+    <div id="guilt-tracker">GUILT LEVEL: <span id="guilt-score">0</span>%</div>
 
-    <div class="container">
-        <img src="image_0.png" alt="Lost and confused chibi Shubham" class="chibi-art">
-        
+    <div id="ghost">
+        <div class="sweat" id="ghost-sweat"></div>
+        <div class="eyes"><div class="eye"><div class="pupil"></div></div><div class="eye"><div class="pupil"></div></div></div>
+        <div class="mouth" id="ghost-mouth"></div>
+    </div>
+
+    <div class="container" id="main-container">
+        <img src="image_0.png" alt="Devastated developer Shubham Vishwakarma" class="chibi-art">
         <h1>Shubham Vishwakarma</h1>
         <p>
             Status: <span class="status-tag">Under Construction</span><br><br>
             Look, I bought this domain with every intention of building a proper, professional portfolio today.<br><br>
-            Then I got side-tracked by <span style="color: #ff0077;">one thing</span> then another then another and now I got <span style="color: #00ffff;">idk many tabs open</span> on my laptop and in my brain hehe. I'll finish this eventually.
+            Then I got side-tracked by <span style="color: #ff0077;">one thing</span> then another then another and now I got <span style="color: #00ffff;">idk many tabs open</span> on my laptop and in my brain hehe. I'll finish this eventually.<br><br>
+            <span style="font-size: 0.7rem; opacity: 0.5;">(Tap background. Swipe tabs. Poke ghost.)</span>
         </p>
-        
         <div class="button-container">
             <a href="/archive" class="btn archive-btn">See The Shiny 3D Thing</a>
-            <button class="btn nudge-btn" onclick="nudgeMe()">Nudge Me To Work</button>
+            <button id="nudge-btn" class="btn nudge-btn">Nudge Me To Work</button>
         </div>
     </div>
 
     <script>
-        // Random funny alerts when someone clicks the nudge button
-        const excuses = [
-            "Nudge received! Shubham will definitely finish this tomorrow... or next month.",
-            "Alert sent to Shubham's brain. (Warning: Currently hyperfocusing on another random project. Please hold).",
-            "Beep boop. Guilt trip successfully delivered. He's opening VS Code now!",
-            "Message received: 'Stop browsing new domains and write some CSS, Shubham!'",
-            "Nudge successful! Shubham is now feeling 100% more guilty about procrastinating."
-        ];
+        // --- 1. NUDGE & GUILT LOGIC ---
+        let guiltLevel = 0;
+        const container = document.getElementById('main-container');
+        const guiltTracker = document.getElementById('guilt-tracker');
+        const guiltScore = document.getElementById('guilt-score');
+        const nudgeBtn = document.getElementById('nudge-btn');
 
-        function nudgeMe() {
-            const randomExcuse = excuses[Math.floor(Math.random() * excuses.length)];
-            alert(randomExcuse);
+        nudgeBtn.addEventListener('pointerdown', (e) => {
+            container.classList.remove('shaking');
+            void container.offsetWidth; 
+            container.classList.add('shaking');
+
+            guiltLevel += Math.floor(Math.random() * 20) + 10;
+            if(guiltLevel > 100) guiltLevel = 999; 
+            guiltTracker.style.opacity = '1';
+            guiltScore.innerText = guiltLevel;
+
+            const rect = nudgeBtn.getBoundingClientRect();
+            for(let i=0; i<5; i++) {
+                spawnTab(rect.left + rect.width/2, rect.top + rect.height/2, true);
+            }
+
+            if (guiltLevel === 999) {
+                guiltTracker.innerHTML = "MAXIMUM GUILT ACHIEVED. OPENING VS CODE...";
+                setTimeout(() => { alert("Okay okay, I'll work on it!"); }, 500);
+            }
+        });
+
+        // --- 2. THE PHYSICS ENGINE & TAB SPAWNER ---
+        const tabTitles = [
+            "StackOverflow: How to center a div", "YouTube: 10 Hours of Rain",
+            "Google: Why does my back hurt at 20?", "Localhost:8080 - [FATAL ERROR]",
+            "GitHub: 'Update Readme' (Commit 45)", "Amazon: Mechanical Keyboard",
+            "Spotify: Phonk Playlist", "ChatGPT: Write a function to...",
+            "Figma: Untilted_Final_v3.fig", "Reddit: r/ProgrammerHumor"
+        ];
+        
+        let activeTabs = []; 
+        let highestZIndex = 5; 
+
+        // Unified pointerdown for mobile taps and desktop clicks
+        document.addEventListener('pointerdown', (e) => {
+            if (e.target.closest('.btn') || e.target.closest('#ghost') || e.target.closest('.cyber-tab')) return;
+            spawnTab(e.clientX, e.clientY, false);
+            
+            // On mobile, tapping the background makes the ghost look and fly toward the tap
+            targetX = e.clientX; targetY = e.clientY;
+        });
+
+        function spawnTab(x, y, isExplosion) {
+            const el = document.createElement('div');
+            el.className = 'cyber-tab';
+            highestZIndex++; el.style.zIndex = highestZIndex;
+            
+            const randomTitle = tabTitles[Math.floor(Math.random() * tabTitles.length)];
+            el.innerHTML = `<span>${randomTitle}</span><span class="tab-close">✕</span>`;
+            document.body.appendChild(el);
+
+            const tabObj = {
+                el: el,
+                x: x - (el.offsetWidth / 2), y: y - (el.offsetHeight / 2),
+                vx: isExplosion ? (Math.random() - 0.5) * 30 : (Math.random() - 0.5) * 10,
+                vy: isExplosion ? (Math.random() * -20) - 10 : (Math.random() * -15) - 5,
+                angle: (Math.random() - 0.5) * 40, vAngle: (Math.random() - 0.5) * 5,
+                width: el.offsetWidth, height: el.offsetHeight,
+                isDragging: false
+            };
+
+            el.querySelector('.tab-close').addEventListener('pointerdown', (e) => {
+                e.stopPropagation(); el.remove();
+                activeTabs = activeTabs.filter(t => t !== tabObj);
+            });
+
+            makeThrowable(tabObj);
+            activeTabs.push(tabObj);
         }
+
+        // --- 3. MOBILE-READY DRAG AND THROW LOGIC ---
+        function makeThrowable(tab) {
+            let lastMouseX = 0, lastMouseY = 0;
+
+            tab.el.onpointerdown = (e) => {
+                if (e.target.classList.contains('tab-close')) return;
+                e.preventDefault(); 
+                
+                // Capture the pointer to track fast finger swipes perfectly
+                tab.el.setPointerCapture(e.pointerId);
+                
+                highestZIndex++; tab.el.style.zIndex = highestZIndex;
+                tab.isDragging = true;
+                
+                lastMouseX = e.clientX; lastMouseY = e.clientY;
+
+                tab.el.onpointerup = (ev) => { 
+                    tab.isDragging = false;
+                    tab.el.releasePointerCapture(ev.pointerId);
+                    tab.el.onpointerup = null; tab.el.onpointermove = null; 
+                };
+                
+                tab.el.onpointermove = (ev) => {
+                    ev.preventDefault();
+                    tab.vx = (ev.clientX - lastMouseX) * 0.8;
+                    tab.vy = (ev.clientY - lastMouseY) * 0.8;
+                    
+                    tab.x += ev.clientX - lastMouseX;
+                    tab.y += ev.clientY - lastMouseY;
+                    
+                    lastMouseX = ev.clientX; lastMouseY = ev.clientY;
+                    tab.angle = tab.vx * 0.5;
+                };
+            };
+        }
+
+        // --- 4. GHOST MOBILE PHYSICS ---
+        const ghost = document.getElementById('ghost');
+        const root = document.documentElement;
+        const pupils = document.querySelectorAll('.pupil');
+        const eyes = document.querySelectorAll('.eye');
+        const mouth = document.getElementById('ghost-mouth');
+        const sweat = document.getElementById('ghost-sweat');
+        
+        let ghostX = window.innerWidth / 2; let ghostY = window.innerHeight / 2;
+        let targetX = window.innerWidth / 2; let targetY = window.innerHeight / 2;
+        let velX = 0; let velY = 0; let isPoked = false;
+
+        // Tracks both mouse movements AND finger drags
+        document.addEventListener('pointermove', (e) => {
+            targetX = e.clientX; targetY = e.clientY;
+            if(!isPoked) {
+                pupils.forEach(pupil => {
+                    const rect = pupil.parentElement.getBoundingClientRect();
+                    const eyeX = rect.left + rect.width / 2; const eyeY = rect.top + rect.height / 2;
+                    const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
+                    pupil.style.transform = `translate(calc(-50% + ${Math.cos(angle)*4}px), calc(-50% + ${Math.sin(angle)*4}px))`;
+                });
+            }
+        });
+
+        // The Poke
+        ghost.addEventListener('pointerdown', (e) => {
+            e.stopPropagation();
+            isPoked = true;
+            root.style.setProperty('--ghost-color', 'rgba(255, 0, 119, 0.9)'); 
+            root.style.setProperty('--ghost-glow', 'rgba(255, 0, 119, 0.7)');
+            
+            eyes.forEach(eye => eye.style.transform = 'scaleY(0.2) scaleX(1.3)');
+            pupils.forEach(pupil => pupil.style.transform = 'translate(-50%, -50%)');
+            mouth.style.height = '12px'; mouth.style.borderRadius = '50%'; 
+            
+            sweat.style.opacity = '1'; sweat.style.transform = 'translateY(10px)';
+
+            setTimeout(() => {
+                isPoked = false;
+                root.style.setProperty('--ghost-color', 'rgba(0, 255, 255, 0.8)');
+                root.style.setProperty('--ghost-glow', 'rgba(0, 255, 255, 0.6)');
+                eyes.forEach(eye => eye.style.transform = 'scaleY(1) scaleX(1)');
+                mouth.style.height = '4px'; mouth.style.borderRadius = '0 0 10px 10px';
+                sweat.style.opacity = '0'; sweat.style.transform = 'translateY(0)';
+            }, 1000);
+        });
+
+        function blink() {
+            if(!isPoked) {
+                eyes.forEach(eye => eye.style.transform = 'scaleY(0.1)');
+                setTimeout(() => { if(!isPoked) eyes.forEach(eye => eye.style.transform = 'scaleY(1)'); }, 150);
+            }
+            setTimeout(blink, Math.random() * 4000 + 2000);
+        }
+        setTimeout(blink, 2000);
+
+        const clock = Date.now();
+        const gravity = 0.8;
+        const friction = 0.95;
+        const bounce = -0.6;
+
+        function animate() {
+            // Tab Physics
+            activeTabs.forEach(tab => {
+                if(!tab.isDragging) {
+                    tab.vy += gravity; tab.vx *= friction; 
+                    tab.x += tab.vx; tab.y += tab.vy; tab.angle += tab.vAngle;
+
+                    if(tab.y + tab.height > window.innerHeight) {
+                        tab.y = window.innerHeight - tab.height;
+                        tab.vy *= bounce; tab.vx *= 0.8; tab.vAngle *= 0.5;
+                    }
+                    if(tab.x < 0) { tab.x = 0; tab.vx *= bounce; }
+                    if(tab.x + tab.width > window.innerWidth) { tab.x = window.innerWidth - tab.width; tab.vx *= bounce; }
+                }
+                tab.el.style.transform = `translate(${tab.x}px, ${tab.y}px) rotate(${tab.angle}deg)`;
+            });
+
+            // Ghost Physics
+            velX = (targetX - ghostX) * 0.08;
+            velY = (targetY - ghostY) * 0.08;
+            ghostX += velX; ghostY += velY;
+
+            const rotation = velX * 0.4; 
+            const speed = Math.sqrt(velX*velX + velY*velY);
+            let stretchX = Math.max(0.85, 1 - (speed * 0.003));
+            let stretchY = Math.min(1.2, 1 + (speed * 0.003));
+            
+            if(!isPoked) {
+                if(speed > 15) { mouth.style.height = '10px'; mouth.style.borderRadius = '50%'; } 
+                else { mouth.style.height = '4px'; mouth.style.borderRadius = '0 0 10px 10px'; }
+            }
+
+            if(isPoked) { stretchX = 1.2; stretchY = 0.8; }
+
+            const time = (Date.now() - clock) / 1000;
+            const floatOffset = Math.sin(time * 3) * 5;
+            const flip = (targetX < ghostX) ? -1 : 1;
+
+            // Apply slight mobile scale down in JS to match CSS media query if needed
+            const mobileScale = window.innerWidth <= 768 ? 0.85 : 1;
+
+            ghost.style.transform = `translate(${ghostX + 15}px, ${ghostY + 15 + floatOffset}px) rotate(${rotation}deg) scale(${stretchX * flip * mobileScale}, ${stretchY * mobileScale})`;
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
     </script>
 </body>
 </html>
