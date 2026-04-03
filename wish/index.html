@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b1220">
+    <title>Birthday Harbor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light;
+            --ink: #241c14;
+            --muted: rgba(59, 46, 30, 0.84);
+            --line: rgba(88, 64, 35, 0.22);
+            --gold: #f7a94f;
+            --teal: #46b3a8;
+            --rose: #dd7598;
+            --sky: #6aa6e8;
+            --paper: #fff1dc;
+            --paper-2: #f5dfbc;
+            --paper-3: #e8cfa6;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background:
+                radial-gradient(circle at 76% 18%, rgba(255, 210, 129, 0.58), transparent 30%),
+                radial-gradient(circle at 22% 16%, rgba(242, 126, 166, 0.28), transparent 38%),
+                radial-gradient(circle at 54% 8%, rgba(255, 164, 88, 0.34), transparent 40%),
+                linear-gradient(180deg, #355a87 0%, #6f5f9d 28%, #d8876a 62%, #e8be85 100%);
+            color: var(--ink);
+            font-family: "Inter", system-ui, sans-serif;
+        }
+
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::before {
+            background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.3), transparent 30%),
+                radial-gradient(circle at 80% 12%, rgba(255, 203, 144, 0.24), transparent 28%),
+                radial-gradient(circle at 65% 75%, rgba(243, 116, 160, 0.18), transparent 32%);
+            mix-blend-mode: soft-light;
+        }
+
+        body::after {
+            background-image:
+                radial-gradient(circle at 20% 70%, rgba(255, 255, 255, 0.2), transparent 30%),
+                radial-gradient(circle at 72% 44%, rgba(255, 255, 255, 0.18), transparent 36%);
+            opacity: 0.46;
+            mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.85));
+        }
+
+        #scene-shell {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        #canvas-container {
+            position: absolute;
+            inset: 0;
+        }
+
+        #hud {
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            right: 18px;
+            z-index: 4;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+            pointer-events: none;
+        }
+
+        .hud-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+        }
+
+        .brand-chip,
+        .meter-chip,
+        .action-chip {
+            pointer-events: auto;
+            background: linear-gradient(180deg, rgba(255, 241, 213, 0.96), rgba(240, 214, 170, 0.94));
+            border: 1px solid rgba(95, 68, 34, 0.26);
+            box-shadow: 0 18px 44px rgba(60, 34, 10, 0.26);
+        }
+
+        .brand-chip {
+            border-radius: 24px;
+            padding: 14px 18px;
+            display: grid;
+            gap: 4px;
+        }
+
+        .brand-chip .eyebrow {
+            text-transform: uppercase;
+            letter-spacing: 0.28em;
+            font-size: 0.67rem;
+            color: rgba(92, 67, 31, 0.75);
+        }
+
+        .brand-chip h1 {
+            margin: 0;
+            font-family: "Cormorant Garamond", Georgia, serif;
+            font-size: clamp(1.5rem, 2.5vw, 2.3rem);
+            line-height: 0.95;
+            letter-spacing: 0.02em;
+        }
+
+        .meter-chip {
+            border-radius: 999px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: min(46vw, 360px);
+        }
+
+        .meter-track {
+            flex: 1;
+            height: 10px;
+            border-radius: 999px;
+            background: rgba(125, 92, 48, 0.2);
+            overflow: hidden;
+        }
+
+        .meter-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--sky), var(--teal), var(--gold));
+            box-shadow: 0 0 18px rgba(114, 231, 222, 0.55);
+            transition: width 0.35s ease;
+        }
+
+        .meter-label {
+            font-size: 0.9rem;
+            white-space: nowrap;
+            color: rgba(77, 58, 35, 0.86);
+        }
+
+        .action-chip {
+            border: 0;
+            border-radius: 999px;
+            padding: 13px 18px;
+            color: #4a3318;
+            font: inherit;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .action-chip:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 26px 70px rgba(0, 0, 0, 0.32);
+        }
+
+        .action-chip:active {
+            transform: translateY(1px) scale(0.99);
+        }
+
+        .action-chip.unlocked {
+            background: linear-gradient(135deg, rgba(124, 219, 197, 0.92), rgba(255, 214, 143, 0.95));
+        }
+
+        #loading {
+            position: fixed;
+            inset: 50% auto auto 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+            width: min(520px, calc(100vw - 32px));
+            padding: 22px 24px;
+            border-radius: 28px;
+            background: rgba(255, 246, 229, 0.93);
+            border: 1px solid rgba(111, 81, 43, 0.22);
+            box-shadow: 0 26px 70px rgba(129, 89, 35, 0.25);
+            transition: opacity 0.45s ease, transform 0.45s ease;
+        }
+
+        #loading.hidden {
+            opacity: 0;
+            transform: translate(-50%, -42%);
+            pointer-events: none;
+        }
+
+        .loading-title {
+            font-family: "Cormorant Garamond", Georgia, serif;
+            font-size: clamp(1.7rem, 3vw, 2.5rem);
+            margin: 0 0 8px;
+        }
+
+        .loading-subtitle,
+        .section-copy,
+        .toast,
+        .side-note,
+        .meter-label,
+        .loading-note {
+            line-height: 1.55;
+        }
+
+        .loading-bar {
+            height: 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+            margin-top: 14px;
+        }
+
+        .loading-bar span {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--teal), var(--sky), var(--gold));
+            transform-origin: left;
+            animation: loadBar 1.35s ease-in-out infinite;
+        }
+
+        @keyframes loadBar {
+            0% { transform: scaleX(0.18); }
+            50% { transform: scaleX(0.8); }
+            100% { transform: scaleX(0.18); }
+        }
+
+        #story {
+            position: relative;
+            z-index: 2;
+            width: min(1200px, calc(100vw - 32px));
+            margin: 0 auto;
+            padding: 92vh 0 12vh;
+            pointer-events: none;
+        }
+
+        .chapter {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 8vh 0;
+            scroll-snap-align: center;
+            scroll-snap-stop: always;
+        }
+
+        #free-explore-space {
+            height: 100vh;
+            scroll-snap-align: start;
+            pointer-events: none;
+        }
+
+        .chapter:nth-child(2n) {
+            justify-content: flex-end;
+        }
+
+        .story-card {
+            width: min(100%, 600px);
+            padding: 26px 28px 24px;
+            border-radius: 8px;
+            background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+            border: 1px solid rgba(117, 90, 58, 0.3);
+            box-shadow: 0 18px 36px rgba(73, 44, 15, 0.3), 0 3px 0 rgba(255, 255, 255, 0.5) inset;
+            transform: translateY(30px) scale(0.98);
+            opacity: 0.55;
+            transition: transform 0.55s ease, opacity 0.55s ease, border-color 0.55s ease;
+            pointer-events: auto;
+        }
+
+        .chapter:nth-child(2n) .story-card {
+            text-align: right;
+        }
+
+        .chapter:nth-child(2n) .story-footer {
+            justify-content: flex-end;
+        }
+
+        .chapter.active .story-card {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            border-color: rgba(140, 96, 46, 0.6);
+        }
+
+        .chapter-index {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(98, 69, 39, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 0.24em;
+            font-size: 0.72rem;
+            margin-bottom: 14px;
+        }
+
+        .chapter-index::before {
+            content: "";
+            width: 44px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(143, 107, 64, 0.7));
+        }
+
+        .story-card h2 {
+            margin: 0 0 10px;
+            font-family: "Cormorant Garamond", Georgia, serif;
+            font-size: clamp(2.2rem, 5vw, 4.4rem);
+            line-height: 0.93;
+            letter-spacing: 0.01em;
+        }
+
+        .section-copy {
+            margin: 0;
+            font-size: clamp(1rem, 1.55vw, 1.12rem);
+            color: var(--muted);
+            max-width: 54ch;
+        }
+
+        .story-footer {
+            margin-top: 18px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tag {
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(247, 221, 177, 0.94);
+            border: 1px solid rgba(130, 90, 36, 0.36);
+            color: rgba(74, 49, 20, 0.92);
+            font-size: 0.84rem;
+        }
+
+        #toast-stack {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            z-index: 6;
+            width: min(92vw, 360px);
+            display: grid;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .toast {
+            padding: 14px 16px;
+            border-radius: 20px;
+            background: rgba(255, 245, 224, 0.96);
+            border: 1px solid rgba(161, 117, 56, 0.35);
+            color: rgba(80, 54, 24, 0.9);
+            box-shadow: 0 14px 34px rgba(122, 84, 39, 0.26);
+        }
+
+        #scene-tip {
+            position: fixed;
+            left: 18px;
+            bottom: 18px;
+            z-index: 4;
+            max-width: min(420px, calc(100vw - 36px));
+            padding: 14px 16px;
+            border-radius: 20px;
+            background: rgba(248, 229, 197, 0.95);
+            border: 1px solid rgba(128, 85, 37, 0.34);
+            color: rgba(76, 50, 24, 0.94);
+            pointer-events: none;
+        }
+
+        #scene-tip strong {
+            color: #5d3f1d;
+        }
+
+        .final-banner {
+            margin-top: 18px;
+            padding: 18px 20px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, rgba(124, 219, 197, 0.45), rgba(255, 211, 132, 0.52));
+            border: 1px solid rgba(140, 106, 67, 0.3);
+            color: #5a3f1f;
+            display: none;
+        }
+
+        .final-banner.show {
+            display: block;
+        }
+
+        @media (max-width: 860px) {
+            #hud {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .hud-group {
+                width: 100%;
+            }
+
+            .meter-chip {
+                min-width: 0;
+            }
+
+            .chapter,
+            .chapter:nth-child(2n) {
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .story-card {
+                width: 100%;
+                padding: 22px 20px 20px;
+                text-align: left;
+            }
+
+            .chapter:nth-child(2n) .story-footer {
+                justify-content: flex-start;
+            }
+
+            #story {
+                width: calc(100vw - 24px);
+                padding-top: 88vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="scene-shell">
+        <div id="canvas-container"></div>
+    </div>
+
+    <div id="hud">
+        <div class="hud-group brand-chip">
+            <div class="eyebrow">Birthday harbor</div>
+            <h1>Multilayered wish voyage</h1>
+        </div>
+        <div class="hud-group meter-chip" aria-live="polite">
+            <div class="meter-track"><div class="meter-fill" id="meter-fill"></div></div>
+            <div class="meter-label"><span id="wish-count">0</span>/5 wish stickers found</div>
+        </div>
+        <button class="action-chip" id="celebrate-btn" type="button">Celebrate</button>
+    </div>
+
+    <div id="loading">
+        <p class="loading-title">Warming up the celebration</p>
+        <p class="loading-subtitle">A birthday scene with layered 3D depth, scroll-synced storytelling, and a small treasure hunt inside the stars.</p>
+        <div class="loading-bar"><span></span></div>
+        <p class="loading-note">Scroll slowly, tap the floating stickers, and let the scene reveal itself.</p>
+    </div>
+
+    <div id="scene-tip"><strong>How to play:</strong> scroll to travel through the story, drag the scene gently, and tap every floating sticker to unlock the final celebration.</div>
+
+    <div id="toast-stack" aria-live="polite"></div>
+
+    <main id="story">
+        <section class="chapter active" data-step="0">
+            <article class="story-card">
+                <div class="chapter-index">Chapter 01</div>
+                <h2>A sky that remembers the person you adore</h2>
+                <p class="section-copy">The page opens like a harbor at dawn: a glowing center, layered light, and a quiet orbit of memories waiting to be discovered. Keep scrolling and the scene will travel with you.</p>
+                <div class="story-footer">
+                    <span class="tag">3D atmosphere</span>
+                    <span class="tag">scroll storytelling</span>
+                    <span class="tag">birthday dedication</span>
+                </div>
+            </article>
+        </section>
+
+        <section class="chapter" data-step="1">
+            <article class="story-card">
+                <div class="chapter-index">Chapter 02</div>
+                <h2>Memories arranged like lanterns on water</h2>
+                <p class="section-copy">The camera glides closer to a ring of luminous memory cards. Their faces can hold photographs, captions, or milestones, so the page feels personal instead of generic.</p>
+                <div class="story-footer">
+                    <span class="tag">memory ring</span>
+                    <span class="tag">photo cards</span>
+                    <span class="tag">replace with your photos</span>
+                </div>
+            </article>
+        </section>
+
+        <section class="chapter" data-step="2">
+            <article class="story-card">
+                <div class="chapter-index">Chapter 03</div>
+                <h2>A small treasure hunt hidden in the glow</h2>
+                <p class="section-copy">Five playful stickers float around the scene. Tap them to collect blessings, unlock more of the page, and make the celebration feel participatory rather than passive.</p>
+                <div class="story-footer">
+                    <span class="tag">collectibles</span>
+                    <span class="tag">game mechanic</span>
+                    <span class="tag">interactive wishes</span>
+                </div>
+            </article>
+        </section>
+
+        <section class="chapter" data-step="3">
+            <article class="story-card">
+                <div class="chapter-index">Chapter 04</div>
+                <h2>Everything blooms into a fuller celebration</h2>
+                <p class="section-copy">As the stickers are found, the center brightens, confetti begins to rise, and the background layers deepen. The story becomes a stage, not just a scene.</p>
+                <div class="story-footer">
+                    <span class="tag">confetti burst</span>
+                    <span class="tag">cinematic lighting</span>
+                    <span class="tag">layered depth</span>
+                </div>
+            </article>
+        </section>
+
+        <section class="chapter" data-step="4">
+            <article class="story-card">
+                <div class="chapter-index">Finale</div>
+                <h2>Happy birthday, with all the admiration in the room</h2>
+                <p class="section-copy">This is the ending card: a personalized line, a brighter world, and enough room for your own message, inside joke, or memory to land beautifully.</p>
+                <div class="final-banner" id="final-banner">
+                    All wish stickers collected. The celebration is fully unlocked.
+                </div>
+                <div class="story-footer">
+                    <span class="tag">personal message</span>
+                    <span class="tag">final reveal</span>
+                    <span class="tag">editable tribute</span>
+                </div>
+            </article>
+        </section>
+        <section id="free-explore-space" aria-hidden="true"></section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script>
+        const container = document.getElementById('canvas-container');
+        const loading = document.getElementById('loading');
+        const celebrateButton = document.getElementById('celebrate-btn');
+        const toastStack = document.getElementById('toast-stack');
+        const meterFill = document.getElementById('meter-fill');
+        const wishCountLabel = document.getElementById('wish-count');
+        const finalBanner = document.getElementById('final-banner');
+        const chapters = Array.from(document.querySelectorAll('.chapter'));
+
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0xf9c38f, 0.017);
+
+        const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 120);
+        camera.position.set(0, 2.5, 14);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.outputEncoding = THREE.sRGBEncoding;
+        container.appendChild(renderer.domElement);
+
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.06;
+        controls.enablePan = false;
+        controls.enableZoom = false;
+        controls.enableRotate = false;
+        controls.minDistance = 8;
+        controls.maxDistance = 22;
+        controls.autoRotate = false;
+        controls.enabled = false;
+
+        const ambient = new THREE.AmbientLight(0xffefdb, 1.18);
+        scene.add(ambient);
+
+        const sunLight = new THREE.DirectionalLight(0xffca86, 1.9);
+        sunLight.position.set(4, 8, 10);
+        scene.add(sunLight);
+
+        const bounceLight = new THREE.DirectionalLight(0xff97bb, 1.1);
+        bounceLight.position.set(-6, 4, -7);
+        scene.add(bounceLight);
+
+        const warmthLight = new THREE.PointLight(0xffb766, 2.8, 44);
+        warmthLight.position.set(0, 2.5, 7);
+        scene.add(warmthLight);
+
+        const root = new THREE.Group();
+        scene.add(root);
+
+        const backdrop = new THREE.Group();
+        root.add(backdrop);
+
+        const centerRig = new THREE.Group();
+        root.add(centerRig);
+
+        const collectiblesRig = new THREE.Group();
+        root.add(collectiblesRig);
+
+        const confettiRig = new THREE.Group();
+        root.add(confettiRig);
+
+        function createTexture(card) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1024;
+            canvas.height = 1536;
+            const ctx = canvas.getContext('2d');
+
+            function drawCard(image) {
+                ctx.clearRect(0, 0, 1024, 1536);
+
+                const photoFrame = {
+                    x: 190,
+                    y: 166,
+                    w: 644,
+                    h: 936
+                };
+
+                ctx.fillStyle = '#ffefce';
+                ctx.fillRect(0, 0, 1024, 1536);
+
+                ctx.fillStyle = '#fff8eb';
+                ctx.fillRect(74, 74, 876, 1388);
+
+                ctx.fillStyle = 'rgba(251, 240, 220, 0.95)';
+                ctx.fillRect(photoFrame.x - 8, photoFrame.y - 8, photoFrame.w + 16, photoFrame.h + 16);
+
+                if (image) {
+                    const targetX = photoFrame.x;
+                    const targetY = photoFrame.y;
+                    const targetW = photoFrame.w;
+                    const targetH = photoFrame.h;
+                    const imageAspect = image.width / image.height;
+                    const targetAspect = targetW / targetH;
+
+                    let drawW = targetW;
+                    let drawH = targetH;
+                    if (imageAspect > targetAspect) {
+                        drawW = targetW;
+                        drawH = targetW / imageAspect;
+                    } else {
+                        drawH = targetH;
+                        drawW = targetH * imageAspect;
+                    }
+
+                    const drawX = targetX + (targetW - drawW) * 0.5;
+                    const drawY = targetY + (targetH - drawH) * 0.5;
+
+                    ctx.fillStyle = '#f3e1c4';
+                    ctx.fillRect(targetX, targetY, targetW, targetH);
+                    ctx.drawImage(image, drawX, drawY, drawW, drawH);
+                } else {
+                    const photoGradient = ctx.createLinearGradient(photoFrame.x, photoFrame.y, photoFrame.x + photoFrame.w, photoFrame.y + photoFrame.h);
+                    photoGradient.addColorStop(0, card.a);
+                    photoGradient.addColorStop(0.55, card.b);
+                    photoGradient.addColorStop(1, card.c);
+                    ctx.fillStyle = photoGradient;
+                    ctx.fillRect(photoFrame.x, photoFrame.y, photoFrame.w, photoFrame.h);
+                }
+
+                const tapeColor = 'rgba(238, 205, 136, 0.8)';
+                ctx.fillStyle = tapeColor;
+                ctx.fillRect(190, 132, 180, 42);
+                ctx.fillRect(654, 132, 180, 42);
+
+                const glow = ctx.createRadialGradient(280, 290, 30, 280, 290, 480);
+                glow.addColorStop(0, 'rgba(255,255,255,0.38)');
+                glow.addColorStop(1, 'rgba(255,255,255,0)');
+                ctx.fillStyle = glow;
+                ctx.fillRect(photoFrame.x, photoFrame.y, photoFrame.w, photoFrame.h);
+
+                ctx.strokeStyle = 'rgba(148,102,48,0.38)';
+                ctx.lineWidth = 6;
+                ctx.strokeRect(74, 74, 876, 1388);
+
+                ctx.fillStyle = 'rgba(255, 232, 192, 0.92)';
+                roundRect(ctx, 128, 1088, 768, 292, 24, true, false);
+
+                ctx.fillStyle = 'rgba(88, 59, 23, 0.92)';
+                ctx.font = '700 80px Inter, sans-serif';
+                ctx.fillText(card.title, 170, 1228);
+
+                ctx.fillStyle = 'rgba(97, 69, 31, 0.82)';
+                ctx.font = '500 40px Inter, sans-serif';
+                wrapText(ctx, card.subtitle, 170, 1290, 690, 54);
+
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.88)';
+                ctx.font = '600 52px Cormorant Garamond, serif';
+                ctx.fillText(card.label, 166, 258);
+
+                ctx.fillStyle = 'rgba(255,255,255,0.78)';
+                ctx.font = '500 28px Inter, sans-serif';
+                ctx.fillText(card.caption, 166, 304);
+
+                ctx.beginPath();
+                ctx.moveTo(170, 332);
+                ctx.lineTo(854, 332);
+                ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+            }
+
+            drawCard(null);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.encoding = THREE.sRGBEncoding;
+            texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+
+            if (card.imageUrl) {
+                const image = new Image();
+                image.onload = () => {
+                    drawCard(image);
+                    texture.needsUpdate = true;
+                };
+                image.src = card.imageUrl;
+            }
+
+            return texture;
+        }
+
+        function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+            const r = Math.min(radius, width / 2, height / 2);
+            ctx.beginPath();
+            ctx.moveTo(x + r, y);
+            ctx.arcTo(x + width, y, x + width, y + height, r);
+            ctx.arcTo(x + width, y + height, x, y + height, r);
+            ctx.arcTo(x, y + height, x, y, r);
+            ctx.arcTo(x, y, x + width, y, r);
+            ctx.closePath();
+            if (fill) {
+                ctx.fill();
+            }
+            if (stroke) {
+                ctx.stroke();
+            }
+        }
+
+        function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+            const words = text.split(' ');
+            let line = '';
+            let offsetY = y;
+            for (let index = 0; index < words.length; index += 1) {
+                const testLine = `${line}${words[index]} `;
+                const metrics = ctx.measureText(testLine);
+                if (metrics.width > maxWidth && index > 0) {
+                    ctx.fillText(line.trim(), x, offsetY);
+                    line = `${words[index]} `;
+                    offsetY += lineHeight;
+                } else {
+                    line = testLine;
+                }
+            }
+            ctx.fillText(line.trim(), x, offsetY);
+        }
+
+        function createCard(card, radius, angle, heightOffset) {
+            const geometry = new THREE.PlaneGeometry(2.6, 3.9, 1, 1);
+            const material = new THREE.MeshStandardMaterial({
+                map: createTexture(card),
+                roughness: 0.88,
+                metalness: 0.08,
+                side: THREE.FrontSide,
+                transparent: true,
+                opacity: 0.98
+            });
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.position.set(Math.cos(angle) * radius, heightOffset, Math.sin(angle) * radius);
+            mesh.lookAt(0, heightOffset * 0.35, 0);
+            mesh.userData.home = mesh.position.clone();
+            return mesh;
+        }
+
+        const circleMaskTexture = (() => {
+            const maskCanvas = document.createElement('canvas');
+            maskCanvas.width = 128;
+            maskCanvas.height = 128;
+            const maskCtx = maskCanvas.getContext('2d');
+            maskCtx.clearRect(0, 0, 128, 128);
+            maskCtx.fillStyle = '#000';
+            maskCtx.fillRect(0, 0, 128, 128);
+            maskCtx.fillStyle = '#fff';
+            maskCtx.beginPath();
+            maskCtx.arc(64, 64, 60, 0, Math.PI * 2);
+            maskCtx.fill();
+            const maskTexture = new THREE.CanvasTexture(maskCanvas);
+            maskTexture.generateMipmaps = false;
+            maskTexture.minFilter = THREE.LinearFilter;
+            maskTexture.magFilter = THREE.LinearFilter;
+            return maskTexture;
+        })();
+
+        function createEmojiSticker(emoji) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512;
+            canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+
+            ctx.clearRect(0, 0, 512, 512);
+
+            // Hard clip to a circle so no square texture edge can appear.
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(256, 256, 210, 0, Math.PI * 2);
+            ctx.clip();
+
+            const g = ctx.createRadialGradient(240, 170, 60, 256, 256, 240);
+            g.addColorStop(0, 'rgba(255, 255, 255, 0.98)');
+            g.addColorStop(1, 'rgba(255, 240, 214, 0.9)');
+            ctx.fillStyle = g;
+            ctx.beginPath();
+            ctx.arc(256, 256, 200, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = 'rgba(181, 128, 65, 0.58)';
+            ctx.lineWidth = 12;
+            ctx.stroke();
+
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.24)';
+            ctx.shadowBlur = 16;
+            ctx.font = '220px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(emoji, 256, 262);
+            ctx.restore();
+
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.encoding = THREE.sRGBEncoding;
+            texture.generateMipmaps = false;
+            texture.minFilter = THREE.LinearFilter;
+            texture.magFilter = THREE.LinearFilter;
+            const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
+                map: texture,
+                alphaMap: circleMaskTexture,
+                transparent: true,
+                alphaTest: 0.2,
+                depthWrite: false
+            }));
+            sprite.scale.set(2.1, 2.1, 1);
+            return sprite;
+        }
+
+        const petalField = new THREE.BufferGeometry();
+        const petalCount = 1300;
+        const petalPositions = new Float32Array(petalCount * 3);
+        for (let index = 0; index < petalCount; index += 1) {
+            petalPositions[index * 3] = (Math.random() - 0.5) * 80;
+            petalPositions[index * 3 + 1] = (Math.random() - 0.5) * 40;
+            petalPositions[index * 3 + 2] = (Math.random() - 0.5) * 60;
+        }
+        petalField.setAttribute('position', new THREE.BufferAttribute(petalPositions, 3));
+        const petals = new THREE.Points(
+            petalField,
+            new THREE.PointsMaterial({
+                color: 0xffe7c4,
+                size: 0.12,
+                transparent: true,
+                opacity: 0.66,
+                depthWrite: false,
+                blending: THREE.AdditiveBlending
+            })
+        );
+        backdrop.add(petals);
+
+        const meadow = new THREE.Mesh(
+            new THREE.CircleGeometry(38, 92),
+            new THREE.MeshStandardMaterial({
+                color: 0xffe6bd,
+                roughness: 0.92,
+                metalness: 0,
+                transparent: true,
+                opacity: 0.78
+            })
+        );
+        meadow.rotation.x = -Math.PI / 2;
+        meadow.position.y = -4.3;
+        backdrop.add(meadow);
+
+        const base = new THREE.Mesh(
+            new THREE.CylinderGeometry(2.4, 2.9, 0.9, 48),
+            new THREE.MeshStandardMaterial({ color: 0xe9c186, roughness: 0.86, metalness: 0.04 })
+        );
+        base.position.y = -2.05;
+        centerRig.add(base);
+
+        const wishTree = new THREE.Group();
+        centerRig.add(wishTree);
+
+        const column = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.52, 0.78, 3.95, 36),
+            new THREE.MeshStandardMaterial({ color: 0xd8a267, roughness: 0.62, metalness: 0.22 })
+        );
+        column.position.y = -0.02;
+        wishTree.add(column);
+
+        const coreCrystal = new THREE.Mesh(
+            new THREE.IcosahedronGeometry(0.74, 1),
+            new THREE.MeshStandardMaterial({
+                color: 0xffdcb0,
+                emissive: 0xff9f7b,
+                emissiveIntensity: 0.62,
+                roughness: 0.18,
+                metalness: 0.36,
+                transparent: true,
+                opacity: 0.92
+            })
+        );
+        coreCrystal.position.y = 2.24;
+        wishTree.add(coreCrystal);
+
+        const ringA = new THREE.Mesh(
+            new THREE.TorusGeometry(1.44, 0.08, 20, 120),
+            new THREE.MeshStandardMaterial({ color: 0xffcb88, emissive: 0xffa35f, emissiveIntensity: 0.65, roughness: 0.28, metalness: 0.32 })
+        );
+        ringA.rotation.x = Math.PI / 2;
+        ringA.position.y = 1.62;
+        wishTree.add(ringA);
+
+        const ringB = new THREE.Mesh(
+            new THREE.TorusGeometry(1.9, 0.045, 16, 120),
+            new THREE.MeshStandardMaterial({ color: 0xf8e9c7, emissive: 0xffc174, emissiveIntensity: 0.45, roughness: 0.32, metalness: 0.24 })
+        );
+        ringB.rotation.x = Math.PI / 2;
+        ringB.rotation.z = Math.PI / 4;
+        ringB.position.y = 1.62;
+        wishTree.add(ringB);
+
+        const canopy = new THREE.Group();
+        canopy.position.y = 2.25;
+        wishTree.add(canopy);
+        const canopyLeaves = [];
+        for (let index = 0; index < 30; index += 1) {
+            const leaf = new THREE.Mesh(
+                new THREE.DodecahedronGeometry(0.38 + Math.random() * 0.18, 0),
+                new THREE.MeshStandardMaterial({
+                    color: index % 2 === 0 ? 0xffd29a : 0xffb886,
+                    emissive: 0xff945f,
+                    emissiveIntensity: 0.2,
+                    roughness: 0.44,
+                    metalness: 0.2
+                })
+            );
+            const angle = (index / 30) * Math.PI * 2;
+            const ring = 1.15 + (index % 4) * 0.2 + Math.random() * 0.16;
+            leaf.position.set(
+                Math.cos(angle) * ring,
+                (Math.random() - 0.5) * 1.05,
+                Math.sin(angle) * ring
+            );
+            leaf.userData.base = leaf.scale.clone();
+            canopy.add(leaf);
+            canopyLeaves.push(leaf);
+        }
+
+        const wishFruits = [];
+        for (let index = 0; index < 5; index += 1) {
+            const fruit = new THREE.Mesh(
+                new THREE.OctahedronGeometry(0.21),
+                new THREE.MeshStandardMaterial({
+                    color: 0xffd784,
+                    emissive: 0xffab6b,
+                    emissiveIntensity: 1,
+                    roughness: 0.24,
+                    metalness: 0.18,
+                    transparent: true,
+                    opacity: 0
+                })
+            );
+            const angle = (index / 5) * Math.PI * 2 + 0.3;
+            fruit.position.set(Math.cos(angle) * 1.95, 0.25 + Math.sin(index) * 0.35, Math.sin(angle) * 1.95);
+            fruit.visible = false;
+            canopy.add(fruit);
+            wishFruits.push(fruit);
+        }
+
+        const treeAura = new THREE.PointLight(0xffb871, 1.8, 20);
+        treeAura.position.set(0, 2.0, 0.5);
+        wishTree.add(treeAura);
+
+        const vines = new THREE.Group();
+        centerRig.add(vines);
+        for (let index = 0; index < 9; index += 1) {
+            const curve = new THREE.CatmullRomCurve3([
+                new THREE.Vector3(0, -0.6, 0),
+                new THREE.Vector3(Math.sin(index) * 1.2, 0.9 + Math.random() * 0.8, Math.cos(index) * 1.2),
+                new THREE.Vector3(Math.cos(index * 0.85) * 3.8, 1.3 + Math.random() * 0.9, Math.sin(index * 0.85) * 3.8)
+            ]);
+            const vine = new THREE.Mesh(
+                new THREE.TubeGeometry(curve, 48, 0.06, 12, false),
+                new THREE.MeshStandardMaterial({
+                    color: index % 2 === 0 ? 0x7bb86a : 0x93ca79,
+                    roughness: 0.84,
+                    metalness: 0.03,
+                    transparent: true,
+                    opacity: 0.94
+                })
+            );
+            vines.add(vine);
+        }
+
+        const cardData = [
+            { title: 'Joyous', subtitle: 'A bright laugh that lifts every room in seconds.', label: 'Golden hour', caption: 'A warm-hearted trait', a: '#ffc889', b: '#f0847a', c: '#8a6ec9', imageUrl: './images/1.jpeg' },
+            { title: 'Vibrant', subtitle: 'Color, energy, and presence wherever she goes.', label: 'Soft tide', caption: 'A radiant trait', a: '#ffb7d3', b: '#ff8fa0', c: '#8f7be3', imageUrl: './images/2.jpeg' },
+            { title: 'Helpful', subtitle: 'Always showing up with care exactly when needed.', label: 'Open sky', caption: 'A generous trait', a: '#8dc6ff', b: '#6ea8ee', c: '#8676dc', imageUrl: './images/3.jpeg' },
+            { title: 'Adorable', subtitle: 'Sweet, genuine, and impossible not to smile around.', label: 'Paper lantern', caption: 'A charming trait', a: '#ffd5a6', b: '#ffa385', c: '#ff7ea0', imageUrl: './images/4.jpeg' },
+            { title: 'Animal Lover', subtitle: 'A heart that naturally makes every creature feel safe.', label: 'Harbor light', caption: 'A gentle trait', a: '#abe7ce', b: '#7ec8ab', c: '#78a3d1', imageUrl: './images/5.jpeg' },
+            { title: 'Hopeful', subtitle: 'Always looking forward with warmth and belief.', label: 'Final current', caption: 'An uplifting trait', a: '#ffe8a9', b: '#ffbd83', c: '#f38aa6', imageUrl: './images/6.jpeg' },
+            { title: 'Lovely', subtitle: 'Kind in ways that feel effortless and real.', label: 'Sun thread', caption: 'A graceful trait', a: '#ffe0b5', b: '#f3a57f', c: '#d4878f', imageUrl: './images/7.jpeg' },
+            { title: 'Fun', subtitle: 'Turning ordinary days into memorable little adventures.', label: 'Soft spark', caption: 'A playful trait', a: '#ffd2c5', b: '#e39aa5', c: '#916fa6', imageUrl: './images/8.jpeg' },
+            { title: 'Energetic', subtitle: 'Bringing motion, excitement, and spark to everyone around.', label: 'Home light', caption: 'A lively trait', a: '#ffe8bd', b: '#e8b57e', c: '#8f83c2', imageUrl: './images/9.jpeg' }
+        ];
+
+        const cardGroup = new THREE.Group();
+        centerRig.add(cardGroup);
+
+        const cards = [];
+        const ringRadius = 8.6;
+        const cardHeightOffsets = [0.9, 0.25, -0.6, -0.1, 0.72, -0.42, 0.52, -0.26, 0.34];
+        const cardRadiusOffsets = [0.75, -0.2, 0.5, -0.18, 0.6, -0.32, 0.42, -0.1, 0.35];
+        const cardTilt = [0.06, -0.05, 0.04, -0.06, 0.05, -0.04, 0.03, -0.03, 0.02];
+        cardData.forEach((card, index) => {
+            const angle = (index / cardData.length) * Math.PI * 2 + 0.24;
+            const cardMesh = createCard(card, ringRadius + cardRadiusOffsets[index], angle, cardHeightOffsets[index]);
+            cardMesh.rotation.y = -angle + Math.PI / 2;
+            cardMesh.rotation.z = cardTilt[index];
+            cardMesh.userData.baseRotationY = cardMesh.rotation.y;
+            cardMesh.userData.baseRotationZ = cardMesh.rotation.z;
+            cardGroup.add(cardMesh);
+            cards.push(cardMesh);
+        });
+        cardGroup.position.y = 0.25;
+
+        const wishColors = [0x87d26f, 0xf9bb67, 0xea8cac, 0x8ec7ff, 0xffd873];
+        const wishMessages = [
+            'A wish for a year that feels open, lucky, and beautifully earned.',
+            'A wish for deep rest, clear joy, and the right people nearby.',
+            'A wish for surprises that are generous instead of noisy.',
+            'A wish for moments that become the stories everyone wants to hear again.',
+            'A wish for the kind of happiness that shows up in the small things.'
+        ];
+
+        const collectibleEmojis = ['🦊', '🌻', '🦋', '🌸', '🐶'];
+        const wishStickers = [];
+        const wishHitTargets = [];
+        const collected = new Set();
+        for (let index = 0; index < 5; index += 1) {
+            const sticker = createEmojiSticker(collectibleEmojis[index]);
+            const angle = (index / 5) * Math.PI * 2 + 0.7;
+            const radius = 10.6 + (index % 2 === 0 ? 0.5 : -0.35);
+            sticker.position.set(Math.cos(angle) * radius, 1.4 + index * 0.55, Math.sin(angle) * radius);
+            sticker.userData.home = sticker.position.clone();
+            sticker.userData.index = index;
+            sticker.userData.message = wishMessages[index];
+            sticker.userData.baseScale = sticker.scale.x;
+            const hitTarget = new THREE.Sprite(new THREE.SpriteMaterial({
+                color: 0xffffff,
+                transparent: true,
+                opacity: 0,
+                depthWrite: false
+            }));
+            hitTarget.scale.set(3.4, 3.4, 1);
+            hitTarget.userData.index = index;
+            hitTarget.userData.sticker = sticker;
+            sticker.add(hitTarget);
+            wishHitTargets.push(hitTarget);
+            collectiblesRig.add(sticker);
+            wishStickers.push(sticker);
+        }
+
+        const decorativeEmojis = ['🌼', '🐦', '🌷', '🌸', '🐿️', '🍀', '🦋', '🌺', '🌿', '🐇', '🪴'];
+        const floatingDecor = [];
+        for (let index = 0; index < 24; index += 1) {
+            const sprite = createEmojiSticker(decorativeEmojis[index % decorativeEmojis.length]);
+            const scale = 0.44 + Math.random() * 0.38;
+            sprite.scale.multiplyScalar(scale);
+            const angle = (index / 24) * Math.PI * 2 + Math.random() * 0.8;
+            const radius = 13 + Math.random() * 5;
+            sprite.position.set(Math.cos(angle) * radius, -1.2 + Math.random() * 6.2, Math.sin(angle) * radius);
+            sprite.userData.home = sprite.position.clone();
+            sprite.material.opacity = 0.55;
+            backdrop.add(sprite);
+            floatingDecor.push(sprite);
+        }
+
+        wishStickers.forEach((sprite, index) => {
+            anime({
+                targets: sprite.position,
+                y: sprite.userData.home.y + (Math.random() * 0.8 - 0.4),
+                x: sprite.userData.home.x + (Math.random() * 0.9 - 0.45),
+                duration: 2400 + Math.random() * 2000,
+                direction: 'alternate',
+                loop: true,
+                easing: 'easeInOutSine',
+                delay: index * 140
+            });
+        });
+
+        floatingDecor.forEach((sprite, index) => {
+            anime({
+                targets: sprite.position,
+                y: sprite.userData.home.y + (Math.random() * 1.2 - 0.6),
+                x: sprite.userData.home.x + (Math.random() * 0.7 - 0.35),
+                duration: 3200 + Math.random() * 2400,
+                direction: 'alternate',
+                loop: true,
+                easing: 'easeInOutSine',
+                delay: index * 90
+            });
+        });
+
+        const confettiPieces = [];
+        const confettiMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.3, metalness: 0.1, transparent: true, opacity: 0.95 });
+        for (let index = 0; index < 220; index += 1) {
+            const piece = new THREE.Mesh(
+                new THREE.BoxGeometry(0.06, 0.22, 0.02),
+                confettiMaterial.clone()
+            );
+            piece.visible = false;
+            piece.userData.velocity = new THREE.Vector3();
+            piece.userData.spin = new THREE.Vector3();
+            confettiRig.add(piece);
+            confettiPieces.push(piece);
+        }
+
+        const raycaster = new THREE.Raycaster();
+        const pointer = new THREE.Vector2();
+        let wishTotal = 0;
+        let celebrationUnlocked = false;
+        let freeControlUnlocked = false;
+        let isCompactViewport = window.innerWidth <= 900;
+        let activeChapterIndex = 0;
+        const activeBursts = [];
+        const sceneProgress = { target: 0, current: 0 };
+
+        function updateWishTree() {
+            const progress = wishTotal / wishStickers.length;
+            canopyLeaves.forEach((leaf, index) => {
+                const pulse = 1 + progress * 0.22 + Math.sin(index * 0.8) * 0.03;
+                leaf.scale.setScalar(pulse);
+                leaf.material.emissiveIntensity = 0.12 + progress * 0.24;
+            });
+            treeAura.intensity = 1.5 + progress * 2.1;
+            treeAura.distance = 18 + progress * 7;
+            for (let index = 0; index < wishFruits.length; index += 1) {
+                const fruit = wishFruits[index];
+                if (index < wishTotal && !fruit.visible) {
+                    fruit.visible = true;
+                    anime({
+                        targets: fruit.material,
+                        opacity: 1,
+                        duration: 320,
+                        easing: 'easeOutQuad'
+                    });
+                }
+            }
+        }
+
+        function showToast(message, accent = 0xffffff) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            toast.style.borderColor = `rgba(${((accent >> 16) & 255)}, ${((accent >> 8) & 255)}, ${(accent & 255)}, 0.3)`;
+            toastStack.prepend(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(8px)';
+            }, 2800);
+            setTimeout(() => toast.remove(), 3400);
+        }
+
+        function updateMeter() {
+            const progress = (wishTotal / wishStickers.length) * 100;
+            meterFill.style.width = `${progress}%`;
+            wishCountLabel.textContent = String(wishTotal);
+            if (wishTotal === wishStickers.length) {
+                celebrateButton.classList.add('unlocked');
+                celebrateButton.textContent = 'Celebrate';
+                finalBanner.classList.add('show');
+            }
+        }
+
+        function collectWish(index) {
+            if (collected.has(index)) {
+                return;
+            }
+            collected.add(index);
+            wishTotal += 1;
+            const sticker = wishStickers[index];
+            createBurst(sticker.position, wishColors[index]);
+            showToast(sticker.userData.message, wishColors[index]);
+            anime({
+                targets: sticker.scale,
+                x: 0.01,
+                y: 0.01,
+                duration: 280,
+                easing: 'easeInBack',
+                complete: () => {
+                    sticker.visible = false;
+                }
+            });
+            updateMeter();
+            if (wishTotal === wishStickers.length) {
+                celebrationUnlocked = true;
+                showToast('All wish stickers collected. The finale is fully unlocked.', 0xffd58a);
+                launchFullCelebration();
+            }
+            updateWishTree();
+        }
+
+        function createBurst(origin, color, options = {}) {
+            const fragmentCount = options.fragmentCount || 16;
+            const spread = options.spread || 0.18;
+            const upward = options.upward || 0.16;
+            const life = options.life || 180;
+            const sizeMin = options.sizeMin || 0.03;
+            const sizeMax = options.sizeMax || 0.06;
+            const burst = [];
+            for (let index = 0; index < fragmentCount; index += 1) {
+                const fragment = new THREE.Mesh(
+                    new THREE.SphereGeometry(sizeMin + Math.random() * (sizeMax - sizeMin), 8, 8),
+                    new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: 1.6, roughness: 0.2, metalness: 0.1, transparent: true, opacity: 0.95 })
+                );
+                fragment.position.copy(origin);
+                fragment.visible = true;
+                fragment.userData.velocity = new THREE.Vector3(
+                    (Math.random() - 0.5) * spread,
+                    0.06 + Math.random() * upward,
+                    (Math.random() - 0.5) * spread
+                );
+                fragment.userData.spin = new THREE.Vector3(Math.random(), Math.random(), Math.random());
+                confettiRig.add(fragment);
+                burst.push(fragment);
+            }
+            activeBursts.push({ fragments: burst, life });
+        }
+
+        function launchFullCelebration() {
+            const centerOrigin = new THREE.Vector3(0, 2.45, 0);
+            for (let index = 0; index < 5; index += 1) {
+                const ringAngle = (index / 5) * Math.PI * 2;
+                const burstOrigin = new THREE.Vector3(Math.cos(ringAngle) * 2.4, 1.45 + Math.random() * 1.8, Math.sin(ringAngle) * 2.4);
+                createBurst(burstOrigin, wishColors[index], { fragmentCount: 34, spread: 0.32, upward: 0.26, life: 230, sizeMin: 0.035, sizeMax: 0.085 });
+            }
+
+            createBurst(centerOrigin, 0xfff2c8, { fragmentCount: 90, spread: 0.46, upward: 0.32, life: 260, sizeMin: 0.03, sizeMax: 0.095 });
+
+            anime({
+                targets: treeAura,
+                intensity: [treeAura.intensity, 6.6, 2.4],
+                distance: [treeAura.distance, 32, 22],
+                duration: 1800,
+                easing: 'easeOutExpo'
+            });
+
+            anime({
+                targets: canopy.scale,
+                x: [1, 1.2, 1],
+                y: [1, 1.2, 1],
+                z: [1, 1.2, 1],
+                duration: 1500,
+                easing: 'easeOutElastic(1, .6)'
+            });
+        }
+
+        function setActiveChapter(index) {
+            chapters.forEach((chapter, chapterIndex) => {
+                chapter.classList.toggle('active', chapterIndex === index);
+            });
+        }
+
+        function cameraFromProgress(progress) {
+            const stops = [
+                { position: new THREE.Vector3(0, 2.9, 16), target: new THREE.Vector3(0, 1.5, 0) },
+                { position: new THREE.Vector3(8.4, 3.1, 10.8), target: new THREE.Vector3(2.1, 1.35, -1.1) },
+                { position: new THREE.Vector3(0, 3.1, 8.8), target: new THREE.Vector3(0, 1.15, 0.5) },
+                { position: new THREE.Vector3(-8.2, 3.05, 10.7), target: new THREE.Vector3(-2, 1.35, 1.2) },
+                { position: new THREE.Vector3(0, 2.7, 9.7), target: new THREE.Vector3(0, 1.65, 0) }
+            ];
+            const scaled = progress * (stops.length - 1);
+            const startIndex = Math.floor(scaled);
+            const endIndex = Math.min(stops.length - 1, startIndex + 1);
+            const local = scaled - startIndex;
+            const start = stops[startIndex];
+            const end = stops[endIndex];
+            return {
+                position: new THREE.Vector3().lerpVectors(start.position, end.position, local),
+                target: new THREE.Vector3().lerpVectors(start.target, end.target, local)
+            };
+        }
+
+        function setPointerFromEvent(event) {
+            const rect = renderer.domElement.getBoundingClientRect();
+            pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            pointer.y = -(((event.clientY - rect.top) / rect.height) * 2 - 1);
+        }
+
+        function onPointerDown(event) {
+            setPointerFromEvent(event);
+            pointerState.downX = event.clientX;
+            pointerState.downY = event.clientY;
+            pointerState.moved = false;
+        }
+
+        function onPointerMove(event) {
+            if (pointerState.downX === null) {
+                return;
+            }
+            const dx = event.clientX - pointerState.downX;
+            const dy = event.clientY - pointerState.downY;
+            if ((dx * dx + dy * dy) > 36) {
+                pointerState.moved = true;
+            }
+        }
+
+        function onPointerUp(event) {
+            if (pointerState.downX === null) {
+                return;
+            }
+            const moved = pointerState.moved;
+            pointerState.downX = null;
+            pointerState.downY = null;
+            pointerState.moved = false;
+            if (moved) {
+                return;
+            }
+
+            setPointerFromEvent(event);
+            raycaster.setFromCamera(pointer, camera);
+            const intersects = raycaster.intersectObjects(wishHitTargets, true);
+            if (!intersects.length) {
+                return;
+            }
+            const hit = intersects[0].object;
+            const targetIndex = hit.userData.index;
+            if (typeof targetIndex !== 'number') {
+                return;
+            }
+            collectWish(targetIndex);
+        }
+
+        const pointerState = { downX: null, downY: null, moved: false };
+        renderer.domElement.addEventListener('pointerdown', onPointerDown, { passive: true });
+        renderer.domElement.addEventListener('pointermove', onPointerMove, { passive: true });
+        renderer.domElement.addEventListener('pointerup', onPointerUp, { passive: true });
+
+        celebrateButton.addEventListener('click', () => {
+            if (!celebrationUnlocked) {
+                showToast('Collect all five stickers to unlock the finale.', 0x9bd4ff);
+                return;
+            }
+            launchFullCelebration();
+            showToast('Celebration burst refreshed.', 0xffd58a);
+        });
+
+        function applySceneProgress(progress) {
+            if (freeControlUnlocked) {
+                setActiveChapter(chapters.length - 1);
+                return;
+            }
+
+            const stopCount = chapters.length - 1;
+            const scaled = progress * stopCount;
+            const nearest = Math.round(scaled);
+            const distance = Math.abs(scaled - nearest);
+            let lockedProgress = progress;
+            if (distance < 0.16) {
+                const lockStrength = ((0.16 - distance) / 0.16) * 0.42;
+                lockedProgress = THREE.MathUtils.lerp(progress, nearest / stopCount, lockStrength);
+            }
+
+            const chapterLockedProgress = activeChapterIndex / stopCount;
+            const presentationProgress = THREE.MathUtils.lerp(lockedProgress, chapterLockedProgress, 0.34);
+
+            const cameraState = cameraFromProgress(presentationProgress);
+            camera.position.lerp(cameraState.position, 0.14);
+            controls.target.lerp(cameraState.target, 0.14);
+            setActiveChapter(activeChapterIndex);
+            scene.fog.density = 0.012 + presentationProgress * 0.006;
+            backdrop.rotation.y = presentationProgress * Math.PI * 0.08;
+
+            const sideTargets = [3.1, -3.1, 3.1, -3.1, 0];
+            const targetCardX = isCompactViewport ? 0 : sideTargets[activeChapterIndex];
+            cardGroup.position.x = THREE.MathUtils.lerp(cardGroup.position.x, targetCardX, 0.14);
+            centerRig.position.x = THREE.MathUtils.lerp(centerRig.position.x, 0, 0.14);
+        }
+
+        function unlockFreeControlMode() {
+            if (freeControlUnlocked) {
+                return;
+            }
+            freeControlUnlocked = true;
+            controls.enabled = true;
+            controls.enableZoom = true;
+            controls.enableRotate = true;
+            controls.minDistance = 5;
+            controls.maxDistance = 30;
+            centerRig.position.x = 0;
+            cardGroup.position.x = 0;
+            showToast('Final chapter reached. Camera is now fully free to explore.', 0xf9bb67);
+        }
+
+        function updateConfetti(delta) {
+            activeBursts.forEach((burst) => {
+                burst.life -= delta * 60;
+                burst.fragments.forEach((fragment) => {
+                    fragment.position.add(fragment.userData.velocity);
+                    fragment.userData.velocity.y -= 0.004;
+                    fragment.rotation.x += fragment.userData.spin.x * 0.1;
+                    fragment.rotation.y += fragment.userData.spin.y * 0.08;
+                    fragment.rotation.z += fragment.userData.spin.z * 0.06;
+                    fragment.material.opacity = Math.max(0, burst.life / 180);
+                });
+            });
+            for (let index = activeBursts.length - 1; index >= 0; index -= 1) {
+                const burst = activeBursts[index];
+                if (burst.life <= 0) {
+                    burst.fragments.forEach((fragment) => {
+                        fragment.visible = false;
+                        confettiRig.remove(fragment);
+                        fragment.geometry.dispose();
+                        fragment.material.dispose();
+                    });
+                    activeBursts.splice(index, 1);
+                }
+            }
+        }
+
+        function animate(time) {
+            requestAnimationFrame(animate);
+            const delta = Math.min(0.032, (time - (animate.lastTime || time)) / 1000);
+            animate.lastTime = time;
+
+            sceneProgress.current += (sceneProgress.target - sceneProgress.current) * 0.1;
+            applySceneProgress(sceneProgress.current);
+            controls.update();
+
+            const t = time * 0.001;
+            canopy.rotation.y = t * 0.06;
+            wishTree.rotation.y = Math.sin(t * 0.2) * 0.04;
+            coreCrystal.rotation.y = t * 0.28;
+            coreCrystal.rotation.x = Math.sin(t * 0.4) * 0.08;
+            ringA.rotation.z = t * 0.14;
+            ringB.rotation.z = Math.PI / 4 - t * 0.11;
+            base.rotation.y = -t * 0.06;
+            vines.rotation.y = t * 0.1;
+            cardGroup.rotation.y = Math.sin(t * 0.23) * 0.04;
+
+            cards.forEach((cardMesh, index) => {
+                const pulse = 0.07 * Math.sin(t * 1.1 + index * 0.5);
+                cardMesh.position.y = cardMesh.userData.home.y + pulse;
+                cardMesh.lookAt(camera.position);
+                cardMesh.rotateZ(cardMesh.userData.baseRotationZ + 0.03 * Math.sin(t * 0.7 + index * 1.3));
+            });
+
+            wishStickers.forEach((orb, index) => {
+                if (collected.has(index)) {
+                    return;
+                }
+                const home = orb.userData.home;
+                orb.position.x = home.x + Math.sin(t * 0.85 + index) * 0.32;
+                orb.position.y = home.y + Math.cos(t * 1.05 + index) * 0.24;
+                orb.position.z = home.z + Math.sin(t * 1.2 + index * 0.7) * 0.22;
+                orb.material.rotation = Math.sin(t * 0.8 + index) * 0.18;
+                const dynamicScale = orb.userData.baseScale * (1 + 0.05 * Math.sin(t * 1.8 + index));
+                orb.scale.set(dynamicScale, dynamicScale, 1);
+            });
+
+            updateConfetti(delta);
+            petals.rotation.y = t * 0.015;
+            petals.rotation.x = Math.sin(t * 0.1) * 0.03;
+
+            renderer.render(scene, camera);
+        }
+
+        function handleResize() {
+            isCompactViewport = window.innerWidth <= 900;
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            if (isCompactViewport && !freeControlUnlocked) {
+                cardGroup.position.x = 0;
+            }
+        }
+
+        function updateScrollTarget() {
+            const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+            const rawProgress = window.scrollY / maxScroll;
+
+            let nearestIndex = 0;
+            let nearestDistance = Number.POSITIVE_INFINITY;
+            chapters.forEach((chapter, index) => {
+                const rect = chapter.getBoundingClientRect();
+                const chapterCenter = rect.top + rect.height * 0.5;
+                const distanceToViewportCenter = Math.abs(chapterCenter - window.innerHeight * 0.5);
+                if (distanceToViewportCenter < nearestDistance) {
+                    nearestDistance = distanceToViewportCenter;
+                    nearestIndex = index;
+                }
+            });
+            activeChapterIndex = nearestIndex;
+
+            const chapterProgress = activeChapterIndex / Math.max(1, chapters.length - 1);
+            sceneProgress.target = THREE.MathUtils.lerp(rawProgress, chapterProgress, 0.58);
+
+            const maxIndex = chapters.length - 1;
+            const scaled = sceneProgress.target * maxIndex;
+            if (scaled > activeChapterIndex + 0.55 && activeChapterIndex < maxIndex) {
+                activeChapterIndex += 1;
+            } else if (scaled < activeChapterIndex - 0.55 && activeChapterIndex > 0) {
+                activeChapterIndex -= 1;
+            }
+
+            if (!freeControlUnlocked) {
+                const lastChapter = chapters[chapters.length - 1];
+                const lastCard = lastChapter.querySelector('.story-card');
+                if (lastCard && lastCard.getBoundingClientRect().bottom <= 0) {
+                    unlockFreeControlMode();
+                }
+            }
+        }
+
+        window.addEventListener('resize', handleResize);
+        window.addEventListener('scroll', updateScrollTarget, { passive: true });
+
+        updateMeter();
+        updateWishTree();
+        updateScrollTarget();
+        sceneProgress.current = sceneProgress.target;
+        applySceneProgress(sceneProgress.current);
+        handleResize();
+
+        setTimeout(() => {
+            loading.classList.add('hidden');
+        }, 900);
+
+        if (window.matchMedia('(pointer: coarse)').matches) {
+            controls.autoRotate = false;
+        }
+
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>
