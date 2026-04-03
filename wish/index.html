@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0b1220">
-    <title>Birthday Harbor</title>
+    <title>Soumya Mam, Celebrating The Person You Are</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -21,6 +21,9 @@
             --paper: #fff1dc;
             --paper-2: #f5dfbc;
             --paper-3: #e8cfa6;
+            --page-contrast: 1.03;
+            --page-brightness: 0.99;
+            --page-saturation: 1.06;
         }
 
         * {
@@ -43,6 +46,10 @@
                 linear-gradient(180deg, #355a87 0%, #6f5f9d 28%, #d8876a 62%, #e8be85 100%);
             color: var(--ink);
             font-family: "Inter", system-ui, sans-serif;
+        }
+
+        body:not(.entered) {
+            overflow: hidden;
         }
 
         body::before,
@@ -74,6 +81,7 @@
             inset: 0;
             overflow: hidden;
             z-index: 1;
+            filter: saturate(var(--page-saturation)) contrast(var(--page-contrast)) brightness(var(--page-brightness));
         }
 
         #canvas-container {
@@ -255,6 +263,7 @@
             margin: 0 auto;
             padding: 92vh 0 12vh;
             pointer-events: none;
+            filter: saturate(1.02) contrast(1.01) brightness(0.995);
         }
 
         .chapter {
@@ -391,6 +400,78 @@
             color: #5d3f1d;
         }
 
+        #entry-gate {
+            position: fixed;
+            inset: 0;
+            z-index: 7;
+            display: grid;
+            place-items: center;
+            background:
+                radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.2), transparent 28%),
+                linear-gradient(180deg, rgba(35, 46, 77, 0.42), rgba(24, 18, 35, 0.7));
+            backdrop-filter: blur(14px);
+        }
+
+        #entry-gate.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.45s ease;
+        }
+
+        .entry-card {
+            width: min(560px, calc(100vw - 32px));
+            padding: 30px 28px 26px;
+            border-radius: 30px;
+            background: linear-gradient(180deg, rgba(255, 247, 231, 0.98), rgba(243, 219, 183, 0.96));
+            border: 1px solid rgba(117, 84, 41, 0.22);
+            box-shadow: 0 30px 80px rgba(20, 13, 8, 0.34);
+            text-align: center;
+        }
+
+        .entry-kicker {
+            margin: 0 0 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.28em;
+            font-size: 0.7rem;
+            color: rgba(92, 67, 31, 0.74);
+        }
+
+        .entry-card h2 {
+            margin: 0;
+            font-family: "Cormorant Garamond", Georgia, serif;
+            font-size: clamp(2.5rem, 6vw, 4.8rem);
+            line-height: 0.95;
+            color: var(--ink);
+        }
+
+        .entry-copy {
+            margin: 14px auto 22px;
+            max-width: 32ch;
+            color: rgba(71, 52, 29, 0.86);
+            font-size: 1.02rem;
+            line-height: 1.55;
+        }
+
+        .entry-button {
+            border: 0;
+            border-radius: 999px;
+            padding: 14px 22px;
+            font: inherit;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #432b10;
+            background: linear-gradient(135deg, #ffe19f, #ffba73);
+            box-shadow: 0 18px 46px rgba(132, 75, 24, 0.32);
+            cursor: pointer;
+        }
+
+        .entry-note {
+            margin: 14px 0 0;
+            color: rgba(99, 74, 43, 0.72);
+            font-size: 0.92rem;
+        }
+
         .final-banner {
             margin-top: 18px;
             padding: 18px 20px;
@@ -449,8 +530,8 @@
 
     <div id="hud">
         <div class="hud-group brand-chip">
-            <div class="eyebrow">Birthday harbor</div>
-            <h1>Multilayered wish voyage</h1>
+            <div class="eyebrow">Happy birthday</div>
+            <h1>Soumya Mam, celebrating the person you are</h1>
         </div>
         <div class="hud-group meter-chip" aria-live="polite">
             <div class="meter-track"><div class="meter-fill" id="meter-fill"></div></div>
@@ -459,9 +540,19 @@
         <button class="action-chip" id="celebrate-btn" type="button">Celebrate</button>
     </div>
 
+    <div id="entry-gate">
+        <div class="entry-card">
+            <p class="entry-kicker">Happy birthday</p>
+            <h2>Soumya Mam</h2>
+            <p class="entry-copy">Tap enter to open the page, start the music, and step into the celebration.</p>
+            <button class="entry-button" id="enter-btn" type="button">Enter</button>
+            <p class="entry-note">Music begins after you enter.</p>
+        </div>
+    </div>
+
     <div id="loading">
-        <p class="loading-title">Warming up the celebration</p>
-        <p class="loading-subtitle">A birthday scene with layered 3D depth, scroll-synced storytelling, and a small treasure hunt inside the stars.</p>
+        <p class="loading-title">Warming up Soumya Mam's celebration</p>
+        <p class="loading-subtitle">A layered birthday tribute with memories, wishes, and a story that celebrates the person you are.</p>
         <div class="loading-bar"><span></span></div>
         <p class="loading-note">Scroll slowly, tap the floating stickers, and let the scene reveal itself.</p>
     </div>
@@ -475,7 +566,7 @@
             <article class="story-card">
                 <div class="chapter-index">Chapter 01</div>
                 <h2>A sky that remembers the person you adore</h2>
-                <p class="section-copy">The page opens like a harbor at dawn: a glowing center, layered light, and a quiet orbit of memories waiting to be discovered. Keep scrolling and the scene will travel with you.</p>
+                <p class="section-copy">Wish: may every new morning greet you with peace, joy, and beautiful reasons to smile.</p>
                 <div class="story-footer">
                     <span class="tag">3D atmosphere</span>
                     <span class="tag">scroll storytelling</span>
@@ -488,7 +579,7 @@
             <article class="story-card">
                 <div class="chapter-index">Chapter 02</div>
                 <h2>Memories arranged like lanterns on water</h2>
-                <p class="section-copy">The camera glides closer to a ring of luminous memory cards. Their faces can hold photographs, captions, or milestones, so the page feels personal instead of generic.</p>
+                <p class="section-copy">Wish: may your favorite memories keep growing, and may each year bring moments even sweeter.</p>
                 <div class="story-footer">
                     <span class="tag">memory ring</span>
                     <span class="tag">photo cards</span>
@@ -501,7 +592,7 @@
             <article class="story-card">
                 <div class="chapter-index">Chapter 03</div>
                 <h2>A small treasure hunt hidden in the glow</h2>
-                <p class="section-copy">Five playful stickers float around the scene. Tap them to collect blessings, unlock more of the page, and make the celebration feel participatory rather than passive.</p>
+                <p class="section-copy">Wish: may every little challenge turn into a playful win, and every step feel rewarding.</p>
                 <div class="story-footer">
                     <span class="tag">collectibles</span>
                     <span class="tag">game mechanic</span>
@@ -514,7 +605,7 @@
             <article class="story-card">
                 <div class="chapter-index">Chapter 04</div>
                 <h2>Everything blooms into a fuller celebration</h2>
-                <p class="section-copy">As the stickers are found, the center brightens, confetti begins to rise, and the background layers deepen. The story becomes a stage, not just a scene.</p>
+                <p class="section-copy">Wish: may your days bloom with good health, meaningful work, and people who truly value you.</p>
                 <div class="story-footer">
                     <span class="tag">confetti burst</span>
                     <span class="tag">cinematic lighting</span>
@@ -527,7 +618,7 @@
             <article class="story-card">
                 <div class="chapter-index">Finale</div>
                 <h2>Happy birthday, with all the admiration in the room</h2>
-                <p class="section-copy">This is the ending card: a personalized line, a brighter world, and enough room for your own message, inside joke, or memory to land beautifully.</p>
+                <p class="section-copy">Wish: may this year be your most fulfilling one yet, full of love, laughter, and quiet victories.</p>
                 <div class="final-banner" id="final-banner">
                     All wish stickers collected. The celebration is fully unlocked.
                 </div>
@@ -547,12 +638,63 @@
     <script>
         const container = document.getElementById('canvas-container');
         const loading = document.getElementById('loading');
+        const entryGate = document.getElementById('entry-gate');
+        const enterButton = document.getElementById('enter-btn');
         const celebrateButton = document.getElementById('celebrate-btn');
         const toastStack = document.getElementById('toast-stack');
         const meterFill = document.getElementById('meter-fill');
         const wishCountLabel = document.getElementById('wish-count');
         const finalBanner = document.getElementById('final-banner');
         const chapters = Array.from(document.querySelectorAll('.chapter'));
+
+        const backgroundMusic = new Audio('./music/loop.mp3');
+        backgroundMusic.loop = true;
+        backgroundMusic.preload = 'auto';
+        backgroundMusic.volume = 0.34;
+
+        const celebrationTrackA = new Audio('./music/confetti.mp3');
+        celebrationTrackA.loop = false;
+        celebrationTrackA.preload = 'auto';
+        celebrationTrackA.volume = 0.52;
+
+        const celebrationTrackB = new Audio('./music/pepper.mp3');
+        celebrationTrackB.loop = false;
+        celebrationTrackB.preload = 'auto';
+        celebrationTrackB.volume = 0.48;
+
+        let musicStarted = false;
+
+        function tryPlayAudio(audio) {
+            const playback = audio.play();
+            if (playback && typeof playback.catch === 'function') {
+                playback.catch(() => {});
+            }
+        }
+
+        function startBackgroundMusic() {
+            if (musicStarted) {
+                return;
+            }
+            musicStarted = true;
+            tryPlayAudio(backgroundMusic);
+        }
+
+        function playCelebrationMusic() {
+            startBackgroundMusic();
+            [celebrationTrackA, celebrationTrackB].forEach((audio) => {
+                audio.currentTime = 0;
+                tryPlayAudio(audio);
+            });
+        }
+
+        function enterExperience() {
+            document.body.classList.add('entered');
+            entryGate.classList.add('hidden');
+            startBackgroundMusic();
+            window.setTimeout(() => {
+                entryGate.remove();
+            }, 500);
+        }
 
         const scene = new THREE.Scene();
         scene.fog = new THREE.FogExp2(0xf9c38f, 0.017);
@@ -564,6 +706,8 @@
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.outputEncoding = THREE.sRGBEncoding;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 0.9;
         container.appendChild(renderer.domElement);
 
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -691,6 +835,12 @@
                 ctx.font = '500 40px Inter, sans-serif';
                 wrapText(ctx, card.subtitle, 170, 1290, 690, 54);
 
+                if (card.wish) {
+                    ctx.fillStyle = 'rgba(110, 78, 39, 0.85)';
+                    ctx.font = '500 30px Cormorant Garamond, serif';
+                    wrapText(ctx, card.wish, 170, 1404, 690, 38);
+                }
+
                 ctx.fillStyle = 'rgba(255, 255, 255, 0.88)';
                 ctx.font = '600 52px Cormorant Garamond, serif';
                 ctx.fillText(card.label, 166, 258);
@@ -767,13 +917,17 @@
                 roughness: 0.88,
                 metalness: 0.08,
                 side: THREE.FrontSide,
-                transparent: true,
-                opacity: 0.98
+                transparent: false,
+                opacity: 1
             });
             const mesh = new THREE.Mesh(geometry, material);
             mesh.position.set(Math.cos(angle) * radius, heightOffset, Math.sin(angle) * radius);
             mesh.lookAt(0, heightOffset * 0.35, 0);
             mesh.userData.home = mesh.position.clone();
+            mesh.userData.baseColor = material.color.clone();
+            mesh.userData.baseOpacity = 1;
+            mesh.userData.baseEmissive = material.emissive.clone();
+            mesh.userData.baseEmissiveIntensity = material.emissiveIntensity;
             return mesh;
         }
 
@@ -884,7 +1038,7 @@
 
         const base = new THREE.Mesh(
             new THREE.CylinderGeometry(2.4, 2.9, 0.9, 48),
-            new THREE.MeshStandardMaterial({ color: 0xe9c186, roughness: 0.86, metalness: 0.04 })
+            new THREE.MeshStandardMaterial({ color: 0xd99d5f, emissive: 0x7d4b22, emissiveIntensity: 0.08, roughness: 0.84, metalness: 0.05 })
         );
         base.position.y = -2.05;
         centerRig.add(base);
@@ -894,7 +1048,7 @@
 
         const column = new THREE.Mesh(
             new THREE.CylinderGeometry(0.52, 0.78, 3.95, 36),
-            new THREE.MeshStandardMaterial({ color: 0xd8a267, roughness: 0.62, metalness: 0.22 })
+            new THREE.MeshStandardMaterial({ color: 0x99673a, emissive: 0x4d2d18, emissiveIntensity: 0.08, roughness: 0.62, metalness: 0.18 })
         );
         column.position.y = -0.02;
         wishTree.add(column);
@@ -902,9 +1056,9 @@
         const coreCrystal = new THREE.Mesh(
             new THREE.IcosahedronGeometry(0.74, 1),
             new THREE.MeshStandardMaterial({
-                color: 0xffdcb0,
-                emissive: 0xff9f7b,
-                emissiveIntensity: 0.62,
+                color: 0xffc39a,
+                emissive: 0xff7d7a,
+                emissiveIntensity: 0.7,
                 roughness: 0.18,
                 metalness: 0.36,
                 transparent: true,
@@ -916,7 +1070,7 @@
 
         const ringA = new THREE.Mesh(
             new THREE.TorusGeometry(1.44, 0.08, 20, 120),
-            new THREE.MeshStandardMaterial({ color: 0xffcb88, emissive: 0xffa35f, emissiveIntensity: 0.65, roughness: 0.28, metalness: 0.32 })
+            new THREE.MeshStandardMaterial({ color: 0xff9d6b, emissive: 0xff6249, emissiveIntensity: 0.72, roughness: 0.28, metalness: 0.32 })
         );
         ringA.rotation.x = Math.PI / 2;
         ringA.position.y = 1.62;
@@ -924,33 +1078,61 @@
 
         const ringB = new THREE.Mesh(
             new THREE.TorusGeometry(1.9, 0.045, 16, 120),
-            new THREE.MeshStandardMaterial({ color: 0xf8e9c7, emissive: 0xffc174, emissiveIntensity: 0.45, roughness: 0.32, metalness: 0.24 })
+            new THREE.MeshStandardMaterial({ color: 0xffd06f, emissive: 0xff9a36, emissiveIntensity: 0.5, roughness: 0.32, metalness: 0.24 })
         );
         ringB.rotation.x = Math.PI / 2;
         ringB.rotation.z = Math.PI / 4;
         ringB.position.y = 1.62;
         wishTree.add(ringB);
 
+        const ringC = new THREE.Mesh(
+            new THREE.TorusGeometry(2.28, 0.05, 18, 140),
+            new THREE.MeshStandardMaterial({ color: 0xff8f9b, emissive: 0xd96ca0, emissiveIntensity: 0.32, roughness: 0.34, metalness: 0.22 })
+        );
+        ringC.rotation.x = Math.PI / 2;
+        ringC.rotation.y = Math.PI / 6;
+        ringC.position.y = 1.58;
+        wishTree.add(ringC);
+
+        const ringD = new THREE.Mesh(
+            new THREE.TorusGeometry(2.72, 0.03, 14, 140),
+            new THREE.MeshStandardMaterial({ color: 0xb5ead7, emissive: 0x6ab89a, emissiveIntensity: 0.24, roughness: 0.36, metalness: 0.18 })
+        );
+        ringD.rotation.x = Math.PI / 2;
+        ringD.rotation.z = Math.PI / 3;
+        ringD.position.y = 1.56;
+        wishTree.add(ringD);
+
+        const ringE = new THREE.Mesh(
+            new THREE.TorusGeometry(3.04, 0.02, 12, 140),
+            new THREE.MeshStandardMaterial({ color: 0xfff2da, emissive: 0xffcf73, emissiveIntensity: 0.3, roughness: 0.4, metalness: 0.14, transparent: true, opacity: 0.92 })
+        );
+        ringE.rotation.x = Math.PI / 2;
+        ringE.rotation.y = Math.PI / 2.5;
+        ringE.position.y = 1.54;
+        wishTree.add(ringE);
+
         const canopy = new THREE.Group();
-        canopy.position.y = 2.25;
+        canopy.position.y = 2.45;
         wishTree.add(canopy);
         const canopyLeaves = [];
-        for (let index = 0; index < 30; index += 1) {
+        for (let index = 0; index < 72; index += 1) {
             const leaf = new THREE.Mesh(
-                new THREE.DodecahedronGeometry(0.38 + Math.random() * 0.18, 0),
+                new THREE.SphereGeometry(0.36 + Math.random() * 0.24, 20, 20),
                 new THREE.MeshStandardMaterial({
-                    color: index % 2 === 0 ? 0xffd29a : 0xffb886,
-                    emissive: 0xff945f,
+                    color: index % 3 === 0 ? 0xffd8a8 : index % 3 === 1 ? 0xffb78d : 0xe2c3ff,
+                    emissive: index % 3 === 2 ? 0xb48cff : 0xff9e65,
                     emissiveIntensity: 0.2,
-                    roughness: 0.44,
-                    metalness: 0.2
+                    roughness: 0.52,
+                    metalness: 0.12
                 })
             );
-            const angle = (index / 30) * Math.PI * 2;
-            const ring = 1.15 + (index % 4) * 0.2 + Math.random() * 0.16;
+            const angle = (index / 72) * Math.PI * 2;
+            const shell = index % 3;
+            const ring = 1.45 + shell * 0.42 + Math.random() * 0.22;
             leaf.position.set(
                 Math.cos(angle) * ring,
-                (Math.random() - 0.5) * 1.05,
+                (Math.random() - 0.35) * (1.12 + shell * 0.28),
                 Math.sin(angle) * ring
             );
             leaf.userData.base = leaf.scale.clone();
@@ -958,14 +1140,118 @@
             canopyLeaves.push(leaf);
         }
 
+        const canopyCore = new THREE.Mesh(
+            new THREE.SphereGeometry(1.52, 28, 28),
+            new THREE.MeshStandardMaterial({
+                color: 0xffb88a,
+                emissive: 0xd96c86,
+                emissiveIntensity: 0.18,
+                roughness: 0.58,
+                metalness: 0.1,
+                transparent: true,
+                opacity: 0.9
+            })
+        );
+        canopyCore.position.y = 0.14;
+        canopy.add(canopyCore);
+
+        const canopyTop = new THREE.Group();
+        canopyTop.position.y = 1.08;
+        canopy.add(canopyTop);
+
+        for (let index = 0; index < 30; index += 1) {
+            const puff = new THREE.Mesh(
+                new THREE.SphereGeometry(0.3 + Math.random() * 0.2, 16, 16),
+                new THREE.MeshStandardMaterial({
+                    color: index % 4 === 0 ? 0xffddb2 : index % 4 === 1 ? 0xffc998 : index % 4 === 2 ? 0xf7e38e : 0xf0b6ff,
+                    emissive: index % 4 === 3 ? 0xbd7aff : 0xff9f6e,
+                    emissiveIntensity: 0.14,
+                    roughness: 0.56,
+                    metalness: 0.08
+                })
+            );
+            const angle = (index / 30) * Math.PI * 2;
+            const radius = 0.9 + (index % 4) * 0.2 + Math.random() * 0.14;
+            puff.position.set(
+                Math.cos(angle) * radius,
+                0.16 + (Math.random() - 0.55) * 0.48,
+                Math.sin(angle) * radius
+            );
+            canopyTop.add(puff);
+            canopyLeaves.push(puff);
+        }
+
+        const canopyCap = new THREE.Group();
+        canopyCap.position.y = 1.48;
+        canopy.add(canopyCap);
+        for (let index = 0; index < 18; index += 1) {
+            const capLeaf = new THREE.Mesh(
+                new THREE.SphereGeometry(0.24 + Math.random() * 0.14, 14, 14),
+                new THREE.MeshStandardMaterial({
+                    color: index % 3 === 0 ? 0xfff0bc : index % 3 === 1 ? 0xf8b7c6 : 0xd8c3ff,
+                    emissive: index % 3 === 2 ? 0x9f7eff : 0xffa765,
+                    emissiveIntensity: 0.16,
+                    roughness: 0.54,
+                    metalness: 0.07
+                })
+            );
+            const angle = (index / 18) * Math.PI * 2 + 0.1;
+            const radius = 1.15 + Math.random() * 0.55;
+            capLeaf.position.set(
+                Math.cos(angle) * radius,
+                0.1 + Math.sin(index * 0.7) * 0.12,
+                Math.sin(angle) * radius
+            );
+            canopyCap.add(capLeaf);
+            canopyLeaves.push(capLeaf);
+        }
+
+        const topBud = new THREE.Mesh(
+            new THREE.SphereGeometry(0.52, 20, 20),
+            new THREE.MeshStandardMaterial({
+                color: 0xffe1a8,
+                emissive: 0xff8f5d,
+                emissiveIntensity: 0.24,
+                roughness: 0.52,
+                metalness: 0.1
+            })
+        );
+        topBud.position.y = 0.62;
+        canopyTop.add(topBud);
+
+        const accentLeaves = new THREE.Group();
+        accentLeaves.position.y = 0.82;
+        canopy.add(accentLeaves);
+        for (let index = 0; index < 18; index += 1) {
+            const accent = new THREE.Mesh(
+                new THREE.SphereGeometry(0.13 + Math.random() * 0.06, 12, 12),
+                new THREE.MeshStandardMaterial({
+                    color: index % 2 === 0 ? 0x97c96d : 0x6fbf9b,
+                    emissive: index % 2 === 0 ? 0x7ab558 : 0x4d9b83,
+                    emissiveIntensity: 0.24,
+                    roughness: 0.62,
+                    metalness: 0.06
+                })
+            );
+            const angle = (index / 18) * Math.PI * 2 + Math.random() * 0.4;
+            const radius = 1.52 + Math.random() * 0.42;
+            accent.position.set(
+                Math.cos(angle) * radius,
+                0.05 + (Math.random() - 0.5) * 0.55,
+                Math.sin(angle) * radius
+            );
+            accentLeaves.add(accent);
+            canopyLeaves.push(accent);
+        }
+
         const wishFruits = [];
         for (let index = 0; index < 5; index += 1) {
             const fruit = new THREE.Mesh(
                 new THREE.OctahedronGeometry(0.21),
                 new THREE.MeshStandardMaterial({
-                    color: 0xffd784,
-                    emissive: 0xffab6b,
-                    emissiveIntensity: 1,
+                    color: index % 2 === 0 ? 0xffd784 : 0xbfa7ff,
+                    emissive: index % 2 === 0 ? 0xffab6b : 0x885dff,
+                    emissiveIntensity: 1.08,
                     roughness: 0.24,
                     metalness: 0.18,
                     transparent: true,
@@ -973,15 +1259,28 @@
                 })
             );
             const angle = (index / 5) * Math.PI * 2 + 0.3;
-            fruit.position.set(Math.cos(angle) * 1.95, 0.25 + Math.sin(index) * 0.35, Math.sin(angle) * 1.95);
+            fruit.position.set(Math.cos(angle) * 2.45, 0.28 + Math.sin(index) * 0.42, Math.sin(angle) * 2.45);
             fruit.visible = false;
             canopy.add(fruit);
             wishFruits.push(fruit);
         }
 
-        const treeAura = new THREE.PointLight(0xffb871, 1.8, 20);
-        treeAura.position.set(0, 2.0, 0.5);
+        const treeAura = new THREE.PointLight(0xffb871, 2.4, 26);
+        treeAura.position.set(0, 2.5, 0.5);
         wishTree.add(treeAura);
+
+        const treeGlowHalo = new THREE.Mesh(
+            new THREE.SphereGeometry(4.2, 32, 32),
+            new THREE.MeshBasicMaterial({
+                color: 0xffc27c,
+                transparent: true,
+                opacity: 0.08,
+                depthWrite: false,
+                blending: THREE.AdditiveBlending
+            })
+        );
+        treeGlowHalo.position.y = 2.2;
+        wishTree.add(treeGlowHalo);
 
         const vines = new THREE.Group();
         centerRig.add(vines);
@@ -1005,15 +1304,15 @@
         }
 
         const cardData = [
-            { title: 'Joyous', subtitle: 'A bright laugh that lifts every room in seconds.', label: 'Golden hour', caption: 'A warm-hearted trait', a: '#ffc889', b: '#f0847a', c: '#8a6ec9', imageUrl: './images/1.jpeg' },
-            { title: 'Vibrant', subtitle: 'Color, energy, and presence wherever she goes.', label: 'Soft tide', caption: 'A radiant trait', a: '#ffb7d3', b: '#ff8fa0', c: '#8f7be3', imageUrl: './images/2.jpeg' },
-            { title: 'Helpful', subtitle: 'Always showing up with care exactly when needed.', label: 'Open sky', caption: 'A generous trait', a: '#8dc6ff', b: '#6ea8ee', c: '#8676dc', imageUrl: './images/3.jpeg' },
-            { title: 'Adorable', subtitle: 'Sweet, genuine, and impossible not to smile around.', label: 'Paper lantern', caption: 'A charming trait', a: '#ffd5a6', b: '#ffa385', c: '#ff7ea0', imageUrl: './images/4.jpeg' },
-            { title: 'Animal Lover', subtitle: 'A heart that naturally makes every creature feel safe.', label: 'Harbor light', caption: 'A gentle trait', a: '#abe7ce', b: '#7ec8ab', c: '#78a3d1', imageUrl: './images/5.jpeg' },
-            { title: 'Hopeful', subtitle: 'Always looking forward with warmth and belief.', label: 'Final current', caption: 'An uplifting trait', a: '#ffe8a9', b: '#ffbd83', c: '#f38aa6', imageUrl: './images/6.jpeg' },
-            { title: 'Lovely', subtitle: 'Kind in ways that feel effortless and real.', label: 'Sun thread', caption: 'A graceful trait', a: '#ffe0b5', b: '#f3a57f', c: '#d4878f', imageUrl: './images/7.jpeg' },
-            { title: 'Fun', subtitle: 'Turning ordinary days into memorable little adventures.', label: 'Soft spark', caption: 'A playful trait', a: '#ffd2c5', b: '#e39aa5', c: '#916fa6', imageUrl: './images/8.jpeg' },
-            { title: 'Energetic', subtitle: 'Bringing motion, excitement, and spark to everyone around.', label: 'Home light', caption: 'A lively trait', a: '#ffe8bd', b: '#e8b57e', c: '#8f83c2', imageUrl: './images/9.jpeg' }
+            { title: 'Joyous', subtitle: 'Wish: may your smile keep finding reasons to shine every day.', label: 'Golden hour', caption: 'A warm-hearted trait', a: '#ffc889', b: '#f0847a', c: '#8a6ec9', imageUrl: './images/1.jpeg' },
+            { title: 'Vibrant', subtitle: 'Wish: may your life stay as vibrant as your spirit.', label: 'Soft tide', caption: 'A radiant trait', a: '#ffb7d3', b: '#ff8fa0', c: '#8f7be3', imageUrl: './images/2.jpeg' },
+            { title: 'Helpful', subtitle: 'Wish: may kindness return to you tenfold in every season.', label: 'Open sky', caption: 'A generous trait', a: '#8dc6ff', b: '#6ea8ee', c: '#8676dc', imageUrl: './images/3.jpeg' },
+            { title: 'Adorable', subtitle: 'Wish: may your warmth keep touching hearts effortlessly.', label: 'Paper lantern', caption: 'A charming trait', a: '#ffd5a6', b: '#ffa385', c: '#ff7ea0', imageUrl: './images/4.jpeg' },
+            { title: 'Animal Lover', subtitle: 'Wish: may your gentle heart always stay soft and strong.', label: 'Harbor light', caption: 'A gentle trait', a: '#abe7ce', b: '#7ec8ab', c: '#78a3d1', imageUrl: './images/5.jpeg' },
+            { title: 'Hopeful', subtitle: 'Wish: may tomorrow always arrive with hope and light.', label: 'Final current', caption: 'An uplifting trait', a: '#ffe8a9', b: '#ffbd83', c: '#f38aa6', imageUrl: './images/6.jpeg' },
+            { title: 'Lovely', subtitle: 'Wish: may your lovely soul always feel deeply celebrated.', label: 'Sun thread', caption: 'A graceful trait', a: '#ffe0b5', b: '#f3a57f', c: '#d4878f', imageUrl: './images/7.jpeg' },
+            { title: 'Fun', subtitle: 'Wish: may joy keep finding you in playful little moments.', label: 'Soft spark', caption: 'A playful trait', a: '#ffd2c5', b: '#e39aa5', c: '#916fa6', imageUrl: './images/8.jpeg' },
+            { title: 'Energetic', subtitle: 'Wish: may your energy keep inspiring everyone around you.', label: 'Home light', caption: 'A lively trait', a: '#ffe8bd', b: '#e8b57e', c: '#8f83c2', imageUrl: './images/9.jpeg' }
         ];
 
         const cardGroup = new THREE.Group();
@@ -1242,27 +1541,37 @@
 
         function launchFullCelebration() {
             const centerOrigin = new THREE.Vector3(0, 2.45, 0);
-            for (let index = 0; index < 5; index += 1) {
-                const ringAngle = (index / 5) * Math.PI * 2;
-                const burstOrigin = new THREE.Vector3(Math.cos(ringAngle) * 2.4, 1.45 + Math.random() * 1.8, Math.sin(ringAngle) * 2.4);
-                createBurst(burstOrigin, wishColors[index], { fragmentCount: 34, spread: 0.32, upward: 0.26, life: 230, sizeMin: 0.035, sizeMax: 0.085 });
+            const celebrationColors = [0xffd873, 0xff8f9b, 0x91d5ff, 0x9be39c, 0xcf9bff, 0xffb36b, 0xf1ea93, 0x7fd5c3];
+            for (let index = 0; index < celebrationColors.length; index += 1) {
+                const ringAngle = (index / celebrationColors.length) * Math.PI * 2;
+                const burstOrigin = new THREE.Vector3(Math.cos(ringAngle) * 2.8, 1.35 + Math.random() * 2.1, Math.sin(ringAngle) * 2.8);
+                createBurst(burstOrigin, celebrationColors[index], { fragmentCount: 32, spread: 0.34, upward: 0.28, life: 230, sizeMin: 0.034, sizeMax: 0.09 });
             }
 
-            createBurst(centerOrigin, 0xfff2c8, { fragmentCount: 90, spread: 0.46, upward: 0.32, life: 260, sizeMin: 0.03, sizeMax: 0.095 });
+            createBurst(centerOrigin, 0xfff2c8, { fragmentCount: 96, spread: 0.48, upward: 0.34, life: 260, sizeMin: 0.03, sizeMax: 0.1 });
+            createBurst(centerOrigin, 0xff8fa0, { fragmentCount: 52, spread: 0.36, upward: 0.28, life: 220, sizeMin: 0.028, sizeMax: 0.075 });
+            createBurst(centerOrigin, 0x91d5ff, { fragmentCount: 46, spread: 0.35, upward: 0.26, life: 220, sizeMin: 0.028, sizeMax: 0.075 });
 
             anime({
                 targets: treeAura,
-                intensity: [treeAura.intensity, 6.6, 2.4],
-                distance: [treeAura.distance, 32, 22],
+                intensity: [treeAura.intensity, 8.2, 2.8],
+                distance: [treeAura.distance, 36, 24],
                 duration: 1800,
                 easing: 'easeOutExpo'
             });
 
             anime({
+                targets: treeGlowHalo.material,
+                opacity: [treeGlowHalo.material.opacity, 0.18, 0.08],
+                duration: 1600,
+                easing: 'easeOutExpo'
+            });
+
+            anime({
                 targets: canopy.scale,
-                x: [1, 1.2, 1],
-                y: [1, 1.2, 1],
-                z: [1, 1.2, 1],
+                x: [1, 1.24, 1],
+                y: [1, 1.24, 1],
+                z: [1, 1.24, 1],
                 duration: 1500,
                 easing: 'easeOutElastic(1, .6)'
             });
@@ -1301,6 +1610,7 @@
         }
 
         function onPointerDown(event) {
+            startBackgroundMusic();
             setPointerFromEvent(event);
             pointerState.downX = event.clientX;
             pointerState.downY = event.clientY;
@@ -1348,12 +1658,15 @@
         renderer.domElement.addEventListener('pointerdown', onPointerDown, { passive: true });
         renderer.domElement.addEventListener('pointermove', onPointerMove, { passive: true });
         renderer.domElement.addEventListener('pointerup', onPointerUp, { passive: true });
+        enterButton.addEventListener('click', enterExperience);
 
         celebrateButton.addEventListener('click', () => {
+            startBackgroundMusic();
             if (!celebrationUnlocked) {
                 showToast('Collect all five stickers to unlock the finale.', 0x9bd4ff);
                 return;
             }
+            playCelebrationMusic();
             launchFullCelebration();
             showToast('Celebration burst refreshed.', 0xffd58a);
         });
@@ -1441,21 +1754,46 @@
             controls.update();
 
             const t = time * 0.001;
-            canopy.rotation.y = t * 0.06;
+            canopy.rotation.y = t * 0.05;
+            canopy.position.y = 2.45 + Math.sin(t * 0.45) * 0.08;
+            canopyTop.rotation.y = -t * 0.06;
+            canopyTop.position.y = 0.95 + Math.sin(t * 0.8) * 0.05;
+            canopyCap.rotation.y = t * 0.04;
+            canopyCap.position.y = 1.48 + Math.sin(t * 0.62) * 0.04;
+            accentLeaves.rotation.y = t * 0.08;
             wishTree.rotation.y = Math.sin(t * 0.2) * 0.04;
             coreCrystal.rotation.y = t * 0.28;
             coreCrystal.rotation.x = Math.sin(t * 0.4) * 0.08;
             ringA.rotation.z = t * 0.14;
             ringB.rotation.z = Math.PI / 4 - t * 0.11;
+            ringC.rotation.z = t * 0.085;
+            ringD.rotation.z = Math.PI / 3 + t * 0.065;
+            ringE.rotation.z = t * 0.05;
             base.rotation.y = -t * 0.06;
             vines.rotation.y = t * 0.1;
             cardGroup.rotation.y = Math.sin(t * 0.23) * 0.04;
+            treeGlowHalo.rotation.y = -t * 0.03;
+            treeGlowHalo.scale.setScalar(1 + Math.sin(t * 0.25) * 0.03);
 
             cards.forEach((cardMesh, index) => {
                 const pulse = 0.07 * Math.sin(t * 1.1 + index * 0.5);
                 cardMesh.position.y = cardMesh.userData.home.y + pulse;
                 cardMesh.lookAt(camera.position);
                 cardMesh.rotateZ(cardMesh.userData.baseRotationZ + 0.03 * Math.sin(t * 0.7 + index * 1.3));
+
+                const projected = cardMesh.position.clone().project(camera);
+                const screenDistance = Math.sqrt((projected.x * projected.x) + (projected.y * projected.y));
+                const distanceToCamera = camera.position.distanceTo(cardMesh.position);
+                const centerFocus = THREE.MathUtils.clamp(1 - (screenDistance / 1.15), 0, 1);
+                const proximityFocus = THREE.MathUtils.clamp(1 - ((distanceToCamera - 8.2) / 7.5), 0, 1);
+                const focus = THREE.MathUtils.clamp((centerFocus * 0.72) + (proximityFocus * 0.28), 0, 1);
+                const tone = THREE.MathUtils.lerp(0.78, 1.0, focus);
+
+                cardMesh.material.color.setRGB(tone, tone, tone);
+                cardMesh.material.opacity = 1;
+                cardMesh.material.emissive.copy(cardMesh.userData.baseEmissive);
+                cardMesh.material.emissiveIntensity = THREE.MathUtils.lerp(0.03, cardMesh.userData.baseEmissiveIntensity, focus);
+                cardMesh.material.roughness = THREE.MathUtils.lerp(0.94, 0.86, focus);
             });
 
             wishStickers.forEach((orb, index) => {
