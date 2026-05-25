@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>Vayu Raksha - Affordable Clean Air</title>
+  <meta name="description" content="Project Vayuraksha is a low-cost, repairable air purifier built for hostels, PGs, and middle-class homes." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f1114;
+      --surface: rgba(255, 255, 255, 0.06);
+      --line: rgba(255, 255, 255, 0.12);
+      --text: #ebedf0;
+      --muted: #95a1ad;
+      --primary: #39ff14;
+      --toxic: #d95c14;
+      --clean: #00d4ff;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+      --radius: 24px;
+      --max: 1200px;
+    }
+
+    * { box-sizing: border-box; }
+    html { background: var(--bg); scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 50% -10%, rgba(0, 212, 255, 0.12), transparent 28%),
+        radial-gradient(circle at 15% 18%, rgba(57, 255, 20, 0.07), transparent 20%),
+        linear-gradient(180deg, #0d1013 0%, #0f1114 45%, #090b0d 100%);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.08;
+      z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    a { color: inherit; text-decoration: none; }
+    h1, h2, h3, h4 { font-family: 'Clash Display', sans-serif; margin: 0; }
+    p { line-height: 1.7; color: rgba(235, 237, 240, 0.8); margin-top: 0; }
+
+    .wrap { width: min(var(--max), calc(100% - 2rem)); margin: 0 auto; position: relative; z-index: 1; }
+    
+    section {
+      padding: clamp(4rem, 8vh, 8rem) 0;
+      position: relative;
+    }
+
+    /* Backgrounds */
+    .bg-hero {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(circle at 40% 20%, rgba(255, 255, 255, 0.1), transparent 30%),
+        radial-gradient(circle at 65% 15%, rgba(57, 255, 20, 0.12), transparent 30%);
+    }
+    
+    .bg-toxic {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(217, 92, 20, 0.08), transparent 40%),
+        linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 4rem 4rem, 4rem 4rem;
+    }
+
+    .bg-clean {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(circle at 25% 24%, rgba(57, 255, 20, 0.12), transparent 30%),
+        radial-gradient(circle at 82% 18%, rgba(0, 212, 255, 0.08), transparent 25%);
+    }
+
+    /* Typography */
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.55rem 0.82rem; border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08);
+      color: rgba(235, 237, 240, 0.82); letter-spacing: 0.18em;
+      text-transform: uppercase; font-size: 0.7rem; width: fit-content; margin-bottom: 1rem;
+    }
+    .eyebrow-dot { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--primary); box-shadow: 0 0 18px rgba(57, 255, 20, 0.8); }
+    .eyebrow.toxic .eyebrow-dot { background: var(--toxic); box-shadow: 0 0 18px rgba(217, 92, 20, 0.8); }
+    .eyebrow.blue .eyebrow-dot { background: var(--clean); box-shadow: 0 0 18px rgba(0, 212, 255, 0.8); }
+
+    .headline { font-size: clamp(3rem, 7vw, 6.5rem); line-height: 0.94; text-transform: uppercase; letter-spacing: -0.04em; margin-bottom: 1.5rem; }
+    .headline .accent { color: var(--primary); text-shadow: 0 0 34px rgba(57, 255, 20, 0.2); }
+    .section-title { font-size: clamp(2.2rem, 4.5vw, 4rem); line-height: 0.95; text-transform: uppercase; letter-spacing: -0.04em; margin-bottom: 1rem; }
+    .subtitle { font-size: clamp(1.2rem, 2vw, 1.5rem); color: rgba(235,237,240,0.9); margin-bottom: 1.5rem; font-weight: 500; }
+    .body-copy { font-size: 1.1rem; max-width: 65ch; margin-bottom: 2rem; color: rgba(235, 237, 240, 0.76); }
+    .closing-line { font-size: 1.1rem; font-weight: 600; color: var(--primary); margin-top: 2rem; border-left: 2px solid var(--primary); padding-left: 1rem; }
+    .closing-line.toxic { color: #ff9b67; border-left-color: var(--toxic); }
+
+    /* Buttons */
+    .actions { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2rem; }
+    .button {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 3.2rem; padding: 0.85rem 1.4rem; border-radius: 999px;
+      border: 1px solid transparent; letter-spacing: 0.18em; text-transform: uppercase;
+      font-size: 0.77rem; font-weight: 700; transition: all 180ms ease; cursor: pointer;
+    }
+    .button:hover { transform: translateY(-2px); }
+    .button-primary { color: #071008; background: linear-gradient(180deg, #95ff79, var(--primary)); box-shadow: 0 14px 36px rgba(57, 255, 20, 0.24); }
+    .button-primary:hover { box-shadow: 0 20px 40px rgba(57, 255, 20, 0.35); }
+    .button-secondary { border-color: rgba(255, 255, 255, 0.12); background: rgba(255, 255, 255, 0.03); color: var(--text); }
+    .button-secondary:hover { border-color: rgba(0, 212, 255, 0.42); background: rgba(0, 212, 255, 0.08); }
+
+    /* Grids & Cards */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+    
+    .bento-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+    .bento-item-large { grid-column: span 2; }
+    
+    .staggered-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.5rem; align-items: start; }
+    .staggered-item-1 { grid-column: 1 / 8; margin-top: 2rem; }
+    .staggered-item-2 { grid-column: 7 / -1; }
+    .staggered-item-3 { grid-column: 3 / 10; margin-top: -1rem; z-index: 2; position: relative; }
+
+    .panel-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      border: 1px solid var(--line); border-radius: var(--radius); padding: 2rem;
+      box-shadow: var(--shadow); position: relative; overflow: hidden;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+    .panel-card:hover { border-color: rgba(57, 255, 20, 0.3); transform: translateY(-5px); }
+
+    .feature-list { display: grid; gap: 1rem; }
+    .feature-item {
+      display: flex; gap: 1rem; padding: 1.2rem; border-radius: 18px;
+      background: rgba(15, 17, 20, 0.6); border: 1px solid rgba(255,255,255,0.08);
+    }
+    .feature-item i {
+      width: 2.2rem; height: 2.2rem; flex-shrink: 0; border-radius: 50%; display: grid; place-items: center;
+      font-style: normal; font-weight: 700; color: var(--primary); background: rgba(57,255,20,0.12); box-shadow: inset 0 0 0 1px rgba(57,255,20,0.18);
+    }
+    .feature-icon-svg { width: 1.2rem; height: 1.2rem; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    .feature-item.toxic i { color: #ff9b67; background: rgba(217,92,20,0.12); box-shadow: inset 0 0 0 1px rgba(217,92,20,0.3); }
+    .feature-item h3 { font-size: 1.1rem; margin-bottom: 0.4rem; letter-spacing: -0.02em; }
+    .feature-item p { margin: 0; font-size: 0.95rem; }
+
+    /* Nav / Header */
+    header { padding: 1.5rem 0; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .nav-wrap { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-family: 'Clash Display', sans-serif; font-weight: 700; font-size: 1.5rem; letter-spacing: 0.05em; color: var(--text); }
+    .nav-links { display: flex; gap: 1.5rem; }
+    .nav-link { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(235,237,240,0.7); transition: color 0.2s; }
+    .nav-link:hover { color: var(--primary); }
+
+    /* Section specifics */
+    .hero { min-height: 85vh; display: flex; align-items: center; text-align: center; }
+    .hero .wrap { display: flex; flex-direction: column; align-items: center; }
+    .hero .body-copy { font-size: 1.25rem; max-width: 50ch; margin: 0 auto; }
+
+    .split-section { align-items: start; }
+    .split-content { max-width: 35rem; }
+
+    .step-card { text-align: center; padding: 2rem 1.5rem; }
+    .step-num { font-family: 'Clash Display', sans-serif; font-size: 3rem; color: rgba(255,255,255,0.1); line-height: 1; margin-bottom: 1rem; }
+    .step-card h3 { font-size: 1.2rem; margin-bottom: 0.8rem; }
+
+    .pain-gain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .pain-card { border-color: rgba(217, 92, 20, 0.3); background: linear-gradient(180deg, rgba(217, 92, 20, 0.05), transparent); }
+    .gain-card { border-color: rgba(57, 255, 20, 0.3); background: linear-gradient(180deg, rgba(57, 255, 20, 0.05), transparent); }
+    .list-item { display: flex; gap: 0.8rem; margin-bottom: 1rem; align-items: flex-start; }
+    .list-item::before { content: "→"; color: var(--primary); font-weight: bold; }
+    .pain-card .list-item::before { content: "✕"; color: var(--toxic); }
+
+    .vision-block { text-align: center; padding: 6rem 2rem; background: rgba(0, 212, 255, 0.05); border-radius: var(--radius); border: 1px solid rgba(0, 212, 255, 0.1); }
+    .vision-block h2 { font-size: clamp(2rem, 4vw, 3.5rem); margin-bottom: 1.5rem; }
+    .vision-block p { font-size: clamp(1.2rem, 2vw, 1.8rem); line-height: 1.5; color: rgba(235,237,240,0.9); max-width: 40ch; margin: 0 auto; }
+
+    .final-cta { text-align: center; }
+    .final-cta .panel-card { background: linear-gradient(160deg, rgba(181, 245, 255, 0.08), rgba(57, 255, 20, 0.05)), rgba(13, 20, 25, 0.84); padding: 4rem 2rem; }
+    
+    footer { padding: 3rem 0; border-top: 1px solid var(--line); text-align: center; color: var(--muted); font-size: 0.9rem; }
+    .footer-links { display: flex; justify-content: center; gap: 1.5rem; margin-top: 1.5rem; flex-wrap: wrap; }
+    .footer-links a { color: rgba(235,237,240,0.6); text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.75rem; }
+    .footer-links a:hover { color: var(--primary); }
+
+    .gsap-reveal { opacity: 0; transform: translateY(30px); }
+
+    @media (max-width: 960px) {
+      .grid-2, .grid-3, .grid-4, .pain-gain-grid, .bento-grid, .staggered-grid { display: flex; flex-direction: column; gap: 1.5rem; }
+      .bento-item-large, .staggered-item-1, .staggered-item-2, .staggered-item-3 { margin-top: 0; }
+      .actions { justify-content: center; }
+      .hero { text-align: center; }
+      .hero .actions { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="wrap nav-wrap">
+      <div class="logo">VAYURAKSHA</div>
+      <nav class="nav-links">
+        <a href="#problem" class="nav-link">The Problem</a>
+        <a href="#solution" class="nav-link">Solution</a>
+        <a href="#model" class="nav-link">Business Model</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 1. Hero -->
+  <section class="hero">
+    <div class="bg-hero"></div>
+    <div class="wrap gsap-reveal">
+      <div class="eyebrow"><span class="eyebrow-dot"></span> Team AirAlgae Project</div>
+      <h1 class="headline">Clean Air Shouldn’t Be a <span class="accent">Luxury</span></h1>
+      <p class="subtitle">A modular clean-air system built for hostels, PGs, and middle-class homes.</p>
+      <p class="body-copy">Most people living in polluted urban areas know they need cleaner indoor air, but premium purifiers are too expensive to buy, maintain, or repair. Vayuraksha is designed as a practical alternative: powerful, accessible, modular, and built around standard filters that are easy to replace locally.</p>
+      <div class="actions">
+        <a href="#cta" class="button button-primary">Get Early Access</a>
+        <a href="#how-it-works" class="button button-secondary">See How It Works</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Problem -->
+  <section id="problem">
+    <div class="bg-toxic"></div>
+    <div class="wrap grid-2 split-section">
+      <div class="split-content gsap-reveal">
+        <div class="eyebrow toxic"><span class="eyebrow-dot"></span> The Challenge</div>
+        <h2 class="section-title">The Problem with Air Purifiers Today</h2>
+        <p class="body-copy">For students in hostels and PGs, and for budget-conscious families, clean indoor air is often unaffordable. Premium branded purifiers come with high upfront costs, costly proprietary filters, and designs that are difficult or impossible to repair at home.</p>
+        <div class="closing-line toxic">The result is simple: the people who need clean air the most are often the least able to access it.</div>
+      </div>
+      <div class="feature-list gsap-reveal">
+        <div class="feature-item toxic">
+          <i><svg class="feature-icon-svg" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></i>
+          <div><h3>High Upfront Costs</h3><p>Branded air purifiers are too expensive for many students and middle-class households.</p></div>
+        </div>
+        <div class="feature-item toxic">
+          <i><svg class="feature-icon-svg" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></i>
+          <div><h3>Proprietary Lock-ins</h3><p>Replacement filters often lock users into costly proprietary ecosystems.</p></div>
+        </div>
+        <div class="feature-item toxic">
+          <i><svg class="feature-icon-svg" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></i>
+          <div><h3>Low Repairability</h3><p>Sleek commercial units are usually not designed for independent maintenance or part independence.</p></div>
+        </div>
+        <div class="feature-item toxic">
+          <i><svg class="feature-icon-svg" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></i>
+          <div><h3>Unmet Needs</h3><p>Many people want a clean-air study and sleep environment but lack an affordable option.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Solution -->
+  <section id="solution">
+    <div class="bg-clean"></div>
+    <div class="wrap grid-2 split-section">
+      <div class="feature-list gsap-reveal" style="order: 2;">
+        <div class="feature-item">
+          <i><svg class="feature-icon-svg" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></i>
+          <div><h3>Strong Airflow</h3><p>Engineered for brutal efficiency and effective filtration.</p></div>
+        </div>
+        <div class="feature-item">
+          <i><svg class="feature-icon-svg" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></i>
+          <div><h3>Standardized Parts</h3><p>Uses standardized filtration components avoiding brand lock-ins.</p></div>
+        </div>
+        <div class="feature-item">
+          <i><svg class="feature-icon-svg" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></i>
+          <div><h3>Independent Maintenance</h3><p>Easy replacement and maintenance designed for everyday users.</p></div>
+        </div>
+        <div class="feature-item">
+          <i><svg class="feature-icon-svg" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></i>
+          <div><h3>Local Sourcing</h3><p>Durable construction with 90%+ local sourcing.</p></div>
+        </div>
+      </div>
+      <div class="split-content gsap-reveal" style="order: 1;">
+        <div class="eyebrow blue"><span class="eyebrow-dot"></span> The Innovation</div>
+        <h2 class="section-title">Our Solution: Project Vayuraksha</h2>
+        <p class="body-copy">Project Vayuraksha is a modular clean-air system designed to make clean air more accessible. Instead of chasing expensive branding and closed ecosystems, it focuses on what really matters: strong air cleaning, low maintenance cost, locally available parts, and easy repairability. It is built around a practical, no-nonsense design.</p>
+        <div class="closing-line">In short, Vayuraksha is not a luxury gadget. It is a dependable clean-air tool for everyday users.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. How it works -->
+  <section id="how-it-works">
+    <div class="wrap">
+      <div class="gsap-reveal" style="text-align: center; max-width: 70ch; margin: 0 auto 4rem;">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> Mechanics</div>
+        <h2 class="section-title">How Vayuraksha Works</h2>
+        <p class="body-copy" style="margin: 0 auto;">Vayuraksha uses a modular system with standardized filtration and a high-static airflow setup to rapidly clean indoor air in a standard room. The design emphasizes practical assembly, reliable airflow, and easy component replacement instead of fragile sealed construction.</p>
+      </div>
+      
+      <div class="grid-4">
+        <div class="panel-card step-card gsap-reveal">
+          <div class="step-num">01</div>
+          <h3>Standardized Intake</h3>
+          <p>Air is pulled in through standardized, locally available, non-proprietary filter formats so replacement is easier and more affordable.</p>
+        </div>
+        <div class="panel-card step-card gsap-reveal">
+          <div class="step-num">02</div>
+          <h3>High-Static Airflow</h3>
+          <p>A strong fan system drives high airflow to achieve strong clean-air delivery, clearing bad air, dust, and smoke faster.</p>
+        </div>
+        <div class="panel-card step-card gsap-reveal">
+          <div class="step-num">03</div>
+          <h3>Rapid Circulation</h3>
+          <p>Cleaned air is circulated back into the room, creating a cleaner study, sleep, and living environment for users in small urban spaces.</p>
+        </div>
+        <div class="panel-card step-card gsap-reveal">
+          <div class="step-num">04</div>
+          <h3>Simple Maintenance</h3>
+          <p>Because the structure is modular, filters and parts can be replaced with basic guidance and tools rather than specialized servicing.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Why Vayuraksha (Value Prop) -->
+  <section>
+    <div class="wrap">
+      <div class="gsap-reveal" style="margin-bottom: 3rem;">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> Value Proposition</div>
+        <h2 class="section-title">Why Vayuraksha Stands Out</h2>
+        <p class="body-copy">Our product is built around three core promises. This makes the purifier especially attractive to practical buyers who want performance, not brand dependency.</p>
+      </div>
+      
+      <div class="bento-grid">
+        <div class="panel-card bento-item-large gsap-reveal">
+          <h3 style="font-size:1.6rem; margin-bottom:1rem; color:var(--primary);">Unbeatable CADR per Rupee</h3>
+          <p style="font-size:1.1rem; max-width:50ch;">Vayuraksha focuses on brute-force air clearing performance that aims to outperform expensive units in terms of value delivered for the price paid, setting a new benchmark for affordability in urban centers.</p>
+        </div>
+        <div class="panel-card gsap-reveal">
+          <h3 style="font-size:1.3rem; margin-bottom:1rem; color:var(--clean);">Open-Source Maintenance</h3>
+          <p>Users are not locked into branded replacement systems. Standard-sized filters available locally make upkeep simpler and more affordable.</p>
+        </div>
+        <div class="panel-card gsap-reveal">
+          <h3 style="font-size:1.3rem; margin-bottom:1rem; color:#a7ff85;">Make-in-India Durability</h3>
+          <p>Built locally with a rugged, repairable approach, Vayuraksha is designed for practical long-term use rather than disposable ownership.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Target Users -->
+  <section>
+    <div class="bg-hero"></div>
+    <div class="wrap">
+      <div class="gsap-reveal" style="text-align: center; margin-bottom: 3rem;">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> Audience</div>
+        <h2 class="section-title">Who We’re Building For</h2>
+        <p class="body-copy" style="margin: 0 auto;">Vayuraksha is designed for people who care about cleaner indoor air but cannot justify the price and maintenance burden of premium purifiers.</p>
+      </div>
+      
+      <div class="staggered-grid">
+        <div class="panel-card staggered-item-1 gsap-reveal">
+          <h3 style="font-size:1.3rem; margin-bottom:1rem; color:var(--primary);">Students in Hostels & PGs</h3>
+          <p>Students living near universities and tech hubs need clean air for studying, sleeping, and long indoor hours, but usually have limited budgets.</p>
+        </div>
+        <div class="panel-card staggered-item-2 gsap-reveal" style="border-color: rgba(0, 212, 255, 0.3);">
+          <h3 style="font-size:1.3rem; margin-bottom:1rem; color:var(--clean);">Middle-Class Families</h3>
+          <p>Families living in urban areas want better respiratory protection at home without spending heavily on premium appliances.</p>
+        </div>
+        <div class="panel-card staggered-item-3 gsap-reveal" style="border-color: rgba(255, 155, 103, 0.3); background: #1a1511;">
+          <h3 style="font-size:1.3rem; margin-bottom:1rem; color:#ff9b67;">PG Owners & Wardens</h3>
+          <p>Property operators can use better air quality as a facility upgrade and a trust-building amenity for tenants.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Pain & Gain -->
+  <section>
+    <div class="wrap">
+      <div class="gsap-reveal" style="text-align: center; margin-bottom: 3rem;">
+        <h2 class="section-title">What Customers Struggle With</h2>
+        <p class="body-copy" style="margin: 0 auto;">Vayuraksha is designed precisely at the intersection of real market pains and desired gains.</p>
+      </div>
+      
+      <div class="pain-gain-grid">
+        <div class="panel-card pain-card gsap-reveal">
+          <h3 style="color:#ff9b67; font-size:1.5rem; margin-bottom:1.5rem;">Current Pains</h3>
+          <p style="margin-bottom:1.5rem;">Today’s customers face real pain points when looking for indoor air purification:</p>
+          <div class="list-item">High upfront cost of premium units.</div>
+          <div class="list-item">Expensive proprietary filter replacements.</div>
+          <div class="list-item">Low repairability of closed commercial products.</div>
+          <div class="list-item">Uncertainty around long-term maintenance cost.</div>
+        </div>
+        <div class="panel-card gain-card gsap-reveal">
+          <h3 style="color:var(--primary); font-size:1.5rem; margin-bottom:1.5rem;">Desired Gains</h3>
+          <p style="margin-bottom:1.5rem;">What they actually want is straightforward and practical:</p>
+          <div class="list-item">Rapid clearance of smoke, dust, and polluted indoor air.</div>
+          <div class="list-item">Low and predictable maintenance cost.</div>
+          <div class="list-item">A solution they can understand and trust.</div>
+          <div class="list-item">Peace of mind in study rooms, bedrooms, and shared indoor spaces.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Business Model -->
+  <section id="model">
+    <div class="wrap">
+      <div class="gsap-reveal" style="margin-bottom: 3rem;">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> Strategy</div>
+        <h2 class="section-title">How the Business Works</h2>
+        <p class="body-copy">Our model is strong because it does not depend on just one source of revenue. We utilize a simple but realistic structure built around product sales, repeat purchases, and institutional adoption, giving Vayuraksha both consumer relevance and small-scale B2B scalability.</p>
+      </div>
+      
+      <div class="bento-grid">
+        <div class="panel-card bento-item-large gsap-reveal">
+          <div style="color:var(--primary); margin-bottom:1rem;">
+            <svg class="feature-icon-svg" style="width:2rem;height:2rem;" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+          </div>
+          <h3>Hardware Sales</h3>
+          <p>Core revenue comes from selling the purifier unit at a practical hardware margin. This provides the foundational cash flow to scale operations sustainably without over-relying on subscriptions.</p>
+        </div>
+        <div class="panel-card gsap-reveal">
+          <div style="color:var(--clean); margin-bottom:1rem;">
+            <svg class="feature-icon-svg" style="width:2rem;height:2rem;" viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path><path d="M16 21v-5h5"></path></svg>
+          </div>
+          <h3>Recurring Filter Replacement</h3>
+          <p>Optional bi-annual filter replacement subscriptions create repeat revenue while making maintenance easier for users.</p>
+        </div>
+        <div class="panel-card gsap-reveal">
+          <div style="color:#ff9b67; margin-bottom:1rem;">
+            <svg class="feature-icon-svg" style="width:2rem;height:2rem;" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>
+          </div>
+          <h3>Bulk B2B Sales</h3>
+          <p>PGs, hostels, educational facilities, and housing complexes can place larger institutional orders.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Go-to-market -->
+  <section>
+    <div class="wrap grid-2 split-section">
+      <div class="split-content gsap-reveal">
+        <div class="eyebrow blue"><span class="eyebrow-dot"></span> Go-To-Market</div>
+        <h2 class="section-title">How We Reach Customers</h2>
+        <p class="body-copy">We use a practical go-to-market strategy that fits local adoption behavior. Instead of expensive mass marketing, the brand grows through demonstrations, trust, and community-led discovery.</p>
+        <div class="closing-line">This is a product that can spread through visible proof, not just advertising.</div>
+      </div>
+      <div class="feature-list gsap-reveal">
+        <div class="feature-item">
+          <i>1</i>
+          <div><h3>Campus Demonstrations</h3><p>Live performance demos can show real-time air clearing and build credibility quickly.</p></div>
+        </div>
+        <div class="feature-item">
+          <i>2</i>
+          <div><h3>PG & Hostel Outreach</h3><p>Direct B2B conversations with PG owners and wardens can convert the purifier from a personal product into a facility upgrade.</p></div>
+        </div>
+        <div class="feature-item">
+          <i>3</i>
+          <div><h3>Hyper-Local Digital Communities</h3><p>WhatsApp groups and student community networks are ideal for affordable, trust-based, local traction.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. Trust & 11. Feasibility -->
+  <section>
+    <div class="bg-toxic"></div>
+    <div class="wrap grid-2">
+      <div class="panel-card gsap-reveal">
+        <h2 class="section-title" style="font-size:2rem;">Why People Will Trust It</h2>
+        <p style="margin-bottom:2rem;">Trust is central to this product. For a product tied to health and safety, trust is not a feature — it is the foundation.</p>
+        <div class="list-item" style="color:var(--text);">Transparent live performance tests (smoke-box style demos).</div>
+        <div class="list-item" style="color:var(--text);">Clear repair and filter replacement guidance.</div>
+        <div class="list-item" style="color:var(--text);">Early-adopter feedback and co-creation.</div>
+        <div class="list-item" style="color:var(--text);">Simpler design that users can actually understand.</div>
+      </div>
+      <div class="panel-card gsap-reveal">
+        <h2 class="section-title" style="font-size:2rem;">What Makes It Feasible</h2>
+        <p style="margin-bottom:2rem;">We are not depending on a huge manufacturing ecosystem from day one. This makes the project easier to prototype, validate, and improve in stages.</p>
+        <div class="list-item" style="color:var(--text);">Local HVAC and filter manufacturing partners.</div>
+        <div class="list-item" style="color:var(--text);">Local hardware and electronics vendors.</div>
+        <div class="list-item" style="color:var(--text);">University maker-labs for casing fabrication.</div>
+        <div class="list-item" style="color:var(--text);">Academic mentors and testing support.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. Vision -->
+  <section>
+    <div class="wrap">
+      <div class="vision-block gsap-reveal">
+        <div class="eyebrow blue" style="margin: 0 auto 1.5rem;"><span class="eyebrow-dot"></span> Our Vision</div>
+        <h2>Clean air should be accessible, maintainable, and locally serviceable.</h2>
+        <p>Project Vayuraksha is a step toward making indoor air purification practical for the people who are usually ignored by premium consumer-tech pricing. We want to make affordable clean air a realistic everyday utility for students, families, and shared living spaces.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13. Final CTA -->
+  <section id="cta" class="final-cta">
+    <div class="wrap">
+      <div class="panel-card gsap-reveal">
+        <div class="eyebrow" style="margin: 0 auto 1.5rem;"><span class="eyebrow-dot"></span> Join Us</div>
+        <h2 class="headline" style="font-size: clamp(2.5rem, 5vw, 4.5rem);">Breathe Better.<br/>Spend Smarter.<br/><span class="accent">Own Your Maintenance.</span></h2>
+        <p class="body-copy" style="margin: 0 auto 2.5rem;">Project Vayuraksha brings together affordability, strong performance, and independent maintenance in one practical air purifier concept. It is designed for real living conditions, real budgets, and real long-term use.</p>
+        <div class="actions" style="justify-content: center;">
+          <a href="#" class="button button-primary">Join the Waitlist</a>
+          <a href="#" class="button button-secondary">Partner With Us</a>
+          <a href="#" class="button button-secondary">Book a Demo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="logo" style="margin-bottom: 1rem;">Project Vayuraksha</div>
+      <p style="margin: 0;">Affordable, repairable clean-air solutions for Indian homes, hostels, and shared spaces.</p>
+      <div class="footer-links">
+        <a href="#">About</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#model">Business Model</a>
+        <a href="#">Contact</a>
+        <a href="#">Demo Request</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+    
+    // Simple fade-up animation for all elements with .gsap-reveal class
+    gsap.utils.toArray('.gsap-reveal').forEach(element => {
+      gsap.to(element, {
+        scrollTrigger: {
+          trigger: element,
+          start: "top 85%", // Trigger when the top of the element hits 85% down the viewport
+          toggleActions: "play none none reverse"
+        },
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        ease: "power3.out"
+      });
+    });
+  </script>
+</body>
+</html>

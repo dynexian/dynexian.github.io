@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vayuraksha Smart - Device Control</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed-dim": "#95d4b3",
+                    "primary-fixed": "#b1f0ce",
+                    "inverse-on-surface": "#eff1f0",
+                    "tertiary": "#713638",
+                    "error-container": "#ffdad6",
+                    "surface-dim": "#d8dada",
+                    "outline": "#707973",
+                    "inverse-primary": "#95d4b3",
+                    "on-tertiary-fixed-variant": "#6f3537",
+                    "tertiary-fixed": "#ffdad9",
+                    "error": "#ba1a1a",
+                    "surface-bright": "#f8faf9",
+                    "secondary-fixed": "#92f7c3",
+                    "tertiary-container": "#8d4d4e",
+                    "background": "#f8faf9",
+                    "surface-container-highest": "#e1e3e2",
+                    "secondary-fixed-dim": "#75daa8",
+                    "on-primary-fixed-variant": "#0e5138",
+                    "tertiary-fixed-dim": "#ffb3b3",
+                    "surface-container": "#eceeed",
+                    "on-primary": "#ffffff",
+                    "on-primary-container": "#a8e7c5",
+                    "primary-container": "#2d6a4f",
+                    "surface-container-high": "#e6e9e8",
+                    "on-primary-fixed": "#002114",
+                    "surface": "#f8faf9",
+                    "on-surface": "#191c1c",
+                    "on-secondary-fixed-variant": "#005235",
+                    "on-background": "#191c1c",
+                    "outline-variant": "#bfc9c1",
+                    "on-surface-variant": "#404943",
+                    "on-tertiary-container": "#ffcfce",
+                    "on-error": "#ffffff",
+                    "on-secondary-container": "#00734d",
+                    "on-secondary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "surface-container-low": "#f2f4f3",
+                    "on-tertiary": "#ffffff",
+                    "surface-variant": "#e1e3e2",
+                    "secondary": "#006c48",
+                    "on-tertiary-fixed": "#390b0e",
+                    "surface-tint": "#2c694e",
+                    "secondary-container": "#92f7c3",
+                    "on-secondary-fixed": "#002113",
+                    "primary": "#0f5238",
+                    "inverse-surface": "#2e3131"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "1.5rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .radial-dial-gradient {
+            background: conic-gradient(from 180deg at 50% 50%, #0f5238 0deg, #2d6a4f 120deg, #e1e3e2 120.1deg);
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface">
+<!-- Top Navigation -->
+<header class="bg-[#f8faf9] dark:bg-[#0a0d0c] fixed top-0 w-full z-50">
+<div class="flex justify-between items-center px-6 h-16 w-full max-w-screen-xl mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#0f5238] dark:text-[#92f7c3]" data-icon="wifi">wifi</span>
+<h1 class="text-xl font-manrope font-extrabold text-[#0f5238] dark:text-[#92f7c3] tracking-tight">Vayuraksha</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex gap-6 items-center">
+<button onclick="window.location.href='app-dashboard.html'" class="font-manrope font-bold text-[#404943] hover:opacity-80 transition-opacity">Home</button>
+<button class="font-manrope font-bold text-[#0f5238] dark:text-[#92f7c3] hover:opacity-80 transition-opacity">Control</button>
+<button onclick="window.location.href='app-forecast.html'" class="font-manrope font-bold text-[#404943] hover:opacity-80 transition-opacity">Forecast</button>
+<button onclick="window.location.href='app-assist.html'" class="font-manrope font-bold text-[#404943] hover:opacity-80 transition-opacity">Assist</button>
+</div>
+<img alt="User Profile" class="w-8 h-8 rounded-full bg-surface-container-highest" data-alt="close-up portrait of a professional user profile avatar in a clean minimalist style with soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGG0obIChqg0420Q9PX4I88oEPX3RuL1E6y4Ux5OQIAgN-FvSTTl90yRKOgbIE8633jYlF_ixgmAfcxNk-8Oh-fls0pt5a8ofbA2ILONNfVA8TQHj5CkRByzHqBxiUc-WxjtA7AGKzQixnVU6Re7ljqPyKWSVxwvFgwWfUzVlQuD2NE24gYxLQMS_4JvjUiNuY83eH3CoYq-SJG2MbF7bM8uZhmKR4Vr_RQNW9Uvrfl3G3ceF5kPi2d7q3Cgaaz-5XTgsCD-MSUA"/>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-screen-xl mx-auto">
+<!-- Header & Status Section -->
+<div class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<span class="font-label text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant">Active Device</span>
+<h2 class="text-4xl font-headline font-bold text-primary tracking-tight mt-1">Living Room Purifier</h2>
+<div class="flex items-center gap-2 mt-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<p class="text-on-surface-variant font-medium">Status: Optimal Air Quality</p>
+</div>
+</div>
+<button class="w-16 h-16 rounded-xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center text-white shadow-lg active:scale-95 duration-300">
+<span class="material-symbols-outlined text-3xl" data-icon="power_settings_new">power_settings_new</span>
+</button>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Main Controller (Radial Dial) -->
+<section class="lg:col-span-7 bg-surface-container-low rounded-xl p-8 flex flex-col items-center justify-center relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAaP7zvPHdD0xkko4Q3s5S11HIsSlB1_dWg4scTZ94pAiqewcbq69zXCJ2ceGqA3-ginUzjxbo7p4FMndUv5ZnHPilnD3CrEhkUUcZRit7OyrTrVBxdeAefvI-1YwapI4oj36yZaOQdSiKRUqQfMylbpJV89vUimE-UaRlhlFtTndEt9XIQ5oSCe-rhvVVFdi4_Mgztol-rOXJ3H2iTpfOKCMrjOiEr42qsQs9umaIPMTaIEHLZJor631pKlpmc6yO5SZSZOcDXqQ')"></div>
+<h3 class="font-label text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-12 self-start">Fan Intensity</h3>
+<div class="relative w-64 h-64 md:w-80 md:h-80 flex items-center justify-center">
+<!-- The Dial visual -->
+<div class="absolute inset-0 rounded-full border-[12px] border-surface-container-highest"></div>
+<div class="absolute inset-0 rounded-full border-[12px] border-primary border-r-transparent border-b-transparent rotate-45"></div>
+<div class="z-10 text-center">
+<span class="font-headline text-7xl md:text-8xl font-extrabold text-primary block leading-none">3</span>
+<span class="font-label text-[12px] uppercase tracking-[0.2em] font-bold text-on-surface-variant">Level</span>
+</div>
+<!-- Floating Knob Indicator -->
+<div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-surface-container-lowest rounded-full shadow-xl border-4 border-primary"></div>
+</div>
+<div class="mt-12 flex items-center gap-8 w-full max-w-md">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="mode_fan">mode_fan</span>
+<input class="w-full h-1.5 bg-surface-container-highest rounded-full appearance-none accent-primary cursor-pointer" max="5" min="1" type="range" value="3"/>
+<span class="material-symbols-outlined text-primary" data-icon="cyclone">cyclone</span>
+</div>
+</section>
+<!-- Mode & Quick Settings Bento -->
+<div class="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Modes Panel -->
+<section class="sm:col-span-2 bg-surface-container-lowest rounded-xl p-6">
+<h3 class="font-label text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-4">Operation Mode</h3>
+<div class="flex flex-wrap gap-3">
+<button class="px-6 py-3 rounded-full bg-primary text-on-primary font-label text-xs font-bold transition-all">AUTO</button>
+<button class="px-6 py-3 rounded-full bg-surface-container text-on-surface-variant font-label text-xs font-bold hover:bg-surface-container-high transition-all">MANUAL</button>
+<button class="px-6 py-3 rounded-full bg-surface-container text-on-surface-variant font-label text-xs font-bold hover:bg-surface-container-high transition-all">SLEEP</button>
+</div>
+</section>
+<!-- Night Mode Toggle -->
+<section class="bg-surface-container-low rounded-xl p-6 flex flex-col justify-between aspect-square sm:aspect-auto h-40">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-primary" data-icon="dark_mode">dark_mode</span>
+<div class="w-10 h-5 bg-primary rounded-full relative">
+<div class="absolute right-0.5 top-0.5 w-4 h-4 bg-white rounded-full"></div>
+</div>
+</div>
+<div>
+<p class="font-headline font-bold text-lg">Night Mode</p>
+<p class="text-xs text-on-surface-variant">Muted acoustics</p>
+</div>
+</section>
+<!-- LED Control -->
+<section class="bg-surface-container-low rounded-xl p-6 flex flex-col justify-between h-40">
+<span class="material-symbols-outlined text-primary" data-icon="lightbulb">lightbulb</span>
+<div>
+<p class="font-headline font-bold text-lg">LED Display</p>
+<div class="flex items-center gap-1 mt-2">
+<div class="w-full h-1 bg-primary rounded-full"></div>
+<div class="w-full h-1 bg-primary rounded-full"></div>
+<div class="w-full h-1 bg-surface-container-highest rounded-full"></div>
+</div>
+</div>
+</section>
+<!-- Timer Bento -->
+<section class="sm:col-span-2 bg-surface-container-lowest rounded-xl p-6">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-label text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant">Scheduled Off</h3>
+<span class="material-symbols-outlined text-primary text-xl" data-icon="schedule">schedule</span>
+</div>
+<div class="grid grid-cols-3 gap-3">
+<button class="py-3 rounded-xl border border-outline-variant/15 font-label text-xs font-bold text-on-surface-variant hover:bg-surface-container transition-all">1H</button>
+<button class="py-3 rounded-xl bg-secondary-container text-on-secondary-container font-label text-xs font-bold">3H</button>
+<button class="py-3 rounded-xl border border-outline-variant/15 font-label text-xs font-bold text-on-surface-variant hover:bg-surface-container transition-all">8H</button>
+</div>
+</section>
+<!-- Child Lock -->
+<section class="sm:col-span-2 bg-surface-container-low rounded-xl p-6 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-surface-container-lowest flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="child_care">child_care</span>
+</div>
+<div>
+<p class="font-headline font-bold">Child Lock</p>
+<p class="text-xs text-on-surface-variant">Disable physical buttons</p>
+</div>
+</div>
+<button class="text-primary font-bold text-sm">ACTIVATE</button>
+</section>
+</div>
+</div>
+<!-- Environmental Context Card (Editorial Style) -->
+<section class="mt-8 rounded-xl overflow-hidden relative h-64">
+<img class="w-full h-full object-cover" data-alt="modern minimalist living room with large windows, soft natural light, indoor plants and clean air aesthetic, cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPo742B7tksmJTmmTWakVnb1RGecQ9Chv-XObIH9NhS1nMcWmhmGuk_V0J6slVUqW1kcqBDvmZDZejiMh3J9QIIl-Y1uq5WQ28tWMmq2st_PLiwipW39fWCjbgNQk3DQ39ZHDlDAeUYwqk0-dzDSnKr1cLyTKikw_03UE-FPmoYV8s4-BCni0cCm3O0u4kyzcSC29uwSmChhreLJFXpSeciV87W20NZzrriROLqkkPGfYV8_aFHf7coDs52s84HOzBaXbTegb5uQ"/>
+<div class="absolute inset-0 bg-gradient-to-r from-primary/80 to-transparent flex flex-col justify-center px-12 text-white">
+<h4 class="text-3xl font-headline font-bold">Breathe freely.</h4>
+<p class="max-w-xs mt-2 text-primary-fixed">Your environment is currently being purified with 99.9% precision efficiency.</p>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Shell (Mobile Only) -->
+<nav class="md:hidden bg-[#f8faf9]/80 dark:bg-[#0a0d0c]/80 backdrop-blur-xl fixed bottom-0 w-full z-50 rounded-t-3xl shadow-[0_-4px_24px_rgba(0,0,0,0.04)]">
+<div class="flex justify-around items-center h-24 pb-safe px-4 w-full">
+<a href="app-dashboard.html" class="flex flex-col items-center justify-center text-[#404943] dark:text-gray-500 px-5 py-1.5 transition-all active:scale-90 duration-500 ease-in-out">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-inter text-[10px] uppercase tracking-widest font-semibold mt-1">Home</span>
+</a>
+<a href="app-control.html" class="flex flex-col items-center justify-center bg-[#2d6a4f] text-white rounded-full px-5 py-1.5 transition-all active:scale-90 duration-500 ease-in-out">
+<span class="material-symbols-outlined" data-icon="tune">tune</span>
+<span class="font-inter text-[10px] uppercase tracking-widest font-semibold mt-1">Control</span>
+</a>
+<a href="app-forecast.html" class="flex flex-col items-center justify-center text-[#404943] dark:text-gray-500 px-5 py-1.5 transition-all active:scale-90 duration-500 ease-in-out">
+<span class="material-symbols-outlined" data-icon="wb_sunny">wb_sunny</span>
+<span class="font-inter text-[10px] uppercase tracking-widest font-semibold mt-1">Forecast</span>
+</a>
+<a href="app-assist.html" class="flex flex-col items-center justify-center text-[#404943] dark:text-gray-500 px-5 py-1.5 transition-all active:scale-90 duration-500 ease-in-out">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-inter text-[10px] uppercase tracking-widest font-semibold mt-1">Assist</span>
+</a>
+</div>
+</nav>
+</body></html>

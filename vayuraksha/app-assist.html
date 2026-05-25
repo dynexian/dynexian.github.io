@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vayuraksha Assist</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#95d4b3",
+                        "primary-fixed": "#b1f0ce",
+                        "inverse-on-surface": "#eff1f0",
+                        "tertiary": "#713638",
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#d8dada",
+                        "outline": "#707973",
+                        "inverse-primary": "#95d4b3",
+                        "on-tertiary-fixed-variant": "#6f3537",
+                        "tertiary-fixed": "#ffdad9",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#f8faf9",
+                        "secondary-fixed": "#92f7c3",
+                        "tertiary-container": "#8d4d4e",
+                        "background": "#f8faf9",
+                        "surface-container-highest": "#e1e3e2",
+                        "secondary-fixed-dim": "#75daa8",
+                        "on-primary-fixed-variant": "#0e5138",
+                        "tertiary-fixed-dim": "#ffb3b3",
+                        "surface-container": "#eceeed",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#a8e7c5",
+                        "primary-container": "#2d6a4f",
+                        "surface-container-high": "#e6e9e8",
+                        "on-primary-fixed": "#002114",
+                        "surface": "#f8faf9",
+                        "on-surface": "#191c1c",
+                        "on-secondary-fixed-variant": "#005235",
+                        "on-background": "#191c1c",
+                        "outline-variant": "#bfc9c1",
+                        "on-surface-variant": "#404943",
+                        "on-tertiary-container": "#ffcfce",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#00734d",
+                        "on-secondary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#f2f4f3",
+                        "on-tertiary": "#ffffff",
+                        "surface-variant": "#e1e3e2",
+                        "secondary": "#006c48",
+                        "on-tertiary-fixed": "#390b0e",
+                        "surface-tint": "#2c694e",
+                        "secondary-container": "#92f7c3",
+                        "on-secondary-fixed": "#002113",
+                        "primary": "#0f5238",
+                        "inverse-surface": "#2e3131"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #0f5238 0%, #2d6a4f 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#f8faf9] dark:bg-[#0a0d0c]">
+<div class="flex justify-between items-center px-6 h-16 w-full max-w-screen-xl mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#0f5238] dark:text-[#92f7c3]">wifi</span>
+<h1 class="text-xl font-manrope font-extrabold text-[#0f5238] dark:text-[#92f7c3] tracking-tight">Vayuraksha</h1>
+</div>
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="Professional headshot of a person with friendly expression in soft natural lighting on a neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB29aVJ1Kbialg91ZKChfc9nm-uxSmghxy-PsU2HpnBik8gG0aEtSVoNHvK7Qm0NCPhXz73zK_BMMTiwjHGYkg-WlpOmkhBqV9yVsPLC-OtS71htGoX_UdiUL_lN2ZNZjw17NQ2-LL6JMBimUGYoPYm9xE5h9PL9HQJBHwdYKa2vcxkvXZdma0KPhncq3mrq3Rt8KU_Fp79m4VlBnID8PdZrqUv-ty_XqKVh4TV0hLQaCY6Uu2K-cSEcvjVSXJjtai8-K6HOhxvrw"/>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-screen-xl mx-auto">
+<!-- Hero Header -->
+<section class="mb-12">
+<h2 class="font-headline font-extrabold text-4xl text-on-surface tracking-tight mb-2">What should I do now?</h2>
+<p class="font-body text-on-surface-variant text-lg max-w-md">Your proactive intelligence for a healthier breathing environment.</p>
+</section>
+<!-- Recommendation Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Urgent Action Card (Pollution Spike) -->
+<div class="bg-surface-container-lowest rounded-xl p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-lg group">
+<div>
+<div class="flex items-center justify-between mb-6">
+<div class="w-12 h-12 rounded-full bg-error-container flex items-center justify-center">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<span class="font-label text-[10px] uppercase tracking-widest font-semibold text-error px-3 py-1 bg-error-container rounded-full">Urgent</span>
+</div>
+<h3 class="font-headline font-bold text-xl mb-3 text-on-surface">Pollution spike expected in 45 min.</h3>
+<p class="font-body text-on-surface-variant mb-8 leading-relaxed">External air currents are bringing urban smoke your way. Pre-clean room now?</p>
+</div>
+<div class="flex flex-col gap-3">
+<button class="w-full hero-gradient text-on-primary font-label font-semibold py-4 rounded-xl flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span>Activate Pre-clean</span>
+<span class="material-symbols-outlined text-sm">bolt</span>
+</button>
+<button class="w-full py-3 font-label text-on-surface-variant hover:text-on-surface transition-colors text-sm">Dismiss for now</button>
+</div>
+</div>
+<!-- Cautionary Card (Outdoor AQI) -->
+<div class="bg-surface-container-low rounded-xl p-6 flex flex-col justify-between group">
+<div class="relative overflow-hidden rounded-xl mb-6 h-40">
+<img class="w-full h-full object-cover grayscale opacity-60" data-alt="Distant city skyline shrouded in light grey haze during twilight with cold atmospheric tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDilnwRvWYTx46EiGo53s5ucSdXoIR8ZhLteN9SJtNgA45GZs-8Lnzcxk6_iThksll6HPPQ8Y4MwD0GPKOh3yKweyJqEFYvVj1gXRskE53zLJDLhyUVtCKo8L2REHJguEvJxvcjtZ-WCVv2v72FA1BeaGxVLiFgZpWCFqPBBkHnDNSg9owBXEoCWmzgbglCgjuMLo-IeFkcfCMCah6rjfeyMZ8VnT8L1VW2BcWr4jUSEwdEiakgf9Tz5XObEbHfcHbtDBy--wUKnw"/>
+<div class="absolute inset-0 bg-tertiary-container/20 mix-blend-overlay"></div>
+<div class="absolute top-4 right-4 bg-surface-container-lowest/80 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary-container"></span>
+<span class="text-[10px] font-label font-bold uppercase tracking-wider text-on-surface">External Threat</span>
+</div>
+</div>
+<div>
+<h3 class="font-headline font-bold text-xl mb-3 text-on-surface">Outdoor AQI worsening.</h3>
+<p class="font-body text-on-surface-variant mb-8 leading-relaxed">Micro-particulate levels are rising. Keep windows closed tonight to maintain purity.</p>
+</div>
+<button class="w-full border border-outline-variant/30 text-on-surface font-label font-semibold py-4 rounded-xl hover:bg-surface transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg">door_front</span>
+<span>Confirm Sealed</span>
+</button>
+</div>
+<!-- Efficiency Card (Indoor Stable) -->
+<div class="bg-surface-container-lowest border border-outline-variant/15 rounded-xl p-6 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-6">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<span class="font-label text-[10px] uppercase tracking-widest font-semibold text-on-secondary-container px-3 py-1 bg-secondary-container rounded-full">Optimized</span>
+</div>
+<h3 class="font-headline font-bold text-xl mb-3 text-on-surface">Indoor air is stable.</h3>
+<p class="font-body text-on-surface-variant mb-8 leading-relaxed">Air purity is currently 98%. Reduce fan speed to save power while maintaining health.</p>
+</div>
+<div class="space-y-6">
+<!-- Subtle progress/status indicator -->
+<div class="bg-surface-container-low rounded-xl p-4 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-[10px] font-label uppercase text-on-surface-variant">Savings Potential</span>
+<span class="font-headline font-bold text-primary">12% Today</span>
+</div>
+<span class="material-symbols-outlined text-primary text-3xl">eco</span>
+</div>
+<button class="w-full bg-primary text-on-primary font-label font-semibold py-4 rounded-xl hover:bg-primary-container transition-colors">
+                        Apply Eco-Mode
+                    </button>
+</div>
+</div>
+<!-- Filter Health Bento Card -->
+<div class="bg-surface-container-low rounded-xl p-6 md:col-span-2 flex flex-col md:flex-row gap-8">
+<div class="flex-1">
+<span class="font-label text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-4 block">System Maintenance</span>
+<h3 class="font-headline font-bold text-2xl mb-4 text-on-surface leading-tight">Your HEPA-13 filter is performing at peak capacity.</h3>
+<p class="font-body text-on-surface-variant mb-6">No immediate action needed. We'll notify you when life drops below 10%.</p>
+<div class="flex items-center gap-6">
+<div class="flex flex-col">
+<span class="text-3xl font-headline font-extrabold text-on-surface">84%</span>
+<span class="text-[10px] font-label uppercase text-on-surface-variant">Current Life</span>
+</div>
+<div class="flex-1 h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 84%"></div>
+</div>
+</div>
+</div>
+<div class="w-full md:w-1/3 aspect-square bg-surface-container-lowest rounded-xl flex items-center justify-center p-4">
+<img class="w-full h-full object-cover rounded-lg opacity-80 mix-blend-multiply" data-alt="Abstract macro shot of clean white fibrous filter texture with high contrast and geometric shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrY93xQyxOAghdN-en4VJNnKpmGh5kt2zqH7ePC4gLqSyZLoKN-MDpdUGk0tLgsQp7qMVGq4fbN_50WKwC9pxOBIyNFGJp44LSWT7-fF-Vl8wZxjoddefGUr9psjnAA9mTqp59vsako-5xg9NfrNLTdbKr7n6iD4TCXe8Jx4pKdWEdvaG8vbmO97b4eVhnc487ivxO8zDgD_StOBA1l8J7ip0n4JiLTmB3q4fafiQevSmg7BphzEdnXOME5qNwZG9aM2zJTnTSIw"/>
+</div>
+</div>
+<!-- Scheduled Maintenance Card -->
+<div class="bg-surface-container-lowest rounded-xl p-6 border border-outline-variant/10">
+<div class="flex items-center gap-4 mb-6">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">calendar_today</span>
+</div>
+<h4 class="font-headline font-bold text-on-surface">Sleep Routine</h4>
+</div>
+<p class="font-body text-sm text-on-surface-variant mb-6">Deep sterilization cycle scheduled for 11:30 PM. Would you like to start it 30 mins early?</p>
+<div class="flex items-center gap-3">
+<button class="flex-1 bg-surface-container-low text-on-surface font-label text-sm font-bold py-3 rounded-xl hover:bg-surface-container transition-colors">Start Now</button>
+<button class="flex-1 border border-outline-variant/20 text-on-surface-variant font-label text-sm font-bold py-3 rounded-xl">Keep Schedule</button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-3xl bg-[#f8faf9]/80 dark:bg-[#0a0d0c]/80 backdrop-blur-xl shadow-[0_-4px_24px_rgba(0,0,0,0.04)]">
+<div class="flex justify-around items-center h-24 pb-safe px-4 w-full max-w-screen-xl mx-auto">
+<!-- Home -->
+<a href="app-dashboard.html" class="flex flex-col items-center justify-center text-[#404943] dark:text-gray-500 px-5 py-1.5 hover:bg-[#f2f4f3] dark:hover:bg-gray-800 transition-all scale-90 duration-500 ease-in-out">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="font-inter text-[10px] uppercase tracking-widest font-semibold">Home</span>
+</a>
+<!-- Control -->
+<a href="app-control.html" class="flex flex-col items-center justify-center text-[#404943] dark:text-gray-500 px-5 py-1.5 hover:bg-[#f2f4f3] dark:hover:bg-gray-800 transition-all scale-90 duration-500 ease-in-out">
+<span class="material-symbols-outlined mb-1">tune</span>
+<span class="font-inter text-[10px] uppercase tracking-widest font-semibold">Control</span>
+</a>
+<!-- Forecast -->
+<a href="app-forecast.html" class="flex flex-col items-center justify-center text-[#404943] dark:text-gray-500 px-5 py-1.5 hover:bg-[#f2f4f3] dark:hover:bg-gray-800 transition-all scale-90 duration-500 ease-in-out">
+<span class="material-symbols-outlined mb-1">wb_sunny</span>
+<span class="font-inter text-[10px] uppercase tracking-widest font-semibold">Forecast</span>
+</a>
+<!-- Assist (ACTIVE) -->
+<a href="app-assist.html" class="flex flex-col items-center justify-center bg-[#2d6a4f] text-white rounded-full px-5 py-1.5 scale-90 duration-500 ease-in-out">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-inter text-[10px] uppercase tracking-widest font-semibold">Assist</span>
+</a>
+</div>
+</nav>
+</body></html>

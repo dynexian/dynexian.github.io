@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vayuraksha Smart - Home Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed-dim": "#95d4b3",
+                    "primary-fixed": "#b1f0ce",
+                    "inverse-on-surface": "#eff1f0",
+                    "tertiary": "#713638",
+                    "error-container": "#ffdad6",
+                    "surface-dim": "#d8dada",
+                    "outline": "#707973",
+                    "inverse-primary": "#95d4b3",
+                    "on-tertiary-fixed-variant": "#6f3537",
+                    "tertiary-fixed": "#ffdad9",
+                    "error": "#ba1a1a",
+                    "surface-bright": "#f8faf9",
+                    "secondary-fixed": "#92f7c3",
+                    "tertiary-container": "#8d4d4e",
+                    "background": "#f8faf9",
+                    "surface-container-highest": "#e1e3e2",
+                    "secondary-fixed-dim": "#75daa8",
+                    "on-primary-fixed-variant": "#0e5138",
+                    "tertiary-fixed-dim": "#ffb3b3",
+                    "surface-container": "#eceeed",
+                    "on-primary": "#ffffff",
+                    "on-primary-container": "#a8e7c5",
+                    "primary-container": "#2d6a4f",
+                    "surface-container-high": "#e6e9e8",
+                    "on-primary-fixed": "#002114",
+                    "surface": "#f8faf9",
+                    "on-surface": "#191c1c",
+                    "on-secondary-fixed-variant": "#005235",
+                    "on-background": "#191c1c",
+                    "outline-variant": "#bfc9c1",
+                    "on-surface-variant": "#404943",
+                    "on-tertiary-container": "#ffcfce",
+                    "on-error": "#ffffff",
+                    "on-secondary-container": "#00734d",
+                    "on-secondary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "surface-container-low": "#f2f4f3",
+                    "on-tertiary": "#ffffff",
+                    "surface-variant": "#e1e3e2",
+                    "secondary": "#006c48",
+                    "on-tertiary-fixed": "#390b0e",
+                    "surface-tint": "#2c694e",
+                    "secondary-container": "#92f7c3",
+                    "on-secondary-fixed": "#002113",
+                    "primary": "#0f5238",
+                    "inverse-surface": "#2e3131"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "1.5rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #f8faf9;
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #0f5238 0%, #2d6a4f 100%);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-surface">
+<!-- TopAppBar Shell -->
+<header class="bg-[#f8faf9] dark:bg-[#0a0d0c] fixed top-0 w-full z-50">
+<nav class="flex justify-between items-center px-6 h-16 w-full max-w-screen-xl mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#0f5238] dark:text-[#92f7c3]" data-icon="wifi">wifi</span>
+<h1 class="text-xl font-manrope font-extrabold text-[#0f5238] dark:text-[#92f7c3] tracking-tight">Vayuraksha</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high ring-2 ring-primary/10">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="Close up portrait of a smiling professional man in a bright modern office with soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzei5SmNp-gjHPmUFJonnkriUNIsg2FS-78b-6B8vT08KCUqd8Fhv-0HUWq0MmV2QXbtCgWbaFjaaz6JovaDouVNJ20w8u7rQ08x40AFPCsthaEJ6He3CXXygGRFN8EQorNLi4RGrzpv3llXu3sJkUyQbHp0OpMHGSJmdRwFLxcpIgFk1Pdb0rIYByrIFlsSNwWuuLtLJQLDHflV6Z_UDJnVu_QgsePshhxCNCRW--0BH4RHiMJY6Ft28I_DXKnVaHpTJkiRLCQQ"/>
+</div>
+</div>
+</nav>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-20 pb-32 px-6 max-w-screen-md mx-auto space-y-8">
+<!-- Welcome Intent -->
+<section class="mt-4">
+<p class="font-label text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-1">CURRENT STATUS</p>
+<h2 class="font-headline text-3xl font-bold tracking-tight text-primary">What is my air like now?</h2>
+</section>
+<!-- Air Quality Hero Card -->
+<div class="hero-gradient rounded-xl p-8 text-white relative overflow-hidden shadow-xl shadow-primary/10">
+<!-- Decorative atmospheric circles -->
+<div class="absolute -right-16 -top-16 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
+<div class="absolute -left-16 -bottom-16 w-48 h-48 bg-white/5 rounded-full blur-2xl"></div>
+<div class="relative z-10 flex flex-col items-center">
+<div class="bg-secondary-container text-on-secondary-container px-6 py-1.5 rounded-full font-label text-xs font-bold tracking-wider mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+                    HEALTHY
+                </div>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="font-headline text-8xl font-extrabold tracking-tighter">22</span>
+<span class="font-label text-lg font-medium opacity-80">PM2.5</span>
+</div>
+<p class="font-body text-white/90 text-sm font-medium mb-8">The air in your living room is excellent.</p>
+<div class="grid grid-cols-2 w-full gap-4 pt-6 border-t border-white/10">
+<div class="flex flex-col items-center border-r border-white/10">
+<span class="font-label text-[10px] uppercase tracking-widest opacity-70 mb-1">OUTDOOR AQI</span>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="wb_sunny">wb_sunny</span>
+<span class="font-headline text-xl font-bold">48</span>
+</div>
+</div>
+<div class="flex flex-col items-center">
+<span class="font-label text-[10px] uppercase tracking-widest opacity-70 mb-1">HUMIDITY</span>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="humidity_percentage">humidity_percentage</span>
+<span class="font-headline text-xl font-bold">42%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Forecast Banner -->
+<section class="bg-surface-container-low rounded-xl px-6 py-4 flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="insights">insights</span>
+</div>
+<p class="font-body text-sm font-semibold text-on-surface-variant flex-1">
+                Outdoor pollution likely to peak at 9 PM. <span class="text-primary font-bold underline decoration-primary/30">View details</span>
+</p>
+</section>
+<!-- Device & Action Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Device Status Card -->
+<div class="bg-surface-container-lowest rounded-xl p-6 flex flex-col justify-between h-44 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start">
+<div class="bg-primary/5 p-3 rounded-xl">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="air_purifier_gen">air_purifier_gen</span>
+</div>
+<div class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">
+                        Active
+                    </div>
+</div>
+<div>
+<h3 class="font-headline text-lg font-bold text-on-surface">Main Purifier</h3>
+<p class="font-body text-sm text-on-surface-variant">ON • Auto Mode</p>
+</div>
+</div>
+<!-- Fan Speed Radial Concept -->
+<div class="bg-surface-container-lowest rounded-xl p-6 h-44 flex flex-col justify-between shadow-sm relative overflow-hidden">
+<div class="flex justify-between items-center z-10">
+<h3 class="font-headline text-lg font-bold">Fan Speed</h3>
+<span class="font-label font-bold text-primary">65%</span>
+</div>
+<!-- Simplified Radial visualization -->
+<div class="absolute bottom-[-60px] left-1/2 -translate-x-1/2 w-48 h-48 border-[12px] border-surface-container-highest rounded-full">
+<div class="absolute inset-0 border-[12px] border-primary rounded-full" style="clip-path: polygon(0 0, 100% 0, 100% 65%, 0 65%); transform: rotate(-90deg);"></div>
+</div>
+<div class="flex justify-between items-center mt-auto z-10">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="leaf">energy_savings_leaf</span>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="cyclone">cyclone</span>
+</div>
+</div>
+</div>
+<!-- Quick Actions -->
+<section>
+<h3 class="font-label text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-4 ml-1">QUICK ACTIONS</h3>
+<div class="grid grid-cols-3 gap-4">
+<button class="flex flex-col items-center justify-center gap-3 bg-surface-container-lowest py-6 rounded-xl border border-outline-variant/15 hover:bg-primary hover:text-white transition-all group active:scale-95 duration-300">
+<span class="material-symbols-outlined text-primary group-hover:text-white" data-icon="bolt">bolt</span>
+<span class="font-label text-xs font-bold tracking-wide">BOOST</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-3 bg-surface-container-lowest py-6 rounded-xl border border-outline-variant/15 hover:bg-primary hover:text-white transition-all group active:scale-95 duration-300">
+<span class="material-symbols-outlined text-primary group-hover:text-white" data-icon="bedtime">bedtime</span>
+<span class="font-label text-xs font-bold tracking-wide">SLEEP</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-3 bg-surface-container-lowest py-6 rounded-xl border border-outline-variant/15 hover:bg-primary hover:text-white transition-all group active:scale-95 duration-300">
+<span class="material-symbols-outlined text-primary group-hover:text-white" data-icon="calendar_month">calendar_month</span>
+<span class="font-label text-xs font-bold tracking-wide">SCHEDULE</span>
+</button>
+</div>
+</section>
+<!-- Secondary Insights Bento -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="md:col-span-2 bg-surface-container-low rounded-xl p-6 overflow-hidden relative min-h-[160px]">
+<div class="relative z-10">
+<h4 class="font-headline font-bold text-on-surface-variant">Filter Health</h4>
+<p class="text-2xl font-bold text-primary mt-2">84%</p>
+<p class="text-xs text-on-surface-variant/80 mt-1 italic">Approx. 124 days remaining</p>
+</div>
+<div class="absolute bottom-0 right-0 w-32 h-32 opacity-20">
+<span class="material-symbols-outlined text-[120px] text-primary" data-icon="filter_alt">filter_alt</span>
+</div>
+</div>
+<div class="bg-primary/5 rounded-xl p-6 flex flex-col items-center justify-center text-center">
+<span class="material-symbols-outlined text-primary mb-2" data-icon="eco">eco</span>
+<h4 class="text-xs font-bold uppercase tracking-tighter">Energy Saved</h4>
+<p class="text-xl font-bold text-primary">12 kWh</p>
+</div>
+</div>
+</main>
+<!-- BottomNavBar Shell -->
+<footer class="bg-[#f8faf9]/80 dark:bg-[#0a0d0c]/80 backdrop-blur-xl fixed bottom-0 w-full z-50 rounded-t-3xl shadow-[0_-4px_24px_rgba(0,0,0,0.04)]">
+<nav class="flex justify-around items-center h-24 pb-safe px-4 w-full">
+<a href="app-dashboard.html" class="flex flex-col items-center justify-center bg-[#2d6a4f] text-white rounded-full px-5 py-1.5 transition-all scale-90 duration-500 ease-in-out cursor-pointer">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-inter text-[10px] uppercase tracking-widest font-semibold mt-1">Home</span>
+</a>
+<a href="app-control.html" class="flex flex-col items-center justify-center text-[#404943] dark:text-gray-500 px-5 py-1.5 hover:bg-[#f2f4f3] dark:hover:bg-gray-800 transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="tune">tune</span>
+<span class="font-inter text-[10px] uppercase tracking-widest font-semibold mt-1">Control</span>
+</a>
+<a href="app-forecast.html" class="flex flex-col items-center justify-center text-[#404943] dark:text-gray-500 px-5 py-1.5 hover:bg-[#f2f4f3] dark:hover:bg-gray-800 transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="wb_sunny">wb_sunny</span>
+<span class="font-inter text-[10px] uppercase tracking-widest font-semibold mt-1">Forecast</span>
+</a>
+<a href="app-assist.html" class="flex flex-col items-center justify-center text-[#404943] dark:text-gray-500 px-5 py-1.5 hover:bg-[#f2f4f3] dark:hover:bg-gray-800 transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-inter text-[10px] uppercase tracking-widest font-semibold mt-1">Assist</span>
+</a>
+</nav>
+</footer>
+</body></html>

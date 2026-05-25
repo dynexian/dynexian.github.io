@@ -2,428 +2,3646 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Shubham's WIP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shubham R. Vishwakarma | Software Engineer & Solana Web3 Developer</title>
+    
+    <!-- Premium Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <style>
+        /* ==========================================
+           1. CORE DESIGN SYSTEM & VARIABLES
+           ========================================== */
         :root {
-            --ghost-color: rgba(0, 255, 255, 0.8);
-            --ghost-glow: rgba(0, 255, 255, 0.6);
-            --bg-color: #010103;
+            --bg: #030306;
+            --glow-1: #10061e;
+            --glow-2: #020b12;
+            --text-primary: #f8fafc;
+            --text-muted: #94a3b8;
+            
+            /* Curated Color Palette */
+            --accent: #8b5cf6;
+            --accent-rgb: 139, 92, 246;
+            --accent-glow: rgba(139, 92, 246, 0.22);
+            
+            --accent-cyan: #0ea5e9;
+            --accent-cyan-rgb: 14, 165, 233;
+            --accent-cyan-glow: rgba(14, 165, 233, 0.22);
+            
+            --accent-gold: #c89d53;
+            --accent-gold-rgb: 200, 157, 83;
+            --accent-gold-glow: rgba(200, 157, 83, 0.15);
+            
+            --border: rgba(255, 255, 255, 0.05);
+            --border-hover: rgba(14, 165, 233, 0.35);
+            --glass-bg: rgba(8, 8, 14, 0.65);
+            --glass-panel: rgba(10, 10, 18, 0.88);
+            --ease-glide: cubic-bezier(0.16, 1, 0.3, 1);
+            
+            --mouse-x: 50%;
+            --mouse-y: 50%;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            outline: none;
+        }
+
+        html { 
+            scroll-behavior: smooth; 
+            background-color: var(--bg);
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) var(--bg);
         }
 
         body {
-            margin: 0; height: 100vh; width: 100vw;
-            background-color: var(--bg-color); color: #ffffff;
-            font-family: 'Courier New', Courier, monospace;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            overflow: hidden; cursor: crosshair; 
-            user-select: none; -webkit-user-select: none;
-            touch-action: none; /* Prevents mobile pull-to-refresh */
-            -webkit-tap-highlight-color: transparent; /* Removes blue tap highlight */
-        }
-        
-        .container {
-            text-align: center; z-index: 2; padding: 20px;
-            max-width: 700px; display: flex; flex-direction: column;
-            align-items: center; pointer-events: none; /* Lets you click through to background easily */
+            background: transparent;
+            color: var(--text-primary);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            line-height: 1.625;
+            transition: background 0.8s var(--ease-glide);
         }
 
-        /* Re-enable pointer events for buttons inside the container */
-        .container .button-container, .container .status-tag {
+        #bg-backdrop {
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 15% 15%, var(--glow-1) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, var(--glow-2) 0%, transparent 45%),
+                var(--bg);
+            z-index: -4;
+            pointer-events: none;
+            transition: background 0.8s var(--ease-glide);
+        }
+
+        body.is-transitioning #app-root,
+        body.is-cinematic #app-root { 
+            pointer-events: none; 
+        }
+
+        /* --- Global Canvas & Ambient Effects --- */
+        #void-canvas { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            z-index: -2; 
+            pointer-events: none; 
+            transition: opacity 1.5s var(--ease-glide); 
+        }
+
+        .ambient-glow { 
+            position: fixed; 
+            top: -20vh; 
+            left: 10vw; 
+            width: 80vw; 
+            height: 60vh; 
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, transparent 70%); 
+            z-index: -3; 
+            pointer-events: none; 
+            filter: blur(80px); 
+            animation: floatGlow 25s ease-in-out infinite alternate; 
+        }
+
+        .ambient-glow.two { 
+            top: auto; 
+            bottom: -20vh; 
+            left: auto; 
+            right: -5vw; 
+            width: 60vw; 
+            height: 60vh; 
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.06) 0%, transparent 70%); 
+            animation: floatGlow 30s ease-in-out infinite alternate-reverse;
+        }
+
+        /* ==========================================
+           2. TYPOGRAPHY & UTILITIES
+           ========================================== */
+        h1, h2, h3, h4, h5 {
+            font-family: 'Outfit', sans-serif;
+            color: var(--text-primary);
+            letter-spacing: -0.025em;
+            font-weight: 700;
+        }
+        
+        h1 { font-size: clamp(2.3rem, 6vw, 3.8rem); line-height: 1.15; margin-bottom: 0.75rem; }
+        h2 { font-size: clamp(1.8rem, 4vw, 2.3rem); line-height: 1.25; margin-bottom: 1rem; }
+        h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; }
+        
+        p { 
+            color: var(--text-muted); 
+            line-height: 1.625; 
+            font-size: 0.98rem; 
+        }
+        
+        .mono { 
+            font-family: 'Fira Code', monospace; 
+            color: var(--accent-cyan); 
+            font-size: 0.78rem; 
+            letter-spacing: 0.05em; 
+            text-transform: uppercase;
+        }
+
+        /* --- Glass Cards & Hover Spotlights --- */
+        .glass-card {
+            position: relative;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.25rem;
+            overflow: hidden;
+            transition: 
+                transform 0.5s var(--ease-glide), 
+                border-color 0.5s var(--ease-glide), 
+                box-shadow 0.5s var(--ease-glide);
+            isolation: isolate;
+        }
+
+        /* Glass reveal effect combining opacity and filter load */
+        .glass-card {
+            animation: glassReveal 0.6s var(--ease-glide) forwards;
+        }
+
+        @keyframes glassReveal {
+            from { 
+                opacity: 0; 
+                backdrop-filter: blur(0px); 
+                -webkit-backdrop-filter: blur(0px); 
+                transform: translateY(8px); 
+            }
+            to { 
+                opacity: 1; 
+                backdrop-filter: blur(20px); 
+                -webkit-backdrop-filter: blur(20px); 
+                transform: translateY(0); 
+            }
+        }
+
+        /* Spotlight border highlights */
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                450px circle at var(--mouse-x) var(--mouse-y),
+                rgba(255, 255, 255, 0.038),
+                transparent 45%
+            );
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .glass-card:hover::before {
+            opacity: 1;
+        }
+
+        .glass-card:hover {
+            box-shadow: 
+                0 20px 40px -15px rgba(0, 0, 0, 0.6),
+                0 0 0 1px var(--border-hover);
+        }
+
+        .glass-card.interactable:hover {
+            transform: translateY(-4px);
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: var(--accent-cyan);
+            font-family: 'Fira Code', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 0.74rem;
+            margin-bottom: 1.25rem;
+            font-weight: 500;
+        }
+
+        .section-label::before {
+            content: '';
+            width: 20px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-cyan));
+        }
+        
+        .epic-btn {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--accent-cyan);
+            padding: 0.75rem 1.65rem;
+            border-radius: 99px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: 
+                transform 0.3s var(--ease-glide), 
+                background 0.3s, 
+                box-shadow 0.3s, 
+                border-color 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            will-change: transform;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.03);
+        }
+
+        .epic-btn:hover { 
+            background: rgba(14, 165, 233, 0.05); 
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.06); 
+            transform: translateY(-2px); 
+            border-color: var(--accent-cyan);
+        }
+
+        .epic-btn.btn-purple {
+            border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.03);
+        }
+        .epic-btn.btn-purple:hover {
+            background: rgba(139, 92, 246, 0.05);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.06);
+            border-color: var(--accent);
+        }
+
+        .tag-group { 
+            display: flex; 
+            gap: 0.5rem; 
+            flex-wrap: wrap; 
+            margin-top: 1rem; 
+        }
+
+        .tag {
+            background: rgba(255, 255, 255, 0.01);
+            color: var(--text-muted);
+            padding: 0.3rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.72rem;
+            font-family: 'Fira Code', monospace;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.3s var(--ease-glide);
+        }
+
+        .tag:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(14, 165, 233, 0.05);
+            color: var(--text-primary);
+        }
+
+        .tag.tag-accent:hover {
+            border-color: var(--accent);
+            background: rgba(139, 92, 246, 0.06);
+            color: var(--text-primary);
+        }
+
+        /* ==========================================
+           3. SPA CORE NAVIGATION SHELL
+           ========================================== */
+        #nav-main {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            padding: 1.25rem 4vw; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            z-index: 100; 
+            background: rgba(3, 3, 6, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            transition: opacity 0.5s, transform 0.5s var(--ease-glide);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Brand monogram typography */
+        .logo-text {
+            font-family: 'Fira Code', monospace;
+            font-weight: 700;
+            font-size: 0.88rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .logo-brackets {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px var(--accent-cyan-glow);
+            font-weight: 800;
+            transition: transform 0.4s var(--ease-glide), color 0.4s var(--ease-glide), text-shadow 0.4s var(--ease-glide);
+            display: inline-block;
+        }
+        
+        .logo-container:hover .logo-brackets:first-child {
+            transform: translateX(-5px);
+            color: #ec4899;
+            text-shadow: 0 0 12px rgba(236, 72, 153, 0.8);
+        }
+
+        .logo-container:hover .logo-brackets:last-child {
+            transform: translateX(5px);
+            color: #38bdf8;
+            text-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
+        }
+        
+        @keyframes logoGradientSweep {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .logo-name {
+            background: linear-gradient(90deg, #38bdf8, #a855f7, #ec4899, #38bdf8);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.14em;
+            font-weight: 800;
+            animation: logoGradientSweep 8s ease infinite;
+            transition: letter-spacing 0.4s var(--ease-glide), filter 0.4s var(--ease-glide), transform 0.4s var(--ease-glide);
+            display: inline-block;
+        }
+        
+        .logo-container:hover .logo-name {
+            letter-spacing: 0.22em;
+            transform: scale(1.03);
+            filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.65)) drop-shadow(0 0 15px rgba(56, 189, 248, 0.4));
+        }
+
+        .nav-links { 
+            display: flex; 
+            gap: 2.25rem; 
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.03em;
+            padding: 0.3rem 0.1rem;
+            position: relative;
+            transition: color 0.3s var(--ease-glide);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--accent-cyan);
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: transform 0.4s var(--ease-glide);
+        }
+
+        .nav-links a:hover, 
+        .nav-links a.active { 
+            color: var(--text-primary); 
+        }
+
+        .nav-links a:hover::after, 
+        .nav-links a.active::after { 
+            transform: scaleX(1); 
+        }
+
+        .sys-telemetry {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.7rem;
+            color: #10b981;
+            background: rgba(16, 185, 129, 0.04);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            padding: 0.35rem 0.75rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sys-telemetry .dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: #10b981;
+            box-shadow: 0 0 6px #10b981;
+            animation: pulseSoft 2s infinite;
+        }
+
+        /* Hamburger Menu Icon */
+        .menu-toggle {
+            display: none;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 101;
+            padding: 0.25rem;
+        }
+
+        #mobile-menu {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(3, 3, 6, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 99;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s var(--ease-glide);
+        }
+
+        #mobile-menu.active {
+            opacity: 1;
             pointer-events: auto;
         }
 
-        .chibi-art {
-            max-width: 300px; height: auto; margin-bottom: 20px;
-            filter: drop-shadow(0 0 15px rgba(255, 0, 119, 0.4));
-            pointer-events: none;
+        #mobile-menu a {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
         }
 
-        h1 {
-            font-size: 2rem; letter-spacing: 5px; margin-bottom: 15px;
-            color: #00ffff; text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-            font-weight: normal; text-transform: uppercase;
+        #mobile-menu a:hover,
+        #mobile-menu a.active {
+            color: var(--accent-cyan);
         }
 
-        p {
-            color: #cccccc; letter-spacing: 1px; line-height: 1.8;
-            margin-bottom: 35px; font-size: 0.95rem; opacity: 0.9;
-            pointer-events: none;
+        #app-root { 
+            max-width: 1140px; 
+            margin: 0 auto; 
+            padding: 16vh 4vw 10vh; 
+            min-height: 100vh; 
+            transition: opacity 0.4s, transform 0.4s var(--ease-glide); 
+            will-change: opacity, transform;
         }
 
-        .status-tag {
-            border: 1px solid #ff0077; color: #ff0077;
-            padding: 3px 8px; text-transform: uppercase;
-            font-size: 0.75rem; letter-spacing: 2px;
-            border-radius: 4px; background: rgba(255, 0, 119, 0.1);
+        #app-root.page-fade { 
+            opacity: 0; 
+            transform: translateY(12px); 
         }
 
-        .button-container {
-            display: flex; gap: 20px; justify-content: center;
-            flex-wrap: wrap; z-index: 10;
+        /* ==========================================
+           4. BENTO DASHBOARD COMPONENT (HOME)
+           ========================================== */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .bento-card {
+            border-radius: 16px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Spacious single column hero design */
+        .bento-card.hero-card {
+            grid-column: span 8;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
+
+        .hero-stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1.25rem 0;
+        }
+        @media (max-width: 768px) {
+            .hero-stats-row {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 1rem;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 0.4rem;
+            transition: all 0.3s var(--ease-glide);
+        }
+        .stat-card:hover {
+            border-color: rgba(14, 165, 233, 0.25) !important;
+            background: rgba(14, 165, 233, 0.03) !important;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(14, 165, 233, 0.08);
         }
         
-        .btn {
-            display: inline-block; padding: 12px 25px;
-            text-decoration: none; text-transform: uppercase;
-            letter-spacing: 2px; font-size: 0.8rem;
-            transition: all 0.4s ease; border-radius: 4px;
-            cursor: pointer; font-family: inherit; position: relative;
+        .stat-card-label {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.68rem;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .stat-card-title {
+            font-size: 1.02rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+            margin: 0;
+        }
+        
+        .stat-card-desc {
+            font-size: 0.73rem;
+            color: var(--text-muted);
+            margin: 0;
+            line-height: 1.35;
         }
 
-        .archive-btn { border: 1px solid #00ffff; color: #00ffff; background: rgba(0, 255, 255, 0.05); }
-        .archive-btn:hover, .archive-btn:active { background: #00ffff; color: #010103; box-shadow: 0 0 25px rgba(0, 255, 255, 0.6); font-weight: bold; }
-
-        .nudge-btn { border: 1px solid #ff0077; color: #ff0077; background: rgba(1, 1, 3, 0.8); }
-        .nudge-btn:hover, .nudge-btn:active { background: #ff0077; color: #ffffff; box-shadow: 0 0 25px rgba(255, 0, 119, 0.6); }
-
-        #guilt-tracker {
-            position: absolute; top: 20px; color: #ff0077;
-            font-size: 0.9rem; letter-spacing: 2px; opacity: 0;
-            transition: opacity 0.5s; text-shadow: 0 0 15px rgba(255, 0, 119, 0.8);
-            pointer-events: none; z-index: 20; font-weight: bold;
+        @media (max-width: 600px) {
+            .hero-competency-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
         }
 
-        .bg-glow {
-            position: absolute; width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(255,0,119,0.05) 0%, rgba(0,0,0,0) 70%);
-            top: 50%; left: 50%; transform: translate(-50%, -50%);
-            z-index: 1; pointer-events: none;
-            animation: pulse 5s infinite alternate ease-in-out;
+        .bento-card.matrix-card {
+            grid-column: span 4;
+            display: flex;
+            flex-direction: column;
         }
 
-        @keyframes pulse {
-            0% { opacity: 0.4; transform: translate(-50%, -50%) scale(0.8); }
-            100% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+        .bento-card.philosophy-card {
+            grid-column: span 5;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .cyber-tab {
-            position: absolute; padding: 10px 15px;
-            background: rgba(10, 15, 30, 0.9);
-            border: 1px solid rgba(0, 255, 255, 0.5);
-            border-top: 3px solid #00ffff; color: #00ffff;
-            font-size: 0.75rem; letter-spacing: 1px;
-            backdrop-filter: blur(8px); border-radius: 6px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.6);
-            cursor: grab; z-index: 5; display: flex; align-items: center; gap: 10px; white-space: nowrap;
-            transform-origin: center center;
+        .bento-card.credentials-card {
+            grid-column: span 7;
+        }
+
+        .bento-avatar-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .photo-placeholder {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: transparent;
+            border: 2px solid rgba(14, 165, 233, 0.45);
+            box-shadow: 0 0 15px var(--accent-cyan-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: transform 0.4s var(--ease-glide), border-color 0.4s var(--ease-glide);
+        }
+
+        .photo-placeholder:hover {
+            transform: scale(1.05);
+            border-color: var(--accent);
+        }
+
+        .hero-title-group h1 {
+            font-size: clamp(1.6rem, 4vw, 2rem);
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+        }
+
+        .hero-text {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 1rem 0;
+        }
+
+        /* Domain Matrix Card with Tabs */
+        .matrix-tabs {
+            display: flex;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: 8px 8px 0 0;
+            margin: -1rem -1rem 1rem -1rem;
+        }
+
+        .matrix-tab-btn {
+            flex: 1;
+            padding: 0.75rem 0;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.72rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            text-align: center;
+            border-bottom: 2px solid transparent;
+        }
+
+        .matrix-tab-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .matrix-tab-btn.active {
+            color: var(--accent-cyan);
+            border-bottom-color: var(--accent-cyan);
+            background: rgba(14, 165, 233, 0.02);
+        }
+
+        .matrix-content-panel {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            animation: paneFade 0.4s var(--ease-glide) forwards;
+        }
+
+        @keyframes paneFade {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .matrix-meta-row {
+            margin-bottom: 0.85rem;
+        }
+
+        .matrix-meta-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .matrix-meta-row label {
+            display: block;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.65rem;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.15rem;
+        }
+
+        .matrix-meta-row span {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            font-weight: 500;
+            line-height: 1.45;
+            display: block;
+        }
+
+        .matrix-meta-row p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.45;
+            margin-top: 0.15rem;
+        }
+
+        /* Philosophy list */
+        .philosophy-item {
+            margin-bottom: 1rem;
+        }
+        .philosophy-item:last-child {
+            margin-bottom: 0;
+        }
+        .philosophy-item h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+            color: var(--text-primary);
+        }
+        .philosophy-item p {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+        }
+
+        /* Credentials list */
+        .cred-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        .cred-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.85rem 1.15rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, 0.01);
+            transition: all 0.3s;
+        }
+
+        .cred-item:hover {
+            border-color: rgba(139, 92, 246, 0.2);
+            background: rgba(139, 92, 246, 0.01);
+        }
+
+        .cred-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .cred-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: rgba(139, 92, 246, 0.06);
+            border: 1px solid rgba(139, 92, 246, 0.15);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+        }
+
+        .cred-details h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .cred-details p {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-family: 'Fira Code', monospace;
+            margin: 0.1rem 0 0;
+        }
+
+        .cred-link {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .cred-link:hover {
+            color: var(--text-primary);
+        }
+
+        /* ==========================================
+           5. TIMELINE DESIGN (EXPERIENCE)
+           ========================================== */
+        .timeline-container {
+            position: relative;
+            max-width: 850px;
+            margin: 1.5rem auto 0;
+            padding-left: 2.25rem;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 4px; top: 8px;
+            width: 1px; height: calc(100% - 24px);
+            background: linear-gradient(to bottom, var(--accent), var(--accent-cyan), transparent);
+        }
+
+        .timeline-node {
+            position: relative;
+            padding-bottom: 3rem;
+        }
+
+        .timeline-node:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-indicator {
+            position: absolute;
+            left: calc(-2.25rem - 3px);
+            top: 7px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--bg);
+            border: 1px solid var(--accent);
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timeline-indicator::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+        }
+
+        .timeline-node:nth-child(even) .timeline-indicator {
+            border-color: var(--accent-cyan);
+        }
+
+        .timeline-card {
+            border-radius: 16px;
+        }
+
+        .timeline-date-badge {
+            display: inline-block;
+            padding: 0.25rem 0.65rem;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.72rem;
+            color: var(--accent-gold);
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-card h3 {
+            font-size: 1.35rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-org {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .timeline-org::before {
+            content: '@';
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Unified domain indicators */
+        .timeline-domain-indicator {
+            display: inline-block;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.55rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .timeline-domain-indicator.d-web3 { background: rgba(139, 92, 246, 0.08); color: var(--accent); border: 1px solid rgba(139, 92, 246, 0.15); }
+        .timeline-domain-indicator.d-iot { background: rgba(14, 165, 233, 0.08); color: var(--accent-cyan); border: 1px solid rgba(14, 165, 233, 0.15); }
+        .timeline-domain-indicator.d-web { background: rgba(200, 157, 83, 0.08); color: var(--accent-gold); border: 1px solid rgba(200, 157, 83, 0.15); }
+
+        .timeline-meta-box {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.85rem;
+            margin: 0.75rem 0 1.25rem;
+            padding: 0.85rem;
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+        }
+
+        .timeline-meta-col label {
+            display: block;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.65rem;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .timeline-meta-col span {
+            font-size: 0.84rem;
+            color: var(--text-primary);
+        }
+
+        .timeline-bullets {
+            padding-left: 1.15rem;
+            color: var(--text-muted);
+            margin-bottom: 1.15rem;
+        }
+
+        .timeline-bullets li {
+            margin-bottom: 0.55rem;
+            line-height: 1.55;
+            font-size: 0.94rem;
+        }
+
+        .timeline-bullets li::marker {
+            color: var(--accent-cyan);
+        }
+
+        /* ==========================================
+           6. ARCHIVES CARD DESIGN (PROJECTS)
+           ========================================== */
+        .archive-filters {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 1rem;
+        }
+
+        .archive-filter-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            padding: 0.45rem 1.15rem;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.74rem;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-glide);
+        }
+
+        .archive-filter-btn:hover {
+            color: var(--text-primary);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .archive-filter-btn.active {
+            color: var(--accent-cyan);
+            border-color: var(--accent-cyan);
+            background: rgba(14, 165, 233, 0.05);
+            box-shadow: 0 0 15px rgba(14, 165, 233, 0.15);
+        }
+
+        .archive-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .archive-card {
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 340px;
+            transition: transform 0.5s var(--ease-glide), opacity 0.5s var(--ease-glide);
+        }
+
+        .archive-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .archive-badge {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.65rem;
+            padding: 0.25rem 0.65rem;
+            border-radius: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--text-muted);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .archive-badge.active {
+            background: rgba(14, 165, 233, 0.06);
+            color: var(--accent-cyan);
+            border-color: rgba(14, 165, 233, 0.15);
+        }
+
+        .archive-badge.web3 {
+            background: rgba(139, 92, 246, 0.06);
+            color: var(--accent);
+            border-color: rgba(139, 92, 246, 0.15);
+        }
+
+        .archive-icon {
+            font-size: 1.75rem;
+            color: var(--accent-cyan);
+            opacity: 0.7;
+        }
+
+        .archive-card h3 {
+            font-size: 1.35rem;
+            margin-bottom: 0.65rem;
+        }
+
+        .archive-card p {
+            font-size: 0.92rem;
+            line-height: 1.55;
+            margin-bottom: 1.15rem;
+        }
+
+        .archive-meta-block {
+            margin: 0.5rem 0 1rem 0;
+            padding: 0.85rem;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+        }
+
+        .archive-meta-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.78rem;
+        }
+
+        .archive-meta-row label {
+            font-family: 'Fira Code', monospace;
+            color: var(--text-muted);
+        }
+
+        .archive-meta-row span {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .archive-footer {
+            margin-top: auto;
+            border-top: 1px dashed rgba(255, 255, 255, 0.05);
+            padding-top: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* ==========================================
+           7. CINEMATIC JOURNEY SCROLLYTELLING VIEW
+           ========================================== */
+        #cinematic-engine {
+            display: none;
+            width: 100%;
+            background: #020204;
+            transition: background 1s var(--ease-glide);
+        }
+
+        .story-shell {
+            display: grid;
+            grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+            gap: 2.5rem;
+            min-height: 100vh;
+            padding: 12vh 4vw 10vh;
+        }
+
+        .story-rail {
+            position: sticky;
+            top: 12vh;
+            align-self: start;
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            background: rgba(10, 10, 18, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .story-rail h2 {
+            font-size: clamp(1.8rem, 3vw, 2.3rem);
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+        }
+
+        .story-rail p { font-size: 0.92rem; }
+
+        .story-progress { margin-top: 1.75rem; }
+
+        .story-progress-bar {
+            width: 100%;
+            height: 2px;
+            border-radius: 99px;
+            background: rgba(255, 255, 255, 0.04);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .story-progress-bar span {
+            display: block;
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-cyan));
+            transform-origin: left center;
+        }
+
+        .story-progress-label {
+            margin-top: 0.75rem;
+            color: var(--text-muted);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .story-list { display: grid; gap: 2.5rem; }
+
+        .story-container {
+            height: 120vh;
+            position: relative;
+            border-radius: 20px;
+        }
+
+        .story-sticky {
+            position: sticky;
+            top: 12vh;
+            min-height: 72vh;
+            width: 100%;
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            background: rgba(8, 8, 14, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            overflow: hidden;
+            isolation: isolate;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+        }
+
+        .story-stage {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 2rem;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Continuous breathing background nebulas inside each chapter */
+        .story-nebula {
+            position: absolute;
+            top: -30%;
+            left: -20%;
+            width: 140%;
+            height: 160%;
+            pointer-events: none;
+            z-index: -1;
+            filter: blur(80px);
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 1s var(--ease-glide), transform 1.2s var(--ease-glide);
+        }
+
+        .story-sticky.is-active .story-nebula {
+            opacity: 0.18;
+            transform: scale(1.05);
+        }
+
+        .n-violet { background: radial-gradient(circle, rgba(139, 92, 246, 0.25) 0%, transparent 60%); }
+        .n-cyan { background: radial-gradient(circle, rgba(14, 165, 233, 0.25) 0%, transparent 60%); }
+        .n-gold { background: radial-gradient(circle, rgba(200, 157, 83, 0.22) 0%, transparent 60%); }
+        .n-emerald { background: radial-gradient(circle, rgba(16, 185, 129, 0.22) 0%, transparent 60%); }
+
+        /* Typography mask reveals */
+        .reveal-mask {
+            overflow: hidden;
+            display: block;
+            position: relative;
+        }
+
+        .reveal-text {
+            display: block;
+            transform: translateY(100%);
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .story-sticky.is-active .reveal-text {
+            transform: translateY(0);
+        }
+
+        .story-copy-reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s var(--ease-glide), transform 0.8s var(--ease-glide);
+            width: 100%;
+        }
+
+        .story-card-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s var(--ease-glide) 0.12s, transform 0.8s var(--ease-glide) 0.12s;
+            width: 100%;
+        }
+
+        .story-sticky.is-active .story-copy-reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .story-sticky.is-active .story-card-reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .story-copy {
+            width: 100%;
+            will-change: transform;
+        }
+
+        .story-card {
+            will-change: transform;
+        }
+
+        .story-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent-cyan);
+            font-family: 'Fira Code', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.72rem;
+            margin-bottom: 1rem;
+        }
+
+        .story-kicker::before {
+            content: '';
+            width: 16px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-cyan));
+        }
+
+        .story-title {
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.15rem;
+            font-weight: 700;
+        }
+
+        .story-title .accent { 
+            color: var(--accent); 
+        }
+
+        .story-subtitle {
+            font-size: 1.025rem;
+            max-width: 520px;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .story-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1.25rem;
+        }
+
+        .story-meta {
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .story-meta strong {
+            display: block;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+            font-size: 0.88rem;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .story-meta span {
+            color: var(--text-muted);
+            font-size: 0.84rem;
+            line-height: 1.45;
+        }
+
+        .story-card {
+            justify-self: end;
+            width: 100%;
+            max-width: 340px;
+            padding: 1.75rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            background: rgba(5, 5, 8, 0.8);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        .story-card .section-label { margin-bottom: 0.75rem; }
+
+        .story-card p {
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .story-card ul {
+            color: var(--text-muted);
+            padding-left: 1.15rem;
+            margin: 1rem 0;
+        }
+
+        .story-card li { margin-bottom: 0.45rem; font-size: 0.85rem; }
+        .story-card li::marker { color: var(--accent); }
+
+        .story-quote {
+            margin-top: 1.25rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            color: var(--accent-gold);
+            font-style: italic;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .scene-flag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            margin-bottom: 1.25rem;
+            color: var(--text-muted);
+            font-size: 0.74rem;
+            font-family: 'Fira Code', monospace;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .scene-flag::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        /* Breathing scroll indicator guide */
+        .scroll-explore {
+            position: fixed;
+            bottom: 2.5rem;
+            right: 4vw;
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0.8;
+            transition: opacity 0.5s;
+            animation: pulseSoft 2.5s infinite;
+        }
+
+        .scroll-explore .mouse-icon {
+            width: 20px;
+            height: 32px;
+            border: 1.5px solid var(--text-muted);
+            border-radius: 99px;
+            display: flex;
+            justify-content: center;
+            padding-top: 6px;
+        }
+
+        .scroll-explore .wheel {
+            width: 3px;
+            height: 6px;
+            background-color: var(--accent-cyan);
+            border-radius: 99px;
+            animation: wheelScroll 1.8s infinite;
+        }
+
+        @keyframes wheelScroll {
+            0% { transform: translateY(0); opacity: 0; }
+            30% { opacity: 1; }
+            80% { transform: translateY(8px); opacity: 0; }
+            100% { opacity: 0; }
+        }
+
+        #exit-journey {
+            position: fixed; 
+            top: 2rem; 
+            right: 4vw; 
+            z-index: 1001; 
+            display: none;
+            background: rgba(3, 3, 6, 0.85); 
+            border: 1px solid var(--accent-cyan); 
+            color: var(--text-primary);
+            padding: 0.5rem 1.15rem; 
+            border-radius: 99px; 
+            font-family: 'Fira Code', monospace; 
+            font-size: 0.74rem;
+            letter-spacing: 0.03em;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: all 0.3s var(--ease-glide);
+        }
+
+        #exit-journey:hover { 
+            background: rgba(14, 165, 233, 0.1);
+            transform: translateY(-1px); 
+        }
+
+        /* ==========================================
+           8. PORTABLE A4 PRINT STYLES (RESUME VIEW)
+           ========================================== */
+        .resume-view {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .resume-layout-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2.25rem;
+            margin-top: 1.5rem;
+        }
+        @media (max-width: 820px) {
+            .resume-layout-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+
+        .resume-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1.75rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .resume-personal {
+            flex-grow: 1;
+        }
+
+        .resume-personal h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .resume-contact-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.25rem;
+            margin-top: 0.75rem;
+            color: var(--text-muted);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.74rem;
+        }
+
+        .resume-contact-bar a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .resume-contact-bar a:hover {
+            color: var(--text-primary);
+        }
+
+        .resume-section {
+            margin-bottom: 2.25rem;
+        }
+
+        .resume-section h2 {
+            font-size: 1.45rem;
+            border-bottom: 1px dashed var(--border);
+            padding-bottom: 0.45rem;
+            margin-bottom: 1.25rem;
+            text-transform: uppercase;
+            letter-spacing: -0.01em;
+            color: var(--accent-cyan);
+        }
+
+        .resume-timeline-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .resume-timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .resume-timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.35rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .resume-timeline-header h3 {
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .resume-timeline-date {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.74rem;
+            color: var(--accent-gold);
+            font-weight: 500;
+        }
+
+        .resume-timeline-org {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.55rem;
+        }
+
+        .resume-skills-block {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .resume-skill-row {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 1.25rem;
+            align-items: center;
+        }
+
+        .resume-skill-row strong {
+            font-size: 0.8rem;
+            font-family: 'Fira Code', monospace;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Printing and Page Overrides */
+        @page { 
+            size: A4; 
+            margin: 15mm; 
+        }
+
+        @media print {
+            * {
+                background: transparent !important;
+                color: #000000 !important;
+                text-shadow: none !important;
+                box-shadow: none !important;
+                filter: none !important;
+                -webkit-filter: none !important;
+            }
+            html, body {
+                background: #ffffff !important;
+                color: #000000 !important;
+                font-size: 10.5pt;
+            }
+            #nav-main, 
+            #exit-journey, 
+            #cinematic-engine, 
+            .ambient-glow, 
+            #custom-cursor,
+            #void-canvas, 
+            .epic-btn,
+            #bg-backdrop,
+            #mobile-menu,
+            .no-print,
+            body::before { 
+                display: none !important; 
+            }
+            #app-root { 
+                padding: 0 !important; 
+                margin: 0 !important;
+                max-width: 100% !important;
+            }
+            .glass-card {
+                border: none !important;
+                padding: 0 !important;
+                background: transparent !important;
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+            }
+            .resume-section h2 {
+                border-bottom: 1.5px solid #000000 !important;
+                color: #000000 !important;
+                margin-top: 1.5rem;
+            }
+            .resume-timeline-date {
+                color: #000000 !important;
+            }
+            .tag {
+                border: 1px solid #000000 !important;
+                color: #000000 !important;
+                padding: 2px 6px !important;
+            }
+            .resume-contact-bar a {
+                color: #000000 !important;
+                text-decoration: underline !important;
+            }
+            .resume-layout-grid {
+                display: grid !important;
+                grid-template-columns: 240px 1fr !important;
+                gap: 1.5rem !important;
+            }
+        }
+
+        /* ==========================================
+           9. RESPONSIVE BREAKPOINTS & MICRO-ANIMATIONS
+           ========================================== */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes floatGlow { from { transform: translate3d(0, 0, 0) scale(1); } to { transform: translate3d(0, 20px, 0) scale(1.03); } }
+        @keyframes pulseSoft { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1024px) {
+            .bento-grid { grid-template-columns: 1fr; }
+            .bento-card.hero-card,
+            .bento-card.matrix-card,
+            .bento-card.philosophy-card,
+            .bento-card.credentials-card {
+                grid-column: span 12;
+            }
+            .archive-grid { grid-template-columns: 1fr; }
+            .story-shell { grid-template-columns: 1fr; padding-top: 10vh; }
+            .story-rail { position: relative; top: 0; width: 100%; }
+            .story-stage { grid-template-columns: 1fr; gap: 2rem; }
+            .story-card { justify-self: stretch; max-width: 100%; }
+            .story-container { height: 95vh; }
+        }
+
+        @media (max-width: 820px) {
+            * { cursor: auto !important; }
+            #custom-cursor { display: none !important; }
+            #nav-main { padding: 1rem 1.5rem; }
+            .nav-links { display: none; }
+            .menu-toggle { display: block; }
+            #app-root { padding: 14vh 1rem 8vh; }
+            .glass-card { padding: 1.5rem; }
+            .resume-skill-row { grid-template-columns: 1fr; gap: 0.4rem; }
+        }
+
+        /* --- Dynamic Mix-Blend Cursor --- */
+        #custom-cursor { 
+            position: fixed; 
             top: 0; left: 0; 
-            touch-action: none; /* Crucial for swiping tabs on mobile */
+            width: 14px;
+            height: 14px;
+            background-color: #ffffff; 
+            border-radius: 50%;
+            pointer-events: none; 
+            z-index: 99999; 
+            transform: translate(-50%, -50%); 
+            mix-blend-mode: difference;
+            transition: 
+                width 0.35s cubic-bezier(0.19, 1, 0.22, 1), 
+                height 0.35s cubic-bezier(0.19, 1, 0.22, 1),
+                background-color 0.35s cubic-bezier(0.19, 1, 0.22, 1);
+            opacity: 0;
         }
-        .cyber-tab:active { cursor: grabbing; box-shadow: 0 15px 30px rgba(0,255,255,0.2); }
-        .tab-close { color: #ff0077; cursor: pointer; font-weight: bold; transition: 0.2s; padding: 5px; }
-        .tab-close:active { text-shadow: 0 0 10px #ff0077; transform: scale(1.2); }
-
-        @keyframes shake {
-            0%, 100% { transform: translate(1px, 1px) rotate(0deg); }
-            20% { transform: translate(-5px, 0px) rotate(2deg); }
-            40% { transform: translate(3px, -3px) rotate(-2deg); }
-            60% { transform: translate(-5px, 3px) rotate(0deg); }
-            80% { transform: translate(-2px, -2px) rotate(2deg); }
+        body.custom-cursor #custom-cursor {
+            opacity: 1;
         }
-        .shaking { animation: shake 0.3s; }
-
-        #ghost {
-            position: fixed; top: 0; left: 0;
-            width: 55px; height: 65px;
-            background: var(--ghost-color);
-            border-radius: 30px 30px 15px 15px;
-            cursor: pointer; z-index: 100;
-            box-shadow: 0 0 25px var(--ghost-glow), inset 0 0 15px rgba(255,255,255,0.9), inset 0 -10px 20px rgba(0,0,0,0.2);
-            transform-origin: center bottom;
-            transition: background 0.3s, box-shadow 0.3s;
-            filter: drop-shadow(0 15px 10px rgba(0,0,0,0.4));
-            touch-action: none;
+        body.hovering-ring #custom-cursor { 
+            width: 64px;
+            height: 64px;
+            background-color: #ffffff;
         }
-
-        #ghost::after {
-            content: ''; position: absolute; bottom: -6px; left: 0;
-            width: 100%; height: 12px;
-            background: radial-gradient(circle at 50% 100%, transparent 5px, var(--ghost-color) 6px);
-            background-size: 18.3px 12px;
-            transition: background 0.3s;
-        }
-
-        .eyes { position: absolute; top: 22px; width: 100%; display: flex; justify-content: space-evenly; }
-        .eye { width: 13px; height: 16px; background: #fff; border-radius: 50%; position: relative; box-shadow: 0 2px 4px rgba(0,0,0,0.4); transition: transform 0.15s ease-out; }
-        .pupil { width: 6px; height: 6px; background: #010103; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-
-        .mouth {
-            position: absolute; top: 40px; left: 50%;
-            transform: translateX(-50%); width: 8px; height: 4px;
-            background: #010103; border-radius: 0 0 10px 10px;
-            transition: all 0.2s; opacity: 0.6;
+        body.custom-cursor * { cursor: none !important; }
+        
+        /* Systems Monitor Simulation Widget Styling */
+        .systems-monitor-card {
+            background: rgba(10, 10, 15, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.15rem;
+            margin: 1rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            transition: border-color 0.3s var(--ease-glide), box-shadow 0.3s var(--ease-glide);
         }
 
-        .sweat {
-            position: absolute; top: 5px; right: 5px;
-            width: 8px; height: 12px; background: #ffffff;
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            opacity: 0; transition: opacity 0.2s, transform 0.3s;
-            box-shadow: 0 0 5px rgba(255,255,255,0.8);
+        .systems-monitor-card:hover {
+            border-color: rgba(14, 165, 233, 0.15);
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6), 0 0 25px rgba(14, 165, 233, 0.04);
         }
 
-        @media (max-width: 768px) {
-            h1 { font-size: 1.4rem; letter-spacing: 3px; }
-            p { font-size: 0.85rem; margin-bottom: 20px; }
-            .button-container { flex-direction: column; gap: 15px; width: 80%; }
-            .chibi-art { max-width: 180px; } /* Smaller on mobile to leave room for physics toys */
-            .bg-glow { width: 300px; height: 300px; }
-            .cyber-tab { font-size: 0.6rem; padding: 8px 12px; }
-            #ghost { transform: scale(0.85); } /* Slightly smaller ghost for mobile */
+        .monitor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            padding-bottom: 0.75rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .monitor-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .monitor-btn {
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            color: var(--text-muted);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.7rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.25s var(--ease-glide);
+        }
+
+        .monitor-btn:hover {
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-primary);
+        }
+
+        .monitor-btn.active {
+            background: rgba(14, 165, 233, 0.08);
+            border-color: rgba(14, 165, 233, 0.35);
+            color: var(--accent-cyan);
+            text-shadow: 0 0 8px var(--accent-cyan-glow);
+        }
+
+        .monitor-status {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .green-pulsate {
+            width: 7px;
+            height: 7px;
+            background-color: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.5; box-shadow: 0 0 3px #10b981; }
+            50% { opacity: 1; box-shadow: 0 0 10px #10b981; }
+        }
+
+        .monitor-screen {
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px dashed rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 1rem;
+            min-height: 145px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Solana Visualizer */
+        .slots-visualizer {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .visualizer-label {
+            font-size: 0.7rem;
+            color: var(--accent-cyan);
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        .slots-grid {
+            display: flex;
+            gap: 0.35rem;
+        }
+
+        .slot-block {
+            width: 11px;
+            height: 11px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .slot-block.active {
+            background: #0ea5e9;
+            border-color: #38bdf8;
+            box-shadow: 0 0 8px var(--accent-cyan-glow);
+        }
+
+        .slot-block.pulsating {
+            animation: slot-pulse 1.2s infinite ease-in-out;
+        }
+
+        @keyframes slot-pulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.15); opacity: 1; background-color: #38bdf8; }
+        }
+
+        .console-logs {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.7rem;
+            color: var(--accent-cyan);
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            line-height: 1.45;
+            max-height: 90px;
+            overflow-y: hidden;
+            text-align: left;
+        }
+
+        /* ESP32 Visualizer */
+        .signals-visualizer {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .signal-metric {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            font-size: 0.72rem;
+        }
+
+        .text-cyan { color: #22d3ee; text-shadow: 0 0 6px rgba(34, 211, 238, 0.3); }
+        .text-purple { color: #a78bfa; text-shadow: 0 0 6px rgba(167, 139, 250, 0.3); }
+
+        .pins-row {
+            display: flex;
+            gap: 0.35rem;
+        }
+
+        .pin {
+            font-size: 0.62rem;
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-weight: 700;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .pin.green { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .pin.red { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+        /* Rust Visualizer */
+        .threads-visualizer {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.65rem;
+            margin-bottom: 0.75rem;
+        }
+
+        @media (max-width: 480px) {
+            .threads-visualizer {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .thread-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.7rem;
+            color: #fda4af;
+        }
+
+        .bar-container {
+            flex: 1;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 3px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.8s ease-in-out;
+        }
+
+        .bar-fill.rust-fill {
+            background: linear-gradient(90deg, #f43f5e, #fda4af);
+            box-shadow: 0 0 6px rgba(244, 63, 94, 0.4);
+        }
+
+        ::view-transition-old(root),
+        ::view-transition-new(root) {
+            animation-duration: 0.3s;
+            animation-timing-function: var(--ease-glide);
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-glow"></div>
-    <div id="guilt-tracker">GUILT LEVEL: <span id="guilt-score">0</span>%</div>
+    <div id="bg-backdrop"></div>
+    <div class="ambient-glow" id="bg-glow-purple"></div>
+    <div class="ambient-glow two" id="bg-glow-cyan"></div>
+    <canvas id="void-canvas"></canvas>
+    
+    <!-- Dynamic Mix-Blend Cursor -->
+    <div id="custom-cursor"></div>
 
-    <div id="ghost">
-        <div class="sweat" id="ghost-sweat"></div>
-        <div class="eyes"><div class="eye"><div class="pupil"></div></div><div class="eye"><div class="pupil"></div></div></div>
-        <div class="mouth" id="ghost-mouth"></div>
-    </div>
-
-    <div class="container" id="main-container">
-        <img src="image_0.png" alt="Devastated developer Shubham Vishwakarma" class="chibi-art">
-        <h1>Shubham Vishwakarma</h1>
-        <p>
-            Status: <span class="status-tag">Under Construction</span><br><br>
-            Look, I bought this domain with every intention of building a proper, professional portfolio today.<br><br>
-            Then I got side-tracked by <span style="color: #ff0077;">one thing</span> then another then another and now I got <span style="color: #00ffff;">idk many tabs open</span> on my laptop and in my brain hehe. I'll finish this eventually.<br><br>
-            <span style="font-size: 0.7rem; opacity: 0.5;">(Tap background. Swipe tabs. Poke ghost.)</span>
-        </p>
-        <div class="button-container">
-            <a href="/archive" class="btn archive-btn">See The Shiny 3D Thing</a>
-            <button id="nudge-btn" class="btn nudge-btn">Nudge Me To Work</button>
+    <!-- Cyber Header Shell -->
+    <nav id="nav-main">
+        <div class="logo-container interactable" onclick="renderSPA('home')" style="cursor: pointer;">
+            <div class="logo-text">
+                <span class="logo-brackets">//</span>
+                <span class="logo-name">dynexian</span>
+                <span class="logo-brackets">//</span>
+            </div>
         </div>
+        
+        <div class="nav-links" id="nav-links">
+            <a href="#" data-view="home" class="interactable active">About</a>
+            <a href="#" data-view="experience" class="interactable">Timeline</a>
+            <a href="#" data-view="artifacts" class="interactable">Projects</a>
+            <a href="#" data-view="story" class="interactable">Journey</a>
+            <a href="#" data-view="resume" class="interactable">Resume</a>
+        </div>
+
+        <div class="sys-telemetry" id="sys-telemetry">
+            <div class="dot"></div>
+            <span>ACTIVE // SOLANA_RUST_INTERN</span>
+        </div>
+
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Navigation">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- Mobile Drawer Menu -->
+    <div id="mobile-menu">
+        <a href="#" data-view="home" class="active">01 // ABOUT</a>
+        <a href="#" data-view="experience">02 // TIMELINE</a>
+        <a href="#" data-view="artifacts">03 // PROJECTS</a>
+        <a href="#" data-view="story">04 // JOURNEY</a>
+        <a href="#" data-view="resume">05 // RESUME</a>
     </div>
 
+    <!-- SPA Main Root -->
+    <main id="app-root"></main>
+
+    <!-- Scrollytelling Simulation Engine Container -->
+    <button id="exit-journey" class="interactable" onclick="exitJourney()">[ Return to Dashboard ]</button>
+    
+    <div id="cinematic-engine" aria-hidden="true">
+        <div class="scroll-explore" id="scroll-explore">
+            <span class="mono" style="font-size:0.7rem; color:var(--text-muted); font-weight:600;">Scroll to Explore</span>
+            <div class="mouse-icon">
+                <div class="wheel"></div>
+            </div>
+        </div>
+
+        <section class="story-shell">
+            <aside class="story-rail">
+                <div class="section-label">Engineering Ethos</div>
+                <h2>Systems build from solid roots.</h2>
+                <p style="color: var(--text-muted); line-height: 1.6; margin-top: 0.50rem;">Four reflections mapping the integration of hardware, software, and robust architectural principles.</p>
+                
+                <div class="story-progress">
+                    <div class="story-progress-bar"><span id="story-progress-fill"></span></div>
+                    <div class="story-progress-label">
+                        <span>Journey Progress</span>
+                        <span id="story-percentage">0%</span>
+                    </div>
+                </div>
+            </aside>
+
+            <div class="story-list">
+                <!-- Chapter 1 -->
+                <div class="story-container">
+                    <div class="story-sticky observe-cine" data-chapter="1">
+                        <div class="story-nebula n-violet"></div>
+                        <div class="story-stage">
+                            <div class="story-copy-reveal">
+                                <div class="story-copy">
+                                    <div class="scene-flag">Chapter 01 &mdash; Primary Roots</div>
+                                <div class="story-kicker">Core Instinct</div>
+                                <div class="reveal-mask">
+                                    <h3 class="story-title reveal-text">Curiosity at the <span class="accent">lowest level</span>.</h3>
+                                </div>
+                                <p class="story-subtitle">The instinct started by opening physical hardware: tracing routes on circuit boards, understanding limits, and rebuilding them. This physical familiarity drives how I map complex software logic today.</p>
+                                <div class="story-meta-grid">
+                                    <div class="story-meta">
+                                        <strong>Structural View</strong>
+                                        <span>Focusing on how bits actually flow, bridging software logic directly into execution nodes.</span>
+                                    </div>
+                                    <div class="story-meta">
+                                        <strong>Refined Directive</strong>
+                                        <span>Favoring clean, minimal architectures over heavy, over-decorated design layers.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="story-card-reveal">
+                                <div class="story-card">
+                                <div class="section-label">Action Items</div>
+                                <p style="color: var(--text-muted); margin-bottom: 1rem;">Observe, trace, and refine systems to achieve maximum throughput with minimal overhead.</p>
+                                <ul>
+                                    <li>Data clarity before execution</li>
+                                    <li>Hardware-conscious software writing</li>
+                                    <li>Reduction of auxiliary packages</li>
+                                </ul>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chapter 2 -->
+                <div class="story-container">
+                    <div class="story-sticky observe-cine" data-chapter="2">
+                        <div class="story-nebula n-cyan"></div>
+                        <div class="story-stage">
+                            <div class="story-copy-reveal">
+                                <div class="story-copy">
+                                    <div class="scene-flag">Chapter 02 &mdash; Theoretical Foundations</div>
+                                <div class="story-kicker">Solid Basics</div>
+                                <div class="reveal-mask">
+                                    <h3 class="story-title reveal-text">Mastering structures <span class="accent">before scaling</span>.</h3>
+                                </div>
+                                <p class="story-subtitle">From pure Mathematics to Government Polytechnic IT systems, and now Silicon University (B.Tech CSE in AI/ML), the emphasis has been on concrete theory before chasing runtime speed.</p>
+                                <div class="story-meta-grid">
+                                    <div class="story-meta">
+                                        <strong>Research Focus</strong>
+                                        <span>Discrete networks, Distributed Ledger structures, and Computer Vision matrices.</span>
+                                    </div>
+                                    <div class="story-meta">
+                                        <strong>Structural Design</strong>
+                                        <span>Code is syntax. Design patterns determine whether your systems survive user spikes.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="story-card-reveal">
+                                <div class="story-card">
+                                <div class="section-label">Loadout Stack</div>
+                                <p style="color: var(--text-muted); margin-bottom: 1rem;">Aligning mathematical logic, hardware limits, and clean data structures seamlessly.</p>
+                                <div class="tag-group">
+                                    <span class="tag">Discrete Math</span>
+                                    <span class="tag">Computer Vision</span>
+                                    <span class="tag">Embedded Systems</span>
+                                    <span class="tag">AI Models</span>
+                                </div>
+                                <div class="story-quote">"The goal is not knowing every tool, but mastering the rules that connect them."</div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chapter 3 -->
+                <div class="story-container">
+                    <div class="story-sticky observe-cine" data-chapter="3">
+                        <div class="story-nebula n-gold"></div>
+                        <div class="story-stage">
+                            <div class="story-copy-reveal">
+                                <div class="story-copy">
+                                    <div class="scene-flag">Chapter 03 &mdash; Web3 & Solana Shift</div>
+                                <div class="story-kicker">High-Performance Blockchain</div>
+                                <div class="reveal-mask">
+                                    <h3 class="story-title reveal-text">Rust concurrency and <span class="accent">Solana protocols</span>.</h3>
+                                </div>
+                                <p class="story-subtitle">Advancing Web3 frameworks relies on writing bulletproof code: compiling secure Rust programs inside the Solana VM (SVM), avoiding execution bloat, and scheduling multithreaded Rayon CLI utilities.</p>
+                                <div class="story-meta-grid">
+                                    <div class="story-meta">
+                                        <strong>Solana Integration</strong>
+                                        <span>Interning in Solana and Rust systems, deploying smart contract instructions and testing ledgers.</span>
+                                    </div>
+                                    <div class="story-meta">
+                                        <strong>Systems Concurrency</strong>
+                                        <span>High-velocity file deduplication compiled in Rust utilizing concurrent Rayon worker threads.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="story-card-reveal">
+                                <div class="story-card">
+                                <div class="section-label">Real Mappings</div>
+                                <p style="color: var(--text-muted);">Practical builds balancing robust execution logic with highly responsive blockchain integrations.</p>
+                                <ul>
+                                    <li>Anchor smart contracts on Sepolia</li>
+                                    <li>Rust CLI tools mapping cryptographic hashes</li>
+                                    <li>Multi-threaded scanning engines</li>
+                                </ul>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chapter 4 -->
+                <div class="story-container" style="height: 100vh;">
+                    <div class="story-sticky observe-cine" data-chapter="4">
+                        <div class="story-nebula n-emerald"></div>
+                        <div class="story-stage">
+                            <div class="story-copy-reveal">
+                                <div class="story-copy">
+                                    <div class="scene-flag">Chapter 04 &mdash; Ultimate Vision</div>
+                                <div class="story-kicker">Core Objective</div>
+                                <div class="reveal-mask">
+                                    <h3 class="story-title reveal-text">Crafting networks <span class="accent">that endure</span>.</h3>
+                                </div>
+                                <p class="story-subtitle">I focus on solving real blockages: building fast dashboards, clean microservices, safe concurrent workers, and layouts that look elegant and load immediately.</p>
+                                <div class="story-meta-grid">
+                                    <div class="story-meta">
+                                        <strong>Target Focus</strong>
+                                        <span>Optimized AI/ML integrations, reliable web setups, and secure blockchain programs.</span>
+                                    </div>
+                                    <div class="story-meta">
+                                        <strong>On-team Vibe</strong>
+                                        <span>Quiet, highly focused, data-driven, with extreme attention to code cleanliness.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="story-card-reveal">
+                                <div class="story-card">
+                                <div class="section-label">Design Ethos</div>
+                                <p style="color: var(--text-muted); margin-bottom: 1.25rem;">Quality over sheer volume. Structure over speed. Build code that lasts.</p>
+                                <div class="story-quote" style="margin-top:0; padding-top:0; border-top:none; margin-bottom:1.5rem;">"When you expose the mechanics cleanly, the interface naturally feels intuitive."</div>
+                                <button class="epic-btn interactable" onclick="exitJourney()"><i class="fa-solid fa-arrow-left"></i>Return to Dashboard</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- SPA Views & Code Base -->
     <script>
-        // --- 1. NUDGE & GUILT LOGIC ---
-        let guiltLevel = 0;
-        const container = document.getElementById('main-container');
-        const guiltTracker = document.getElementById('guilt-tracker');
-        const guiltScore = document.getElementById('guilt-score');
-        const nudgeBtn = document.getElementById('nudge-btn');
+        // ==========================================
+        // 1. DATA PAYLOAD & SPA ROOT DATA VIEWS
+        // ==========================================
+        const views = {
+            home: `
+                <div class="stagger-in bento-grid">
+                    <!-- Bento Card 1: Main Introduction (Visual Split Grid) -->
+                    <div class="glass-card bento-card hero-card interactable" style="animation: glassReveal 0.6s var(--ease-glide) forwards;">
+                        <div class="bento-avatar-wrapper">
+                            <div class="photo-placeholder">
+                                <img src="./profile.png" alt="Shubham R. Vishwakarma" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+                            </div>
+                            <div class="hero-title-group">
+                                <div class="section-label" style="margin-bottom:0.35rem; color: var(--accent-cyan);">ACTIVE_RESEARCH // SILICON_UNIVERSITY</div>
+                                <h1>Shubham Rajesh Vishwakarma</h1>
+                                <div class="mono" style="color: var(--accent-cyan); font-weight:500; font-size:0.75rem;">4th-Year B.Tech Student &mdash; Rust & Solana Web3 Intern</div>
+                            </div>
+                        </div>
+                        <p class="hero-text" style="color: var(--text-primary); font-size: 0.98rem; margin: 0.5rem 0;">
+                            I am a 4th-year Computer Science & Engineering student at Silicon University. My current focus is an internship advancing with <strong style="color: var(--accent-cyan); font-weight: 600;">Rust and its systems applications specifically under Solana</strong>. I bridge high-throughput blockchain networks, parallel concurrency scripts, and embedded IoT firmware to build fast, robust, and clean digital systems.
+                        </p>
+                        
+                        <!-- High-Fidelity Typographic Statement with Glowing Cyber Gradient -->
+                        <div class="hero-editorial-statement" style="margin: 1.25rem 0; text-align: left;">
+                            <h2 style="font-size: clamp(1.28rem, 3.2vw, 1.65rem); font-weight: 800; line-height: 1.4; letter-spacing: -0.02em; margin: 0; background: linear-gradient(135deg, #ffffff 10%, #a855f7 60%, #0ea5e9 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 2px 10px rgba(168, 85, 247, 0.15));">
+                                Building resilient, memory-safe systems where concurrent backend control loops meet highly responsive user experiences.
+                            </h2>
+                        </div>
 
-        nudgeBtn.addEventListener('pointerdown', (e) => {
-            container.classList.remove('shaking');
-            void container.offsetWidth; 
-            container.classList.add('shaking');
 
-            guiltLevel += Math.floor(Math.random() * 20) + 10;
-            if(guiltLevel > 100) guiltLevel = 999; 
-            guiltTracker.style.opacity = '1';
-            guiltScore.innerText = guiltLevel;
+                        <div style="display:flex; gap:0.75rem; align-items:center; margin-top: 0.25rem; flex-wrap:wrap;">
+                            <button class="epic-btn interactable" onclick="renderSPA('artifacts')"><i class="fa-solid fa-code"></i>View Featured Projects</button>
+                            <button class="epic-btn btn-purple interactable" onclick="renderSPA('resume')"><i class="fa-solid fa-file-pdf"></i>View Resume</button>
+                        </div>
+                    </div>
 
-            const rect = nudgeBtn.getBoundingClientRect();
-            for(let i=0; i<5; i++) {
-                spawnTab(rect.left + rect.width/2, rect.top + rect.height/2, true);
-            }
+                    <!-- Bento Card 2: Expose Technical Skill Sets Separated by Domain Context (How, Why, Where) -->
+                    <div class="glass-card bento-card matrix-card" style="animation: glassReveal 0.7s var(--ease-glide) forwards;">
+                        <div class="matrix-tabs">
+                            <button class="matrix-tab-btn active" onclick="switchMatrixTab(this, 'web3')">Web3 & Rust</button>
+                            <button class="matrix-tab-btn" onclick="switchMatrixTab(this, 'iot')">Embedded IoT</button>
+                            <button class="matrix-tab-btn" onclick="switchMatrixTab(this, 'web')">Full-Stack</button>
+                        </div>
+                        
+                        <div id="matrix-pane" class="matrix-content-panel">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
 
-            if (guiltLevel === 999) {
-                guiltTracker.innerHTML = "MAXIMUM GUILT ACHIEVED. OPENING VS CODE...";
-                setTimeout(() => { alert("Okay okay, I'll work on it!"); }, 500);
-            }
-        });
+                    <!-- Bento Card 3: Engineering Philosophy (Human-Centered Philosophy Card) -->
+                    <div class="glass-card bento-card philosophy-card" style="animation: glassReveal 0.8s var(--ease-glide) forwards;">
+                        <div>
+                            <div class="section-label">Core Philosophy</div>
+                            <h3>Engineering Focus</h3>
+                        </div>
+                        <div style="margin: 1rem 0;">
+                            <div class="philosophy-item">
+                                <h4>Hardware-Aware Software</h4>
+                                <p>Writing optimized software that respects actual hardware constraints (memory margins, CPU threads, ESP32 footprints).</p>
+                            </div>
+                            <div class="philosophy-item" style="margin-top:0.85rem;">
+                                <h4>Parallel Architectures</h4>
+                                <p>Leveraging Rust multi-core task scheduling to execute file scans and data searches concurrently.</p>
+                            </div>
+                            <div class="philosophy-item" style="margin-top:0.85rem;">
+                                <h4>Intuitive Frontends</h4>
+                                <p>Packaging heavy underlying logic into clean, responsive user interfaces designed with strict layout fidelity.</p>
+                            </div>
+                        </div>
+                        <div class="mono" style="font-size:0.7rem; color:var(--text-muted); border-top:1px dashed rgba(255,255,255,0.04); padding-top:0.75rem;">
+                            Quality over noise // Structure over speed
+                        </div>
+                    </div>
 
-        // --- 2. THE PHYSICS ENGINE & TAB SPAWNER ---
-        const tabTitles = [
-            "StackOverflow: How to center a div", "YouTube: 10 Hours of Rain",
-            "Google: Why does my back hurt at 20?", "Localhost:8080 - [FATAL ERROR]",
-            "GitHub: 'Update Readme' (Commit 45)", "Amazon: Mechanical Keyboard",
-            "Spotify: Phonk Playlist", "ChatGPT: Write a function to...",
-            "Figma: Untilted_Final_v3.fig", "Reddit: r/ProgrammerHumor"
-        ];
-        
-        let activeTabs = []; 
-        let highestZIndex = 5; 
+                    <!-- Bento Card 4: Verified Credentials -->
+                    <div class="glass-card bento-card credentials-card" style="animation: glassReveal 0.9s var(--ease-glide) forwards;">
+                        <div class="section-label">Certifications</div>
+                        <h3>Professional Credentials</h3>
+                        <div class="cred-list">
+                            <div class="cred-item">
+                                <div class="cred-info">
+                                    <div class="cred-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                                    <div class="cred-details">
+                                        <h4>NPTEL Elite: Blockchain and its Applications</h4>
+                                        <p>Credential Registry // CS34S852500573</p>
+                                    </div>
+                                </div>
+                            </div>
 
-        // Unified pointerdown for mobile taps and desktop clicks
-        document.addEventListener('pointerdown', (e) => {
-            if (e.target.closest('.btn') || e.target.closest('#ghost') || e.target.closest('.cyber-tab')) return;
-            spawnTab(e.clientX, e.clientY, false);
-            
-            // On mobile, tapping the background makes the ghost look and fly toward the tap
-            targetX = e.clientX; targetY = e.clientY;
-        });
+                            <div class="cred-item">
+                                <div class="cred-info">
+                                    <div class="cred-icon"><i class="fa-solid fa-eye"></i></div>
+                                    <div class="cred-details">
+                                        <h4>NPTEL: Computer Vision and Image Processing</h4>
+                                        <p>Credential Registry // EE31S1152500717</p>
+                                    </div>
+                                </div>
+                            </div>
 
-        function spawnTab(x, y, isExplosion) {
-            const el = document.createElement('div');
-            el.className = 'cyber-tab';
-            highestZIndex++; el.style.zIndex = highestZIndex;
-            
-            const randomTitle = tabTitles[Math.floor(Math.random() * tabTitles.length)];
-            el.innerHTML = `<span>${randomTitle}</span><span class="tab-close">✕</span>`;
-            document.body.appendChild(el);
+                            <div class="cred-item">
+                                <div class="cred-info">
+                                    <div class="cred-icon"><i class="fa-brands fa-rust"></i></div>
+                                    <div class="cred-details">
+                                        <h4>Blockchain With Rust</h4>
+                                        <p>Silicon Institute of Technology // SIT</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Hidden list of additional certifications -->
+                            <div id="more-certs" style="display: none; flex-direction: column; gap: 0.85rem; margin-top: 0.85rem; animation: paneFade 0.4s var(--ease-glide) forwards;">
+                                <div class="cred-item">
+                                    <div class="cred-info">
+                                        <div class="cred-icon"><i class="fa-solid fa-palette"></i></div>
+                                        <div class="cred-details">
+                                            <h4>Graphic Designing</h4>
+                                            <p>NIIT Foundation</p>
+                                        </div>
+                                    </div>
+                                </div>
 
-            const tabObj = {
-                el: el,
-                x: x - (el.offsetWidth / 2), y: y - (el.offsetHeight / 2),
-                vx: isExplosion ? (Math.random() - 0.5) * 30 : (Math.random() - 0.5) * 10,
-                vy: isExplosion ? (Math.random() * -20) - 10 : (Math.random() * -15) - 5,
-                angle: (Math.random() - 0.5) * 40, vAngle: (Math.random() - 0.5) * 5,
-                width: el.offsetWidth, height: el.offsetHeight,
-                isDragging: false
-            };
+                                <div class="cred-item">
+                                    <div class="cred-info">
+                                        <div class="cred-icon"><i class="fa-solid fa-file-word"></i></div>
+                                        <div class="cred-details">
+                                            <h4>Microsoft: Work Smarter with Word</h4>
+                                            <p>Microsoft Academy</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="epic-btn interactable" id="view-more-certs-btn" onclick="toggleMoreCertificates()" style="margin-top: 1.25rem; width: 100%; justify-content: center;">
+                            <i class="fa-solid fa-chevron-down" style="margin-right:6px;"></i>View More Certifications
+                        </button>
+                    </div>
+                </div>
+            `,
 
-            el.querySelector('.tab-close').addEventListener('pointerdown', (e) => {
-                e.stopPropagation(); el.remove();
-                activeTabs = activeTabs.filter(t => t !== tabObj);
-            });
-
-            makeThrowable(tabObj);
-            activeTabs.push(tabObj);
-        }
-
-        // --- 3. MOBILE-READY DRAG AND THROW LOGIC ---
-        function makeThrowable(tab) {
-            let lastMouseX = 0, lastMouseY = 0;
-
-            tab.el.onpointerdown = (e) => {
-                if (e.target.classList.contains('tab-close')) return;
-                e.preventDefault(); 
-                
-                // Capture the pointer to track fast finger swipes perfectly
-                tab.el.setPointerCapture(e.pointerId);
-                
-                highestZIndex++; tab.el.style.zIndex = highestZIndex;
-                tab.isDragging = true;
-                
-                lastMouseX = e.clientX; lastMouseY = e.clientY;
-
-                tab.el.onpointerup = (ev) => { 
-                    tab.isDragging = false;
-                    tab.el.releasePointerCapture(ev.pointerId);
-                    tab.el.onpointerup = null; tab.el.onpointermove = null; 
-                };
-                
-                tab.el.onpointermove = (ev) => {
-                    ev.preventDefault();
-                    tab.vx = (ev.clientX - lastMouseX) * 0.8;
-                    tab.vy = (ev.clientY - lastMouseY) * 0.8;
+            experience: `
+                <div class="stagger-in page-copy">
+                    <div class="section-label">Engineering Journey</div>
+                    <h2>Professional Timeline</h2>
+                    <p style="margin-bottom: 2rem; max-width:650px;">A detailed timeline of active Web3 research, low-level firmware engineering, and visual web deployments.</p>
                     
-                    tab.x += ev.clientX - lastMouseX;
-                    tab.y += ev.clientY - lastMouseY;
+                    <div class="timeline-container">
+                        <div class="timeline-line"></div>
+                        
+                        <!-- Solana & Rust Intern -->
+                        <div class="timeline-node" style="animation: fadeIn 0.5s var(--ease-glide) forwards;">
+                            <div class="timeline-indicator"></div>
+                            <div class="glass-card timeline-card">
+                                <div class="timeline-date-badge">Jun 2025 - Present</div>
+                                <h3>Research Intern: Rust & Solana Web3 Systems</h3>
+                                <div class="timeline-org">Silicon University (Computer Science Lab)</div>
+                                <div class="timeline-domain-indicator d-web3">Web3, Blockchain & Rust Concurrency</div>
+                                
+                                <div class="timeline-meta-box">
+                                    <div class="timeline-meta-col">
+                                        <label>Where (Context)</label>
+                                        <span>4th-Year Research capstone, Silicon University Web3 Lab.</span>
+                                    </div>
+                                    <div class="timeline-meta-col">
+                                        <label>Why & How</label>
+                                        <span>Rust provides safe multi-core memory management; Solana enables fast ledgers.</span>
+                                    </div>
+                                </div>
+
+                                <ul class="timeline-bullets">
+                                    <li>Advancing with Rust compilation pipelines, focusing on memory allocation bounds and high-throughput thread concurrency.</li>
+                                    <li>Developing and testing Solidity and Rust programs compiled for high-speed blockchain network environments.</li>
+                                    <li>Studying Solana Virtual Machine (SVM) program parameters and cryptographic key architectures.</li>
+                                </ul>
+                                <div class="tag-group">
+                                    <span class="tag">Solana VM</span>
+                                    <span class="tag">Rust systems</span>
+                                    <span class="tag">Concurrency</span>
+                                    <span class="tag">Anchor Smart Contracts</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Web Developer -->
+                        <div class="timeline-node" style="animation: fadeIn 0.6s var(--ease-glide) forwards;">
+                            <div class="timeline-indicator"></div>
+                            <div class="glass-card timeline-card">
+                                <div class="timeline-date-badge">Jul 2025 - Aug 2025</div>
+                                <h3>Web Developer</h3>
+                                <div class="timeline-org">Nekhkhilesh Technologies Pvt. Ltd. (Corporate Web Project)</div>
+                                <div class="timeline-domain-indicator d-web">Frontend & Web Constructs</div>
+                                
+                                <div class="timeline-meta-box">
+                                    <div class="timeline-meta-col">
+                                        <label>Where (Context)</label>
+                                        <span>Corporate Footprint Setup (https://nehkhileshtechnologies.com/).</span>
+                                    </div>
+                                    <div class="timeline-meta-col">
+                                        <label>Why & How</label>
+                                        <span>Next.js for optimized SSR/SEO, Three.js WebGL for visual client engagement.</span>
+                                    </div>
+                                </div>
+
+                                <ul class="timeline-bullets">
+                                    <li>Delivered the corporate web platform, incorporating custom Three.js assets and React Hooks.</li>
+                                    <li>Built clean, highly responsive layout modules using React Hooks, TypeScript, and Tailwind CSS.</li>
+                                    <li>Provisioned hosting files, DNS record configurations, and secure SMTP contact mail pipelines.</li>
+                                    <li>Executed maintenance routines to optimize core client-side performance markers.</li>
+                                </ul>
+                                <div class="tag-group">
+                                    <span class="tag">Next.js</span>
+                                    <span class="tag">Three.js</span>
+                                    <span class="tag">TypeScript</span>
+                                    <span class="tag">Tailwind CSS</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- VisiLock -->
+                        <div class="timeline-node" style="animation: fadeIn 0.7s var(--ease-glide) forwards;">
+                            <div class="timeline-indicator"></div>
+                            <div class="glass-card timeline-card">
+                                <div class="timeline-date-badge">Aug 2023 - Jun 2024</div>
+                                <h3>Embedded Firmware & Web Integrator</h3>
+                                <div class="timeline-org">VisiLock (Biometric entrance System Project)</div>
+                                <div class="timeline-domain-indicator d-iot">Embedded Hardware & IoT</div>
+                                
+                                <div class="timeline-meta-box">
+                                    <div class="timeline-meta-col">
+                                        <label>Where (Context)</label>
+                                        <span>Independent hardware prototype engineered for high-security corridors.</span>
+                                    </div>
+                                    <div class="timeline-meta-col">
+                                        <label>Why & How</label>
+                                        <span>ESP32 microcontrollers for cost-efficiency, C++ firmware for direct hardware controls.</span>
+                                    </div>
+                                </div>
+
+                                <ul class="timeline-bullets">
+                                    <li>Programmed C++ based ESP32 firmware logic, designing facial biometric validation loops.</li>
+                                    <li>Integrated WebSocket pipelines to broadcast validation updates dynamically onto local dashboard maps.</li>
+                                    <li>Constructed secure front-end panels allowing administrators to trigger real-time, remote overrides.</li>
+                                </ul>
+                                <div class="tag-group">
+                                    <span class="tag">ESP32 Firmware</span>
+                                    <span class="tag">Embedded C++</span>
+                                    <span class="tag">Biometrics</span>
+                                    <span class="tag">WebSockets</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Biotez -->
+                        <div class="timeline-node" style="animation: fadeIn 0.8s var(--ease-glide) forwards;">
+                            <div class="timeline-indicator"></div>
+                            <div class="glass-card timeline-card">
+                                <div class="timeline-date-badge">Jun 2024 - Aug 2024</div>
+                                <h3>Project In-Charge cum Coordinator</h3>
+                                <div class="timeline-org">Biotez Agrinovation Pvt. Ltd. (Operations)</div>
+                                <div class="timeline-domain-indicator d-web">Operations & Supply Systems</div>
+                                
+                                <div class="timeline-meta-box">
+                                    <div class="timeline-meta-col">
+                                        <label>Where (Context)</label>
+                                        <span>Biotez agricultural supply chains and field logistics.</span>
+                                    </div>
+                                    <div class="timeline-meta-col">
+                                        <label>Why & How</label>
+                                        <span>Systematic planning and resource mapping to prevent scheduling bottlenecks.</span>
+                                    </div>
+                                </div>
+
+                                <ul class="timeline-bullets">
+                                    <li>Coordinated field teams and oversaw procurement routes for core technical deliverables.</li>
+                                    <li>Formulated strategic communication bridges to smooth vendor interactions.</li>
+                                    <li>Tracked execution parameters to secure scheduled milestone deployment.</li>
+                                </ul>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+
+            artifacts: `
+                <div class="stagger-in page-copy">
+                    <div class="section-label">Featured Projects</div>
+                    <h2>Selected Mappings & Open Source</h2>
+                    <p style="margin-bottom: 1.5rem; max-width:650px;">Explore projects organized by their engineering domain. Select a domain below to filter blueprints.</p>
                     
-                    lastMouseX = ev.clientX; lastMouseY = ev.clientY;
-                    tab.angle = tab.vx * 0.5;
-                };
-            };
+                    <!-- Interactive Domain Filters -->
+                    <div class="archive-filters">
+                        <button class="archive-filter-btn active interactable" onclick="filterProjects('all', this)">[ All Domains ]</button>
+                        <button class="archive-filter-btn interactable" onclick="filterProjects('web3', this)">[ Web3 & Rust Concurrency ]</button>
+                        <button class="archive-filter-btn interactable" onclick="filterProjects('iot', this)">[ Embedded Hardware & IoT ]</button>
+                        <button class="archive-filter-btn interactable" onclick="filterProjects('web', this)">[ Full-Stack UI ]</button>
+                    </div>
+
+                    <div class="archive-grid" id="project-archive-grid">
+                        <!-- Project 1 -->
+                        <div class="glass-card archive-card interactable" data-proj-domain="iot" style="animation: glassReveal 0.5s var(--ease-glide) forwards;">
+                            <div class="archive-header">
+                                <span class="archive-badge active">Embedded Hardware</span>
+                                <div class="archive-icon"><i class="fa-solid fa-microchip"></i></div>
+                            </div>
+                            <div>
+                                <h3>The VisiLock Apparatus</h3>
+                                <p style="color:var(--text-muted);">A keyless entrance system integrating facial biometric scanning on ESP32 microcontrollers, linked to secure WebSocket override dashboards.</p>
+                                <div class="archive-meta-block">
+                                    <div class="archive-meta-row"><label>Where</label><span>Independent Hardware Core</span></div>
+                                    <div class="archive-meta-row"><label>Why</label><span>Eliminate key loss in healthcare systems</span></div>
+                                    <div class="archive-meta-row"><label>How</label><span>ESP32 + C++ firmware + WebSockets</span></div>
+                                </div>
+                            </div>
+                            <div class="archive-footer">
+                                <div class="mono" style="font-size:0.72rem; color:var(--text-muted);">C++ // ESP32 // WebSockets</div>
+                                <a href="https://github.com/dynexian/visiLock-smart-face-access" target="_blank" class="cred-link interactable">Repository <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- Project 2 -->
+                        <div class="glass-card archive-card interactable" data-proj-domain="web3" style="animation: glassReveal 0.6s var(--ease-glide) forwards;">
+                            <div class="archive-header">
+                                <span class="archive-badge web3">Rust Concurrency</span>
+                                <div class="archive-icon"><i class="fa-brands fa-rust"></i></div>
+                            </div>
+                            <div>
+                                <h3>The Rayon Purge</h3>
+                                <p style="color:var(--text-muted);">A high-velocity file deduplication CLI scraper. Utilizes parallel path scanning and SHA256 hashes to quarantine duplicates concurrently.</p>
+                                <div class="archive-meta-block">
+                                    <div class="archive-meta-row"><label>Where</label><span>Independent CLI Systems Utility</span></div>
+                                    <div class="archive-meta-row"><label>Why</label><span>Speed up redundant data scans</span></div>
+                                    <div class="archive-meta-row"><label>How</label><span>Rust + Rayon multi-core scheduler</span></div>
+                                </div>
+                            </div>
+                            <div class="archive-footer">
+                                <div class="mono" style="font-size:0.72rem; color:var(--text-muted);">Rust // Rayon // Concurrency</div>
+                                <a href="https://github.com/dynexian" target="_blank" class="cred-link interactable">Repository <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- Project 3 -->
+                        <div class="glass-card archive-card interactable" data-proj-domain="web3" style="animation: glassReveal 0.7s var(--ease-glide) forwards;">
+                            <div class="archive-header">
+                                <span class="archive-badge web3">Web3 Protocol</span>
+                                <div class="archive-icon"><i class="fa-solid fa-cubes"></i></div>
+                            </div>
+                            <div>
+                                <h3>EduTech DAO Smart Contract</h3>
+                                <p style="color:var(--text-muted);">A decentralized education funding protocol programmed in Solidity. Supports MetaMask deposits, token distribution, and voting panels.</p>
+                                <div class="archive-meta-block">
+                                    <div class="archive-meta-row"><label>Where</label><span>Web3 Solidity Capstone Project</span></div>
+                                    <div class="archive-meta-row"><label>Why</label><span>Transparent school resources pools</span></div>
+                                    <div class="archive-meta-row"><label>How</label><span>Solidity + Sepolia Testnet + Ethers.js</span></div>
+                                </div>
+                            </div>
+                            <div class="archive-footer">
+                                <div class="mono" style="font-size:0.72rem; color:var(--text-muted);">Solidity // Ethers.js // Web3</div>
+                                <a href="https://github.com/dynexian/dao-funding-dapp" target="_blank" class="cred-link interactable">Repository <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- Project 4 -->
+                        <div class="glass-card archive-card interactable" data-proj-domain="iot" style="animation: glassReveal 0.8s var(--ease-glide) forwards;">
+                            <div class="archive-header">
+                                <span class="archive-badge active">Telemetry Node</span>
+                                <div class="archive-icon"><i class="fa-solid fa-wind"></i></div>
+                            </div>
+                            <div>
+                                <h3>Project Vayuraksha</h3>
+                                <p style="color:var(--text-muted);">A smart air monitoring micro-node. Captures environmental sensor telemetries and automatically modulates filtration hardware flow speed dynamically.</p>
+                                <div class="archive-meta-block">
+                                    <div class="archive-meta-row"><label>Where</label><span>EDP Capstone Hardware Build</span></div>
+                                    <div class="archive-meta-row"><label>Why</label><span>Environmental tracking in work setups</span></div>
+                                    <div class="archive-meta-row"><label>How</label><span>Sensor arrays + C++ firmware loops</span></div>
+                                </div>
+                            </div>
+                            <div class="archive-footer">
+                                <div class="mono" style="font-size:0.72rem; color:var(--text-muted);">Sensors // Embedded C // Telemetry</div>
+                                <span class="mono" style="color:var(--accent-gold); font-size:0.72rem;">Hardware Build</span>
+                            </div>
+                        </div>
+
+                        <!-- Project 5 -->
+                        <div class="glass-card archive-card interactable" data-proj-domain="web" style="animation: glassReveal 0.9s var(--ease-glide) forwards;">
+                            <div class="archive-header">
+                                <span class="archive-badge active">Full-Stack Web</span>
+                                <div class="archive-icon"><i class="fa-solid fa-globe"></i></div>
+                            </div>
+                            <div>
+                                <h3>Nekhkhilesh Corporate Platform</h3>
+                                <p style="color:var(--text-muted);">The official corporate digital hub. Integrates interactive, GPU-driven Three.js WebGL scenes, secure lead capture endpoints, and automatic SMTP routing pipelines.</p>
+                                <div class="archive-meta-block">
+                                    <div class="archive-meta-row"><label>Where</label><span>Nekhkhilesh Technologies Pvt. Ltd.</span></div>
+                                    <div class="archive-meta-row"><label>Why</label><span>Establish authority & lead capturing</span></div>
+                                    <div class="archive-meta-row"><label>How</label><span>React + Next.js + Three.js + Tailwind CSS</span></div>
+                                </div>
+                            </div>
+                            <div class="archive-footer">
+                                <div class="mono" style="font-size:0.72rem; color:var(--text-muted);">Next.js // Three.js // React // SMTP</div>
+                                <a href="https://nehkhileshtechnologies.com/" target="_blank" class="cred-link interactable">Live Site <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+
+            resume: `
+                <div class="stagger-in resume-view">
+                    <!-- Actions Menu -->
+                    <div style="display:flex; justify-content:flex-end; margin-bottom: 2rem;" class="no-print">
+                        <button class="epic-btn interactable" onclick="window.print()"><i class="fa-solid fa-print"></i>Print / Save PDF</button>
+                    </div>
+
+                    <div class="glass-card" style="padding: 3rem; animation: glassReveal 0.6s var(--ease-glide) forwards;">
+                        <header class="resume-header">
+                            <div class="resume-personal">
+                                <div class="mono" style="color: var(--accent-cyan); font-weight:600; margin-bottom:0.45rem;">// PROFESSIONAL RESUME</div>
+                                <h1>Shubham Rajesh Vishwakarma</h1>
+                                <p style="font-size:1.05rem; color:var(--text-primary); font-weight:500;">Software Engineer &bull; Solana Web3 Developer</p>
+                                <div class="resume-contact-bar">
+                                    <span><i class="fa-solid fa-envelope" style="margin-right:6px;"></i><a href="mailto:vishwakarmashubham2004@gmail.com" class="interactable">vishwakarmashubham2004@gmail.com</a></span>
+                                    <span><i class="fa-solid fa-location-dot" style="margin-right:6px;"></i>Bhubaneswar / Rourkela, India</span>
+                                    <span><i class="fa-brands fa-github" style="margin-right:6px;"></i><a href="https://github.com/dynexian" target="_blank" class="interactable">github.com/dynexian</a></span>
+                                </div>
+                            </div>
+                            <div class="photo-placeholder no-print">
+                                <img src="./profile.png" alt="Shubham R. Vishwakarma" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+                            </div>
+                        </header>
+
+                        <div class="resume-layout-grid">
+                            <!-- Left Sidebar Column (Profile, Education, Skills, Certifications) -->
+                            <div class="resume-sidebar-col">
+                                <section class="resume-section">
+                                    <h2>Profile</h2>
+                                    <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin:0;">
+                                        Currently a 4th-Year Computer Science & Engineering student at Silicon University doing a specialized research internship advancing with Rust and Solana Web3 systems. I map complex distributed ledgers, low-level concurrency schedules, and embedded C++ microcontrollers into highly optimized, clean architectures.
+                                    </p>
+                                </section>
+
+                                <section class="resume-section">
+                                    <h2>Education</h2>
+                                    <div class="resume-timeline-item" style="margin-bottom: 1.25rem;">
+                                        <h4 style="font-size: 0.95rem; margin:0 0 0.2rem 0; color:var(--text-primary);">B.Tech: CSE (AI/ML)</h4>
+                                        <div style="font-size:0.8rem; color:var(--accent-gold); margin-bottom:0.15rem; font-family:'Fira Code',monospace;">2024 &mdash; Present (Ongoing)</div>
+                                        <div style="font-size: 0.8rem; color: var(--text-muted); line-height:1.3;">Silicon Institute of Technology</div>
+                                    </div>
+                                    <div class="resume-timeline-item">
+                                        <h4 style="font-size: 0.95rem; margin:0 0 0.2rem 0; color:var(--text-primary);">Diploma: IT (86%)</h4>
+                                        <div style="font-size:0.8rem; color:var(--accent-gold); margin-bottom:0.15rem; font-family:'Fira Code',monospace;">2022 &mdash; 2024</div>
+                                        <div style="font-size: 0.8rem; color: var(--text-muted); line-height:1.3;">SKDAV Govt. Polytechnic</div>
+                                    </div>
+                                </section>
+
+                                <section class="resume-section">
+                                    <h2>Skills Loadout</h2>
+                                    <div style="display:flex; flex-direction:column; gap:0.85rem;">
+                                        <div>
+                                            <strong style="font-size:0.78rem; font-family:'Fira Code',monospace; color:var(--text-primary); display:block; margin-bottom:0.35rem;">Web3 & Systems:</strong>
+                                            <div class="tag-group" style="margin-top:0;">
+                                                <span class="tag">Rust</span><span class="tag">Solidity</span><span class="tag">Rayon</span><span class="tag">Anchor</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <strong style="font-size:0.78rem; font-family:'Fira Code',monospace; color:var(--text-primary); display:block; margin-bottom:0.35rem;">Embedded & IoT:</strong>
+                                            <div class="tag-group" style="margin-top:0;">
+                                                <span class="tag">ESP32</span><span class="tag">C++</span><span class="tag">WebSockets</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <strong style="font-size:0.78rem; font-family:'Fira Code',monospace; color:var(--text-primary); display:block; margin-bottom:0.35rem;">Frontend & Web:</strong>
+                                            <div class="tag-group" style="margin-top:0;">
+                                                <span class="tag">Next.js</span><span class="tag">Three.js</span><span class="tag">TypeScript</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <section class="resume-section">
+                                    <h2>Certifications</h2>
+                                    <ul style="padding-left:1.1rem; font-size:0.82rem; color:var(--text-muted); display:flex; flex-direction:column; gap:0.45rem; margin:0;">
+                                        <li>Blockchain With Rust &mdash; SIT</li>
+                                        <li>Blockchain &amp; Applications (Elite) &mdash; NPTEL</li>
+                                        <li>Computer Vision &mdash; NPTEL</li>
+                                        <li>Graphic Designing &mdash; NIIT</li>
+                                        <li>Microsoft: Word Systems</li>
+                                    </ul>
+                                </section>
+                            </div>
+
+                            <!-- Right Core Column (Experience, Key Projects) -->
+                            <div class="resume-main-col">
+                                <section class="resume-section">
+                                    <h2>Experience</h2>
+                                    
+                                    <div class="resume-timeline-item">
+                                        <div class="resume-timeline-header">
+                                            <h3>Web3 & Systems Intern (Rust & Solana)</h3>
+                                            <span class="resume-timeline-date">Jun 2025 &mdash; Present</span>
+                                        </div>
+                                        <div class="resume-timeline-org">Silicon University (Web3 Systems Lab)</div>
+                                        <ul style="padding-left:1.15rem; font-size:0.88rem; color:var(--text-muted); line-height:1.45;">
+                                            <li>Advancing with Rust compilation pipelines, focusing on memory allocation bounds and high-throughput thread concurrency.</li>
+                                            <li>Developing and testing Solidity and Rust programs compiled for high-speed blockchain network environments.</li>
+                                            <li>Studying Solana Virtual Machine (SVM) program parameters and cryptographic key architectures.</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="resume-timeline-item">
+                                        <div class="resume-timeline-header">
+                                            <h3>Web Developer</h3>
+                                            <span class="resume-timeline-date">Jul 2025 &mdash; Aug 2025</span>
+                                        </div>
+                                        <div class="resume-timeline-org">Nekhkhilesh Technologies Pvt. Ltd.</div>
+                                        <ul style="padding-left:1.15rem; font-size:0.88rem; color:var(--text-muted); line-height:1.45;">
+                                            <li>Designed, integrated, and deployed the official corporate landing platform (nehkhileshtechnologies.com).</li>
+                                            <li>Implemented interactive visual environments incorporating custom Three.js WebGL systems.</li>
+                                            <li>Constructed modular layout pages using React Hooks, TypeScript, and Tailwind CSS.</li>
+                                            <li>Provisioned hosting structures, nameserver configurations, and SMTP contact routing pipelines.</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="resume-timeline-item">
+                                        <div class="resume-timeline-header">
+                                            <h3>Embedded & Front-end Developer</h3>
+                                            <span class="resume-timeline-date">Aug 2023 &mdash; Jun 2024</span>
+                                        </div>
+                                        <div class="resume-timeline-org">VisiLock (Biometric Access Project)</div>
+                                        <ul style="padding-left:1.15rem; font-size:0.88rem; color:var(--text-muted); line-height:1.45;">
+                                            <li>Programmed C++ based ESP32 firmware, deploying facial biometric comparison validation loops.</li>
+                                            <li>Orchestrated full-stack WebSocket pipelines to broadcast biometric logs onto interactive web panels.</li>
+                                            <li>Allowed security overseers to trigger real-time, remote overrides.</li>
+                                        </ul>
+                                    </div>
+                                </section>
+
+                                <section class="resume-section">
+                                    <h2>Key Projects</h2>
+                                    
+                                    <div class="resume-timeline-item">
+                                        <div class="resume-timeline-header">
+                                            <h3>The Rayon Purge (Rust Concurrency CLI Tool)</h3>
+                                            <span class="resume-timeline-date">Standalone Systems Program</span>
+                                        </div>
+                                        <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.45; margin-top:0.35rem;">
+                                            Designed a high-velocity command-line utility to index and delete duplicate system archives. Implemented parallel worker pools using Rayon, scanning paths concurrently, comparing SHA256 hashes, and outputting structured JSON summaries.
+                                        </p>
+                                    </div>
+
+                                    <div class="resume-timeline-item">
+                                        <div class="resume-timeline-header">
+                                            <h3>EduTech DAO Smart Contract (Solidity / Sepolia)</h3>
+                                            <span class="resume-timeline-date">Web3 Capstone Project</span>
+                                        </div>
+                                        <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.45; margin-top:0.35rem;">
+                                            Constructed an on-chain funding pool on Sepolia Testnet. Enabled community MetaMask deposits, dynamic token minting, and voting parameters, bridging the contract directly onto standard web interfaces.
+                                        </p>
+                                    </div>
+                                </section>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `
+        };
+
+        // ==========================================
+        // 2. DOMAIN MATRIX INTERACTIVE LOGIC
+        // ==========================================
+        const matrixData = {
+            web3: `
+                <div class="matrix-content-panel" style="animation: paneFade 0.4s var(--ease-glide) forwards;">
+                    <div>
+                        <div class="matrix-meta-row">
+                            <label>Domain Focus</label>
+                            <span>Web3, Blockchain & Rust Concurrency</span>
+                        </div>
+                        <div class="matrix-meta-row">
+                            <label>Current Context (Where)</label>
+                            <span>4th-Year Capstone & Web3 Research Intern @ Silicon University.</span>
+                        </div>
+                        <div class="matrix-meta-row">
+                            <label>Engineering Rationale (Why & How)</label>
+                            <p>Rust delivers safe, low-level multi-core concurrency without garbage collection, making it ideal for the high-frequency Solana Virtual Machine (SVM) program loops. Anchor CLI is used to compile smart contract ledger instructions.</p>
+                        </div>
+                    </div>
+                    <div class="tag-group" style="margin-top:0.75rem;">
+                        <span class="tag tag-accent">Rust</span>
+                        <span class="tag tag-accent">Solana VM</span>
+                        <span class="tag tag-accent">Solidity</span>
+                        <span class="tag tag-accent">Rayon</span>
+                        <span class="tag tag-accent">Anchor</span>
+                    </div>
+                </div>
+            `,
+            iot: `
+                <div class="matrix-content-panel" style="animation: paneFade 0.4s var(--ease-glide) forwards;">
+                    <div>
+                        <div class="matrix-meta-row">
+                            <label>Domain Focus</label>
+                            <span>Embedded Hardware & IoT Systems</span>
+                        </div>
+                        <div class="matrix-meta-row">
+                            <label>Applied Context (Where)</label>
+                            <span>VisiLock biometric system & Project Vayuraksha air sensor modules.</span>
+                        </div>
+                        <div class="matrix-meta-row">
+                            <label>Engineering Rationale (Why & How)</label>
+                            <p>ESP32 microcontrollers are utilized for cost-efficiency. Embedded C++ firmware enables direct control of physical relays, sensors, and camera pins, while WebSocket protocols broadcast telemetries to admin maps.</p>
+                        </div>
+                    </div>
+                    <div class="tag-group" style="margin-top:0.75rem;">
+                        <span class="tag tag-accent">ESP32 Firmware</span>
+                        <span class="tag tag-accent">Embedded C++</span>
+                        <span class="tag tag-accent">Sensors</span>
+                        <span class="tag tag-accent">WebSockets</span>
+                        <span class="tag tag-accent">Biometrics</span>
+                    </div>
+                </div>
+            `,
+            web: `
+                <div class="matrix-content-panel" style="animation: paneFade 0.4s var(--ease-glide) forwards;">
+                    <div>
+                        <div class="matrix-meta-row">
+                            <label>Domain Focus</label>
+                            <span>Frontend & Web Constructs</span>
+                        </div>
+                        <div class="matrix-meta-row">
+                            <label>Applied Context (Where)</label>
+                            <span>Nekhkhilesh Technologies Pvt. Ltd. (Corporate Web Project).</span>
+                        </div>
+                        <div class="matrix-meta-row">
+                            <label>Engineering Rationale (Why & How)</label>
+                            <p>Next.js is selected for optimized Server-Side Rendering and SEO visibility. Three.js leverages client GPUs to render interactive spatial WebGL assets, packaging heavy logic into fluid visual systems.</p>
+                        </div>
+                    </div>
+                    <div class="tag-group" style="margin-top:0.75rem;">
+                        <span class="tag tag-accent">Next.js</span>
+                        <span class="tag tag-accent">Three.js</span>
+                        <span class="tag tag-accent">TypeScript</span>
+                        <span class="tag tag-accent">Tailwind CSS</span>
+                        <span class="tag tag-accent">React Hooks</span>
+                    </div>
+                </div>
+            `
+        };
+
+        function switchMatrixTab(element, domainKey) {
+            const tabs = document.querySelectorAll('.matrix-tab-btn');
+            tabs.forEach(t => t.classList.remove('active'));
+            element.classList.add('active');
+
+            const pane = document.getElementById('matrix-pane');
+            if (pane) {
+                pane.innerHTML = matrixData[domainKey] || matrixData['web3'];
+                bindSpotlights();
+            }
         }
 
-        // --- 4. GHOST MOBILE PHYSICS ---
-        const ghost = document.getElementById('ghost');
-        const root = document.documentElement;
-        const pupils = document.querySelectorAll('.pupil');
-        const eyes = document.querySelectorAll('.eye');
-        const mouth = document.getElementById('ghost-mouth');
-        const sweat = document.getElementById('ghost-sweat');
-        
-        let ghostX = window.innerWidth / 2; let ghostY = window.innerHeight / 2;
-        let targetX = window.innerWidth / 2; let targetY = window.innerHeight / 2;
-        let velX = 0; let velY = 0; let isPoked = false;
-
-        // Tracks both mouse movements AND finger drags
-        document.addEventListener('pointermove', (e) => {
-            targetX = e.clientX; targetY = e.clientY;
-            if(!isPoked) {
-                pupils.forEach(pupil => {
-                    const rect = pupil.parentElement.getBoundingClientRect();
-                    const eyeX = rect.left + rect.width / 2; const eyeY = rect.top + rect.height / 2;
-                    const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
-                    pupil.style.transform = `translate(calc(-50% + ${Math.cos(angle)*4}px), calc(-50% + ${Math.sin(angle)*4}px))`;
-                });
-            }
-        });
-
-        // The Poke
-        ghost.addEventListener('pointerdown', (e) => {
-            e.stopPropagation();
-            isPoked = true;
-            root.style.setProperty('--ghost-color', 'rgba(255, 0, 119, 0.9)'); 
-            root.style.setProperty('--ghost-glow', 'rgba(255, 0, 119, 0.7)');
+        // ==========================================
+        // 2B. OUT-OF-THE-BOX SYSTEMS SIMULATION MONITOR
+        // ==========================================
+        const SystemsMonitor = {
+            activeFeed: 'solana',
+            intervalId: null,
+            slotCounter: 284091,
+            logs: {
+                solana: [],
+                esp32: [],
+                rust: []
+            },
             
-            eyes.forEach(eye => eye.style.transform = 'scaleY(0.2) scaleX(1.3)');
-            pupils.forEach(pupil => pupil.style.transform = 'translate(-50%, -50%)');
-            mouth.style.height = '12px'; mouth.style.borderRadius = '50%'; 
+            init() {
+                this.logs.solana = [
+                    "// Solana Virtual Machine Node Active",
+                    "// Listening for SVM Anchor entrypoints",
+                    "[INIT] Epoch 612 active",
+                    "[INFO] Core ledger listener running on SIT port 8899"
+                ];
+                this.logs.esp32 = [
+                    "// ESP32-WROOM-32E low-level hardware active",
+                    "// GPIO initialization successful",
+                    "[INIT] WebSocket handler established on port 80",
+                    "[INFO] VisiLock biometric relay: Standby"
+                ];
+                this.logs.rust = [
+                    "// cargo check --workspace --release",
+                    "// Rayon threadpool initialized: 4 workers",
+                    "[INIT] Cryptographic hashing context loaded",
+                    "[INFO] deduplicator memory-mapped page-cache active"
+                ];
+            },
             
-            sweat.style.opacity = '1'; sweat.style.transform = 'translateY(10px)';
-
-            setTimeout(() => {
-                isPoked = false;
-                root.style.setProperty('--ghost-color', 'rgba(0, 255, 255, 0.8)');
-                root.style.setProperty('--ghost-glow', 'rgba(0, 255, 255, 0.6)');
-                eyes.forEach(eye => eye.style.transform = 'scaleY(1) scaleX(1)');
-                mouth.style.height = '4px'; mouth.style.borderRadius = '0 0 10px 10px';
-                sweat.style.opacity = '0'; sweat.style.transform = 'translateY(0)';
-            }, 1000);
-        });
-
-        function blink() {
-            if(!isPoked) {
-                eyes.forEach(eye => eye.style.transform = 'scaleY(0.1)');
-                setTimeout(() => { if(!isPoked) eyes.forEach(eye => eye.style.transform = 'scaleY(1)'); }, 150);
-            }
-            setTimeout(blink, Math.random() * 4000 + 2000);
-        }
-        setTimeout(blink, 2000);
-
-        const clock = Date.now();
-        const gravity = 0.8;
-        const friction = 0.95;
-        const bounce = -0.6;
-
-        function animate() {
-            // Tab Physics
-            activeTabs.forEach(tab => {
-                if(!tab.isDragging) {
-                    tab.vy += gravity; tab.vx *= friction; 
-                    tab.x += tab.vx; tab.y += tab.vy; tab.angle += tab.vAngle;
-
-                    if(tab.y + tab.height > window.innerHeight) {
-                        tab.y = window.innerHeight - tab.height;
-                        tab.vy *= bounce; tab.vx *= 0.8; tab.vAngle *= 0.5;
-                    }
-                    if(tab.x < 0) { tab.x = 0; tab.vx *= bounce; }
-                    if(tab.x + tab.width > window.innerWidth) { tab.x = window.innerWidth - tab.width; tab.vx *= bounce; }
+            start() {
+                this.stop(); // safety
+                this.init();
+                this.render();
+                
+                this.intervalId = setInterval(() => {
+                    this.tick();
+                }, 1500);
+            },
+            
+            stop() {
+                if (this.intervalId) {
+                    clearInterval(this.intervalId);
+                    this.intervalId = null;
                 }
-                tab.el.style.transform = `translate(${tab.x}px, ${tab.y}px) rotate(${tab.angle}deg)`;
-            });
-
-            // Ghost Physics
-            velX = (targetX - ghostX) * 0.08;
-            velY = (targetY - ghostY) * 0.08;
-            ghostX += velX; ghostY += velY;
-
-            const rotation = velX * 0.4; 
-            const speed = Math.sqrt(velX*velX + velY*velY);
-            let stretchX = Math.max(0.85, 1 - (speed * 0.003));
-            let stretchY = Math.min(1.2, 1 + (speed * 0.003));
+            },
             
-            if(!isPoked) {
-                if(speed > 15) { mouth.style.height = '10px'; mouth.style.borderRadius = '50%'; } 
-                else { mouth.style.height = '4px'; mouth.style.borderRadius = '0 0 10px 10px'; }
+            switchFeed(feedName) {
+                this.activeFeed = feedName;
+                this.render();
+            },
+            
+            tick() {
+                const feed = this.activeFeed;
+                if (feed === 'solana') {
+                    this.slotCounter += Math.floor(Math.random() * 3) + 1;
+                    const logMsg = `[TX] Slot ${this.slotCounter} verified // Tx count: ${Math.floor(Math.random() * 80) + 12} // gas: 0.000005 SOL`;
+                    this.logs.solana.push(logMsg);
+                    if (this.logs.solana.length > 5) this.logs.solana.shift();
+                } else if (feed === 'esp32') {
+                    const wifiSignal = -50 - Math.floor(Math.random() * 20);
+                    const coreTemp = (39.5 + Math.random() * 3.5).toFixed(1);
+                    const logMsg = `[TELEMETRY] RSSI: ${wifiSignal}dBm // CPU Temp: ${coreTemp}&deg;C // Heap: ${21420 + Math.floor(Math.random()*800)} bytes`;
+                    this.logs.esp32.push(logMsg);
+                    if (this.logs.esp32.length > 5) this.logs.esp32.shift();
+                } else if (feed === 'rust') {
+                    const fileCount = Math.floor(Math.random() * 500) + 50;
+                    const timeTaken = (0.05 + Math.random() * 0.12).toFixed(3);
+                    const threads = [0,1,2,3];
+                    const activeThread = threads[Math.floor(Math.random() * threads.length)];
+                    const logMsg = `[RUST] Thread ${activeThread} complete: deduped ${fileCount} files in ${timeTaken}s`;
+                    this.logs.rust.push(logMsg);
+                    if (this.logs.rust.length > 5) this.logs.rust.shift();
+                }
+                this.render();
+            },
+            
+            render() {
+                const container = document.getElementById('monitor-screen-feed');
+                if (!container) return;
+                
+                let html = '';
+                
+                if (this.activeFeed === 'solana') {
+                    html = `
+                        <div class="feed-solana" style="animation: paneFade 0.3s var(--ease-glide) forwards;">
+                            <div class="slots-visualizer">
+                                <span class="mono visualizer-label">Ledger Slots:</span>
+                                <div class="slots-grid">
+                                    <div class="slot-block active pulsating"></div>
+                                    <div class="slot-block active"></div>
+                                    <div class="slot-block active"></div>
+                                    <div class="slot-block"></div>
+                                    <div class="slot-block"></div>
+                                    <div class="slot-block"></div>
+                                    <div class="slot-block"></div>
+                                    <div class="slot-block"></div>
+                                </div>
+                            </div>
+                            <div class="console-logs mono">
+                                ${this.logs.solana.map(log => `<div>${log}</div>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                } else if (this.activeFeed === 'esp32') {
+                    html = `
+                        <div class="feed-esp32" style="animation: paneFade 0.3s var(--ease-glide) forwards;">
+                            <div class="signals-visualizer">
+                                <div class="signal-metric"><span class="mono text-muted">WiFi:</span> <span class="mono text-cyan">CONNECTED</span></div>
+                                <div class="signal-metric"><span class="mono text-muted">Pins Status:</span> <div class="pins-row"><span class="pin green">G2</span><span class="pin green">G4</span><span class="pin red">G12</span></div></div>
+                                <div class="signal-metric"><span class="mono text-muted">Relay Mode:</span> <span class="mono text-purple">SECURE</span></div>
+                            </div>
+                            <div class="console-logs mono" style="color: #a78bfa;">
+                                ${this.logs.esp32.map(log => `<div>${log}</div>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                } else if (this.activeFeed === 'rust') {
+                    html = `
+                        <div class="feed-rust" style="animation: paneFade 0.3s var(--ease-glide) forwards;">
+                            <div class="threads-visualizer">
+                                <div class="thread-item"><span class="mono">T0</span><div class="bar-container"><div class="bar-fill rust-fill" style="width: 85%;"></div></div></div>
+                                <div class="thread-item"><span class="mono">T1</span><div class="bar-container"><div class="bar-fill rust-fill" style="width: 45%;"></div></div></div>
+                                <div class="thread-item"><span class="mono">T2</span><div class="bar-container"><div class="bar-fill rust-fill" style="width: 95%;"></div></div></div>
+                                <div class="thread-item"><span class="mono">T3</span><div class="bar-container"><div class="bar-fill rust-fill" style="width: 15%;"></div></div></div>
+                            </div>
+                            <div class="console-logs mono" style="color: #fda4af;">
+                                ${this.logs.rust.map(log => `<div>${log}</div>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                container.innerHTML = html;
             }
+        };
 
-            if(isPoked) { stretchX = 1.2; stretchY = 0.8; }
-
-            const time = (Date.now() - clock) / 1000;
-            const floatOffset = Math.sin(time * 3) * 5;
-            const flip = (targetX < ghostX) ? -1 : 1;
-
-            // Apply slight mobile scale down in JS to match CSS media query if needed
-            const mobileScale = window.innerWidth <= 768 ? 0.85 : 1;
-
-            ghost.style.transform = `translate(${ghostX + 15}px, ${ghostY + 15 + floatOffset}px) rotate(${rotation}deg) scale(${stretchX * flip * mobileScale}, ${stretchY * mobileScale})`;
-
-            requestAnimationFrame(animate);
+        function switchMonitorFeed(feedName, event) {
+            if (event) {
+                const buttons = document.querySelectorAll('.monitor-btn');
+                buttons.forEach(btn => btn.classList.remove('active'));
+                event.currentTarget.classList.add('active');
+            }
+            SystemsMonitor.switchFeed(feedName);
         }
 
-        animate();
+        // ==========================================
+        // 3. PROJECT ARCHIVE DYNAMIC FILTERING
+        // ==========================================
+        function filterProjects(domain, btnElement) {
+            // Update active filter btn
+            const filterBtns = document.querySelectorAll('.archive-filter-btn');
+            filterBtns.forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            const projectGrid = document.getElementById('project-archive-grid');
+            if (!projectGrid) return;
+
+            const cards = projectGrid.querySelectorAll('.archive-card');
+            
+            cards.forEach(card => {
+                const projDomain = card.dataset.projDomain;
+                
+                if (domain === 'all' || projDomain === domain) {
+                    card.style.display = 'flex';
+                    // Re-trigger animation
+                    card.style.animation = 'none';
+                    card.offsetHeight; /* trigger reflow */
+                    card.style.animation = 'glassReveal 0.5s var(--ease-glide) forwards';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // ==========================================
+        // 4. SPA ROUTER IMPLEMENTATION
+        // ==========================================
+        const appRoot = document.getElementById('app-root');
+        const navLinks = document.querySelectorAll('#nav-links a');
+        const mobileLinks = document.querySelectorAll('#mobile-menu a');
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        function renderSPA(viewName) {
+            // Fade out
+            appRoot.classList.add('page-fade');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            window.setTimeout(() => {
+                // Render HTML
+                appRoot.innerHTML = views[viewName] || views['home'];
+                
+                // Update active link state
+                const allNavs = [...navLinks, ...mobileLinks];
+                allNavs.forEach(link => {
+                    if (link.dataset.view === viewName) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+
+                // Fade in
+                appRoot.classList.remove('page-fade');
+                
+                // Triggers & spotlights
+                bindSpotlights();
+                
+                if (viewName === 'home') {
+                    // Pre-load default active domain tab
+                    const defaultTab = document.querySelector('.matrix-tab-btn');
+                    if (defaultTab) switchMatrixTab(defaultTab, 'web3');
+                    
+                    // Start dynamic systems simulator
+                    SystemsMonitor.start();
+                } else {
+                    // Stop simulator when moving away
+                    SystemsMonitor.stop();
+                }
+            }, 180);
+        }
+
+        // Navigation Routing Hooks
+        function setupNavigation(links) {
+            links.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetView = link.dataset.view;
+
+                    // Close mobile menu if open
+                    mobileMenu.classList.remove('active');
+                    menuToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+
+                    document.body.classList.add('is-transitioning');
+                    const finish = () => document.body.classList.remove('is-transitioning');
+                    
+                    // Cinematic Journey handler
+                    if (targetView === 'story') {
+                        startJourney();
+                        window.setTimeout(finish, 300);
+                        return;
+                    }
+
+                    // Standard SPA Transition (supports View Transitions API where available)
+                    if (!document.startViewTransition) {
+                        renderSPA(targetView);
+                        window.setTimeout(finish, 300);
+                        return;
+                    }
+                    
+                    const transition = document.startViewTransition(() => renderSPA(targetView));
+                    transition.finished.finally(finish);
+                });
+            });
+        }
+
+        setupNavigation(navLinks);
+        setupNavigation(mobileLinks);
+
+        // Mobile Menu toggle
+        menuToggle.addEventListener('click', () => {
+            const isActive = mobileMenu.classList.toggle('active');
+            menuToggle.innerHTML = isActive ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+        });
+
+        // Initialize Router
+        renderSPA('home');
+
+        // ==========================================
+        // 5. CINEMATIC ENGINE (JOURNEY SCROLLYTELLING)
+        // ==========================================
+        const spaContainer = document.getElementById('app-root');
+        const navMain = document.getElementById('nav-main');
+        const cineEngine = document.getElementById('cinematic-engine');
+        const exitBtn = document.getElementById('exit-journey');
+        const scrollExplore = document.getElementById('scroll-explore');
+        let isCinematic = false;
+
+        function startJourney() {
+            isCinematic = true; 
+            window.scrollTo(0, 0);
+            document.body.classList.add('is-cinematic');
+            
+            // Fade out explore guide state
+            scrollExploreFaded = false;
+            
+            // Fade out navbar and root
+            spaContainer.style.opacity = '0'; 
+            navMain.style.transform = 'translateY(-100%)';
+            
+            setTimeout(() => {
+                spaContainer.style.display = 'none'; 
+                cineEngine.style.display = 'block'; 
+                exitBtn.style.display = 'block';
+                scrollExplore.style.display = 'flex';
+                scrollExplore.style.opacity = '0.8';
+                cineEngine.setAttribute('aria-hidden', 'false');
+                document.getElementById('story-chapter').textContent = '01';
+                document.getElementById('story-progress-fill').style.width = '0%';
+                document.getElementById('story-percentage').textContent = '0%';
+                document.getElementById('void-canvas').style.opacity = '0.15'; // dim dust specs
+                
+                // Cache metrics once the cinematic layout is active and rendered
+                cacheStoryMetrics();
+                handleStoryScroll();
+            }, 450);
+        }
+
+        function exitJourney() {
+            isCinematic = false; 
+            window.scrollTo(0, 0);
+            document.body.classList.remove('is-cinematic');
+            cineEngine.setAttribute('aria-hidden', 'true');
+            
+            cineEngine.style.display = 'none'; 
+            exitBtn.style.display = 'none'; 
+            scrollExplore.style.display = 'none';
+            spaContainer.style.display = 'block';
+            
+            // Reset active state references
+            activeChapterElement = null;
+            
+            // Reset canvas opacity
+            document.getElementById('void-canvas').style.opacity = '1';
+            
+            // Reactivate active link
+            const activeLink = document.querySelector('#nav-links a.active');
+            const targetView = activeLink ? activeLink.dataset.view : 'home';
+            renderSPA(targetView);
+
+            setTimeout(() => { 
+                spaContainer.style.opacity = '1'; 
+                navMain.style.transform = 'translateY(0)'; 
+            }, 100);
+        }
+
+        // CONTINUOUS SCROLL-LINKED PROGRESS & NEBULA PARALLAX
+        // Silky-Smooth Cinematic Scroll Engine (GPU-Accelerated, Throttled & Zero-Reflow)
+        let cachedStoryShellTop = 0;
+        let cachedStoryShellHeight = 0;
+        let cachedWindowHeight = 0;
+        let cachedChapterTops = {};
+        
+        let activeChapterElement = null;
+        let isScrollPending = false;
+        let scrollExploreFaded = false;
+
+        function cacheStoryMetrics() {
+            const storyShell = document.querySelector('.story-shell');
+            if (!storyShell) return;
+            
+            cachedStoryShellTop = storyShell.offsetTop;
+            cachedStoryShellHeight = storyShell.scrollHeight;
+            cachedWindowHeight = window.innerHeight;
+            
+            const containers = document.querySelectorAll('.story-container');
+            containers.forEach((container) => {
+                const sticky = container.querySelector('.story-sticky');
+                if (sticky) {
+                    const chapterNum = sticky.dataset.chapter;
+                    cachedChapterTops[chapterNum] = container.offsetTop;
+                }
+            });
+        }
+
+        function updateStoryScroll() {
+            if (!isCinematic) {
+                isScrollPending = false;
+                return;
+            }
+            
+            const scrollY = window.scrollY || window.pageYOffset;
+            const scrolled = scrollY - cachedStoryShellTop;
+            const totalHeight = cachedStoryShellHeight - cachedWindowHeight;
+            
+            let percent = (scrolled / totalHeight) * 100;
+            percent = Math.min(100, Math.max(0, percent));
+            
+            const progressFill = document.getElementById('story-progress-fill');
+            const progressPercent = document.getElementById('story-percentage');
+            
+            if (progressFill) progressFill.style.width = `${percent}%`;
+            if (progressPercent) progressPercent.textContent = `${Math.round(percent)}%`;
+
+            // Fade out explore guide on scroll (Throttled layout-free state shift)
+            if (percent > 2) {
+                if (!scrollExploreFaded) {
+                    scrollExploreFaded = true;
+                    scrollExplore.style.opacity = '0';
+                    scrollExplore.style.pointerEvents = 'none';
+                }
+            } else {
+                if (scrollExploreFaded) {
+                    scrollExploreFaded = false;
+                    scrollExplore.style.opacity = '0.8';
+                    scrollExplore.style.pointerEvents = 'auto';
+                }
+            }
+
+            // High-end scroll-linked Parallax translations on active elements
+            if (activeChapterElement) {
+                const chapterNum = activeChapterElement.dataset.chapter;
+                const parentTop = cachedChapterTops[chapterNum];
+                if (parentTop !== undefined) {
+                    // Offset ratio relative to viewport middle (Zero-Reflow Arithmetic)
+                    const offset = (parentTop - scrollY) / cachedWindowHeight;
+                    
+                    const storyCard = activeChapterElement.querySelector('.story-card');
+                    const storyCopy = activeChapterElement.querySelector('.story-copy');
+                    
+                    if (storyCard) {
+                        storyCard.style.transform = `translateY(${offset * 32}px) translateZ(0)`;
+                    }
+                    if (storyCopy) {
+                        storyCopy.style.transform = `translateY(${offset * -12}px) translateZ(0)`;
+                    }
+                }
+            }
+            
+            isScrollPending = false;
+        }
+
+        function handleStoryScroll() {
+            if (!isCinematic) return;
+            if (!isScrollPending) {
+                isScrollPending = true;
+                requestAnimationFrame(updateStoryScroll);
+            }
+        }
+
+        window.addEventListener('scroll', handleStoryScroll, { passive: true });
+        window.addEventListener('resize', () => {
+            if (isCinematic) {
+                cacheStoryMetrics();
+                handleStoryScroll();
+            }
+        });
+
+        // Intersection Observer for Story Chapters (Caching Active Elements)
+        const storyChapter = document.getElementById('story-chapter');
+        const storyScenes = Array.from(document.querySelectorAll('.observe-cine'));
+        
+        const cineObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-active');
+                    activeChapterElement = entry.target;
+                    const chap = entry.target.dataset.chapter;
+                    if (storyChapter && chap) {
+                        storyChapter.textContent = String(chap).padStart(2, '0');
+                    }
+                } else {
+                    entry.target.classList.remove('is-active');
+                    if (activeChapterElement === entry.target) {
+                        activeChapterElement = null;
+                    }
+                }
+            });
+        }, { threshold: 0.35, rootMargin: '-10% 0px -10% 0px' });
+
+        storyScenes.forEach(el => cineObserver.observe(el));
+
+        // Custom Cursor Precision Toggle
+        if (window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+            document.body.classList.add('custom-cursor');
+        }
+
+        // Print Layout triggers - Render synchronously to avoid blank capture in printing engine
+        function renderSPASync(viewName) {
+            // Render HTML immediately without transitions
+            appRoot.innerHTML = views[viewName] || views['home'];
+            
+            // Update active link state
+            const allNavs = [...navLinks, ...mobileLinks];
+            allNavs.forEach(link => {
+                if (link.dataset.view === viewName) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+
+            // Ensure transition classes are removed so it prints fully visible
+            appRoot.classList.remove('page-fade');
+            
+            // Triggers & spotlights
+            bindSpotlights();
+            
+            if (viewName === 'home') {
+                const defaultTab = document.querySelector('.matrix-tab-btn');
+                if (defaultTab) switchMatrixTab(defaultTab, 'web3');
+                SystemsMonitor.start();
+            } else {
+                SystemsMonitor.stop();
+            }
+        }
+
+        window.addEventListener('beforeprint', () => {
+            try { renderSPASync('resume'); } catch (e) {}
+        });
+        window.addEventListener('afterprint', () => {
+            try {
+                const active = document.querySelector('#nav-links a.active');
+                renderSPA(active ? active.dataset.view : 'home');
+            } catch (e) {}
+        });
+
+        // ==========================================
+        // 6. ADVANCED SPOTLIGHT COORDINATES BINDING
+        // ==========================================
+        function bindSpotlights() {
+            const cards = document.querySelectorAll('.glass-card');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                });
+            });
+        }
+
+        // ==========================================
+        // 7. LIGHTWEIGHT RESPONSIVE CUSTOM CURSOR
+        // ==========================================
+        const cursorElement = document.getElementById('custom-cursor');
+        let mouseXCoord = -100, mouseYCoord = -100;
+        let currentX = -100, currentY = -100;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseXCoord = e.clientX; 
+            mouseYCoord = e.clientY;
+        });
+
+        // Smooth snapping hover events
+        function setupCursorHoverEffects() {
+            document.body.addEventListener('mouseover', (e) => {
+                const target = e.target.closest('.interactable, a, button, .tag, .cred-item, .matrix-tab-btn, .archive-filter-btn');
+                if (target) {
+                    document.body.classList.add('hovering-ring');
+                }
+            });
+
+            document.body.addEventListener('mouseout', (e) => {
+                const target = e.target.closest('.interactable, a, button, .tag, .cred-item, .matrix-tab-btn, .archive-filter-btn');
+                if (target) {
+                    document.body.classList.remove('hovering-ring');
+                }
+            });
+        }
+        setupCursorHoverEffects();
+
+        function renderCursors() {
+            // Elastic damping algorithm for 60fps tracking
+            currentX += (mouseXCoord - currentX) * 0.15; 
+            currentY += (mouseYCoord - currentY) * 0.15;
+            
+            if (cursorElement) {
+                cursorElement.style.transform = `translate(calc(${currentX}px - 50%), calc(${currentY}px - 50%))`;
+            }
+            requestAnimationFrame(renderCursors);
+        }
+        renderCursors();
+
+        // ==========================================
+        // 8. STRIPE-STYLE AMBIENT DUST DRIFT CANVAS
+        // ==========================================
+        const canvas = document.getElementById('void-canvas');
+        const ctx = canvas ? canvas.getContext('2d') : null;
+        let width, height, nodes = [];
+
+        // Mouse velocity indicators
+        let lastMouseXPos = -1000, lastMouseYPos = -1000;
+        let mouseVelocityX = 0, mouseVelocityY = 0;
+
+        window.addEventListener('mousemove', (e) => {
+            if (lastMouseXPos === -1000) {
+                lastMouseXPos = e.clientX;
+                lastMouseYPos = e.clientY;
+            }
+            mouseVelocityX = e.clientX - lastMouseXPos;
+            mouseVelocityY = e.clientY - lastMouseYPos;
+            
+            lastMouseXPos = e.clientX;
+            lastMouseYPos = e.clientY;
+        });
+
+        function resizeCanvas() {
+            if (!canvas) return;
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initFlowField();
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        // Fluid flow field vector equations
+        const gridSpacing = 40;
+        let cols, rows;
+        let flowField = [];
+
+        function initFlowField() {
+            cols = Math.ceil(width / gridSpacing) + 1;
+            rows = Math.ceil(height / gridSpacing) + 1;
+            flowField = new Float32Array(cols * rows * 2);
+            for (let i = 0; i < cols * rows; i++) {
+                flowField[i * 2] = (Math.random() - 0.5) * 0.1;
+                flowField[i * 2 + 1] = (Math.random() - 0.5) * 0.1;
+            }
+        }
+
+        class FluidParticle {
+            constructor() {
+                this.reset();
+                this.x = Math.random() * width; 
+                this.y = Math.random() * height;
+            }
+            
+            reset() {
+                this.x = Math.random() * width; 
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.2; 
+                this.vy = (Math.random() - 0.5) * 0.2;
+                this.life = 100 + Math.random() * 150;
+                this.maxLife = this.life;
+                this.color = Math.random() > 0.4 ? 'rgba(139, 92, 246,' : 'rgba(14, 165, 233,'; // violet or cyan
+                this.radius = 1 + Math.random() * 1.5;
+            }
+            
+            update() {
+                // Get vector coordinate under particle
+                const colIdx = Math.floor(this.x / gridSpacing);
+                const rowIdx = Math.floor(this.y / gridSpacing);
+                
+                if (colIdx >= 0 && colIdx < cols && rowIdx >= 0 && rowIdx < rows) {
+                    const idx = (rowIdx * cols + colIdx) * 2;
+                    this.vx += flowField[idx] * 0.1;
+                    this.vy += flowField[idx + 1] * 0.1;
+                }
+
+                // Fluid mouse sweeps
+                let dx = this.x - mouseXCoord, dy = this.y - mouseYCoord;
+                let dist = Math.sqrt(dx*dx + dy*dy);
+                
+                if (dist < 150) {
+                    let force = (150 - dist) / 150;
+                    this.vx += mouseVelocityX * force * 0.05;
+                    this.vy += mouseVelocityY * force * 0.05;
+                }
+                
+                // Fluid Friction
+                this.vx *= 0.96;
+                this.vy *= 0.96;
+                
+                this.x += this.vx; 
+                this.y += this.vy;
+                this.life--;
+                
+                if (this.life <= 0 || this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
+                    this.reset();
+                }
+            }
+            
+            draw() {
+                if (!ctx) return;
+                const alpha = (this.life / this.maxLife) * 0.45;
+                ctx.beginPath(); 
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color + alpha + ')'; 
+                ctx.fill();
+            }
+        }
+
+        // Initialize particles
+        if (canvas) {
+            resizeCanvas();
+            const count = Math.min(280, Math.floor((width * height) / 3800));
+            for (let i = 0; i < count; i++) {
+                nodes.push(new FluidParticle());
+            }
+        }
+
+        function updateFlowField() {
+            for (let i = 0; i < cols * rows; i++) {
+                const idx = i * 2;
+                const nodeX = (i % cols) * gridSpacing;
+                const nodeY = Math.floor(i / cols) * gridSpacing;
+                
+                const dx = nodeX - mouseXCoord;
+                const dy = nodeY - mouseYCoord;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                
+                if (dist < 160) {
+                    const force = (160 - dist) / 160;
+                    flowField[idx] += mouseVelocityX * force * 0.02;
+                    flowField[idx + 1] += mouseVelocityY * force * 0.02;
+                }
+                
+                // Baseline grid node decay
+                flowField[idx] *= 0.95;
+                flowField[idx + 1] *= 0.95;
+            }
+            // Decay mouse velocity
+            mouseVelocityX *= 0.88;
+            mouseVelocityY *= 0.88;
+        }
+
+        function renderCanvasFrame() {
+            if (!ctx || !canvas) return;
+            
+            // Elite alpha-erasure trails trick (preserves layout transparency)
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.09)';
+            ctx.fillRect(0, 0, width, height);
+            ctx.globalCompositeOperation = 'source-over';
+            
+            updateFlowField();
+            
+            // Constellation line linkage for ink currents
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    let dx = nodes[i].x - nodes[j].x;
+                    let dy = nodes[i].y - nodes[j].y;
+                    let dist = Math.sqrt(dx*dx + dy*dy);
+                    
+                    if (dist < 80) {
+                        ctx.beginPath(); 
+                        ctx.moveTo(nodes[i].x, nodes[i].y); 
+                        ctx.lineTo(nodes[j].x, nodes[j].y);
+                        
+                        const lineAlpha = (1 - (dist / 80)) * 0.12 * (nodes[i].life / nodes[i].maxLife);
+                        ctx.strokeStyle = `rgba(139, 92, 246, ${lineAlpha})`; 
+                        ctx.lineWidth = 0.65;
+                        ctx.stroke();
+                    }
+                }
+            }
+            
+            nodes.forEach(node => { 
+                node.update(); 
+                node.draw(); 
+            });
+            
+            requestAnimationFrame(renderCanvasFrame);
+        }
+        
+        if (canvas) {
+            renderCanvasFrame();
+        }
+
+        // ==========================================
+        // 10. DYNAMIC CERTIFICATIONS TOGGLE LIST
+        // ==========================================
+        function toggleMoreCertificates() {
+            const moreCerts = document.getElementById('more-certs');
+            const btn = document.getElementById('view-more-certs-btn');
+            if (!moreCerts || !btn) return;
+            
+            if (moreCerts.style.display === 'none') {
+                moreCerts.style.display = 'flex';
+                btn.innerHTML = '<i class="fa-solid fa-chevron-up" style="margin-right:6px;"></i>Collapse List';
+            } else {
+                moreCerts.style.display = 'none';
+                btn.innerHTML = '<i class="fa-solid fa-chevron-down" style="margin-right:6px;"></i>View More Certifications';
+            }
+        }
     </script>
 </body>
 </html>

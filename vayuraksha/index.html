@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>Vayu Raksha - The Future of Respiration</title>
+  <meta name="description" content="A pinned scrollytelling landing page for Vayu Raksha, a hybrid HEPA and algae air filtration concept." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f1114;
+      --surface: rgba(255, 255, 255, 0.06);
+      --line: rgba(255, 255, 255, 0.12);
+      --text: #ebedf0;
+      --muted: #95a1ad;
+      --primary: #39ff14;
+      --toxic: #d95c14;
+      --clean: #00d4ff;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+      --radius: 24px;
+      --max: 1200px;
+      --mx: 0.5;
+      --my: 0.5;
+    }
+
+    * { box-sizing: border-box; }
+    html { background: var(--bg); }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 50% -10%, rgba(0, 212, 255, 0.12), transparent 28%),
+        radial-gradient(circle at 15% 18%, rgba(57, 255, 20, 0.07), transparent 20%),
+        linear-gradient(180deg, #0d1013 0%, #0f1114 45%, #090b0d 100%);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+      cursor: none;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.08;
+      z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    a { color: inherit; text-decoration: none; }
+    h1, h2, h3 { font-family: 'Clash Display', sans-serif; margin: 0; }
+
+    .wrap { width: min(var(--max), calc(100% - 2rem)); margin: 0 auto; }
+    .page { position: relative; z-index: 1; }
+
+    .story-track { position: relative; min-height: 560vh; }
+    .viewport-stage { position: relative; width: 100%; height: 100svh; overflow: hidden; isolation: isolate; }
+    .scene-bg, .scene-layer, .cursor-loom, .scanline, .motion-veil { position: absolute; inset: 0; }
+    .scene-bg { opacity: 0; transform: scale(1.02); will-change: opacity, transform; }
+
+    .bg-hero {
+      background:
+        radial-gradient(circle at 40% 20%, rgba(255, 255, 255, 0.18), transparent 18%),
+        radial-gradient(circle at 65% 15%, rgba(57, 255, 20, 0.12), transparent 20%),
+        linear-gradient(135deg, rgba(217, 92, 20, 0.92), rgba(59, 59, 59, 0.98));
+    }
+    .bg-problem {
+      background:
+        radial-gradient(circle at 50% 12%, rgba(217, 92, 20, 0.18), transparent 25%),
+        linear-gradient(180deg, rgba(12, 14, 16, 0.96), rgba(10, 12, 14, 0.98));
+    }
+    .bg-catalyst {
+      background:
+        linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(15,17,20,0.98), rgba(11,12,14,0.99));
+      background-size: 5vw 5vw, 5vw 5vw, auto;
+    }
+    .bg-solution {
+      background:
+        radial-gradient(circle at 25% 24%, rgba(57, 255, 20, 0.18), transparent 24%),
+        radial-gradient(circle at 82% 18%, rgba(0, 212, 255, 0.14), transparent 18%),
+        linear-gradient(180deg, rgba(12, 14, 16, 0.96), rgba(10, 12, 14, 0.98));
+    }
+    .bg-climax {
+      background:
+        radial-gradient(circle at 50% 20%, rgba(171, 246, 255, 0.42), transparent 34%),
+        radial-gradient(circle at 22% 14%, rgba(57, 255, 20, 0.16), transparent 26%),
+        radial-gradient(circle at 82% 16%, rgba(255, 235, 179, 0.18), transparent 24%),
+        linear-gradient(180deg, rgba(19, 28, 34, 0.98), rgba(30, 45, 52, 0.98));
+    }
+
+    .scanline {
+      pointer-events: none;
+      background: linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.03) 48%, transparent 100%);
+      mix-blend-mode: screen;
+      opacity: 0.45;
+      transform: translateY(-110%);
+    }
+
+    .motion-veil {
+      pointer-events: none;
+      background: radial-gradient(circle at calc(var(--mx) * 100%) calc(var(--my) * 100%), rgba(255,255,255,0.12), transparent 18%);
+      mix-blend-mode: screen;
+      opacity: 0.8;
+    }
+
+    .layer-shell {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
+      height: 100%;
+      display: grid;
+      align-items: center;
+      padding: clamp(0.9rem, 2.5vh, 2rem) 0 clamp(2.8rem, 8vh, 4.6rem);
+      position: relative;
+      z-index: 2;
+    }
+
+    .scene-layer {
+      display: grid;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      will-change: transform, opacity;
+      pointer-events: none;
+    }
+
+    .scene-layer.is-active { pointer-events: auto; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.55rem 0.82rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: rgba(235, 237, 240, 0.82);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      width: fit-content;
+    }
+
+    .eyebrow-dot { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--primary); box-shadow: 0 0 18px rgba(57, 255, 20, 0.8); }
+
+    .headline, .scene-title, .solution-title, .climax-title {
+      text-transform: uppercase;
+      letter-spacing: -0.05em;
+      line-height: 0.94;
+    }
+
+    .headline { font-size: clamp(2.65rem, 6.25vw, 6rem); max-width: 11ch; margin: 0.7rem 0 0.9rem; }
+    .headline .accent { color: rgba(235, 237, 240, 0.68); text-shadow: 0 0 34px rgba(57, 255, 20, 0.12); }
+    .scene-copy { color: rgba(235, 237, 240, 0.76); line-height: 1.75; font-size: clamp(1rem, 1.45vw, 1.12rem); max-width: 42rem; margin-top: 1rem; }
+
+    .hero-grid, .problem-grid, .solution-grid, .climax-grid { display: grid; align-items: center; gap: 1.5rem; }
+    .hero-grid, .solution-grid, .climax-grid { grid-template-columns: 1.15fr 0.85fr; }
+    .problem-grid { grid-template-columns: 0.94fr 1.06fr; }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      margin-top: 1.8rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 3.2rem;
+      padding: 0.85rem 1.15rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-size: 0.77rem;
+      font-weight: 700;
+      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
+      white-space: nowrap;
+      pointer-events: auto;
+    }
+
+    .button:hover { transform: translateY(-2px); }
+    .button-primary { color: #071008; background: linear-gradient(180deg, #95ff79, var(--primary)); box-shadow: 0 14px 36px rgba(57, 255, 20, 0.24); }
+    .button-secondary { border-color: rgba(255, 255, 255, 0.12); background: rgba(255, 255, 255, 0.03); color: var(--text); }
+    .button-secondary:hover { border-color: rgba(0, 212, 255, 0.42); background: rgba(0, 212, 255, 0.08); }
+
+    .hero-stat-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; margin-top: 1.55rem; }
+    .stat, .metric, .feature, .mini, .panel-card, .cta-card { border: 1px solid rgba(255, 255, 255, 0.08); background: rgba(255, 255, 255, 0.05); box-shadow: var(--shadow); }
+    .stat { padding: 1rem; border-radius: 18px; }
+    .label { display: block; color: var(--muted); text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.68rem; margin-bottom: 0.55rem; }
+    .value { font-family: 'Clash Display', sans-serif; font-size: clamp(1.35rem, 2vw, 1.8rem); letter-spacing: -0.04em; }
+
+    .hero-visual {
+      position: relative;
+      min-height: 28rem;
+      will-change: transform;
+      transform: translate3d(calc((var(--mx) - 0.5) * -5vw), calc((var(--my) - 0.5) * -5vh), 0);
+    }
+
+    .hero-grid-lines {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(to right, rgba(255,255,255,0.12) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.12) 1px, transparent 1px);
+      background-size: 4.2rem 4.2rem;
+      mask-image: radial-gradient(circle at center, black 42%, transparent 78%);
+      opacity: 0.36;
+    }
+
+    .orb-ring, .hero-orb, .hero-halo { position: absolute; border-radius: 50%; }
+    .orb-ring { inset: 10% 12%; border: 1px solid rgba(255, 255, 255, 0.12); transform: rotate(-8deg); }
+    .hero-halo {
+      inset: 17% 18%;
+      background: radial-gradient(circle at 50% 50%, rgba(57,255,20,0.16), rgba(57,255,20,0.05) 42%, transparent 72%);
+      filter: blur(24px);
+    }
+    .hero-orb {
+      inset: 12% 10% 15%;
+      background:
+        radial-gradient(circle at 28% 24%, rgba(255,255,255,0.42), transparent 22%),
+        radial-gradient(circle at 50% 50%, rgba(57,255,20,0.28), rgba(57,255,20,0.08) 44%, transparent 72%),
+        radial-gradient(circle at 70% 62%, rgba(0,212,255,0.22), transparent 34%),
+        linear-gradient(180deg, rgba(217,92,20,0.3), rgba(15,17,20,0.12));
+      filter: blur(16px);
+      box-shadow: inset 0 0 80px rgba(255,255,255,0.06), 0 0 120px rgba(57,255,20,0.08);
+      transform: translate3d(calc((var(--mx) - 0.5) * 5vw), calc((var(--my) - 0.5) * 4vh), 0);
+    }
+
+    .floating-chip {
+      position: absolute;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.65rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(15, 17, 20, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(10px);
+      font-size: 0.74rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(235, 237, 240, 0.9);
+      box-shadow: var(--shadow);
+      will-change: transform;
+    }
+    .floating-chip::before { content: ""; width: 0.45rem; height: 0.45rem; border-radius: 50%; background: currentColor; opacity: 0.9; }
+    .floating-chip.a { top: 12%; left: 4%; color: var(--toxic); }
+    .floating-chip.b { top: 18%; right: 6%; color: var(--primary); }
+    .floating-chip.c { bottom: 12%; left: 8%; color: var(--clean); }
+
+    .section-heading { font-size: clamp(2.1rem, 4.2vw, 4.8rem); line-height: 0.95; max-width: 13ch; }
+
+    .panel-card { position: relative; overflow: hidden; border-radius: var(--radius); }
+
+    .metric-stack, .feature-list { display: grid; gap: 0.85rem; }
+    .metric { padding: 1rem 1.05rem; border-radius: 18px; }
+    .metric .title { display: flex; justify-content: space-between; gap: 1rem; color: var(--muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.16em; margin-bottom: 0.55rem; }
+    .ticker { font-family: 'Clash Display', sans-serif; font-size: clamp(1.7rem, 3vw, 2.8rem); line-height: 1; letter-spacing: -0.04em; color: var(--primary); }
+    .hazard { padding: 1rem 1.05rem; border-radius: 18px; border: 1px solid rgba(217,92,20,0.45); background: linear-gradient(180deg, rgba(217,92,20,0.12), rgba(217,92,20,0.05)); }
+    .hazard .ticker { color: #ff9b67; }
+
+    .swarm-stage {
+      position: relative;
+      min-height: 34rem;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.04), transparent 56%),
+        linear-gradient(180deg, rgba(15,17,20,0.3), rgba(15,17,20,0.92));
+    }
+
+    .swarm-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 4.6rem 4.6rem;
+      opacity: 0.25;
+      mask-image: radial-gradient(circle at center, black 40%, transparent 82%);
+    }
+
+    .particle {
+      position: absolute;
+      background: linear-gradient(180deg, rgba(217,92,20,0.86), rgba(255,255,255,0.04));
+      border: 1px solid rgba(255,255,255,0.08);
+      clip-path: polygon(12% 0%, 100% 16%, 72% 100%, 0% 72%);
+      filter: drop-shadow(0 0 20px rgba(217,92,20,0.15));
+      opacity: 0.92;
+      will-change: transform;
+    }
+    .particle.a { width: 12rem; height: 11rem; top: 12%; left: 8%; }
+    .particle.b { width: 10rem; height: 9rem; top: 26%; left: 42%; }
+    .particle.c { width: 9rem; height: 8rem; top: 9%; right: 8%; }
+    .particle.d { width: 8rem; height: 7rem; top: 54%; left: 18%; }
+    .particle.e { width: 11rem; height: 10rem; bottom: 10%; right: 10%; }
+    .particle.f { width: 7rem; height: 6rem; bottom: 18%; left: 54%; }
+
+    .threat-copy {
+      position: relative;
+      z-index: 1;
+      margin-top: 1.2rem;
+      display: grid;
+      gap: 0.6rem;
+      padding: 0.9rem 1rem 1.1rem;
+    }
+    .threat-line { font-family: 'Clash Display', sans-serif; font-size: clamp(2rem, 3.5vw, 3rem); line-height: 0.95; text-transform: uppercase; }
+    .threat-line span:nth-child(2) { color: var(--toxic); }
+
+    .problem-grid .panel-card,
+    .solution-right,
+    .cta-card,
+    .climax-panel {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04));
+    }
+
+    .solution-stage {
+      position: relative;
+      min-height: 34rem;
+      overflow: hidden;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 20% 18%, rgba(57,255,20,0.15), transparent 25%),
+        radial-gradient(circle at 80% 16%, rgba(0,212,255,0.1), transparent 20%),
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+    }
+
+    .solution-stage::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image: linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 4.2rem 4.2rem;
+      opacity: 0.34;
+      mask-image: radial-gradient(circle at center, black 36%, transparent 82%);
+    }
+
+    .blob-layer { position: absolute; inset: 0; filter: blur(18px) saturate(130%); pointer-events: none; }
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.35), rgba(57,255,20,0.9) 31%, rgba(57,255,20,0.36) 57%, transparent 73%);
+      mix-blend-mode: screen;
+      box-shadow: 0 0 80px rgba(57,255,20,0.26);
+      will-change: transform;
+    }
+    .blob.one { width: 34vw; height: 34vw; top: 0; left: -2%; }
+    .blob.two { width: 28vw; height: 28vw; top: 28%; left: 34%; }
+    .blob.three { width: 24vw; height: 24vw; top: 6%; right: -4%; }
+
+    .sensor-hud {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      right: 1rem;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.6rem;
+      pointer-events: none;
+    }
+
+    .sensor-chip {
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 14px;
+      background: rgba(10, 17, 22, 0.72);
+      box-shadow: 0 12px 34px rgba(0,0,0,0.34);
+      padding: 0.65rem 0.75rem;
+      opacity: 0;
+      transform: translateY(14px);
+      will-change: transform, opacity;
+    }
+
+    .sensor-chip .k {
+      display: block;
+      font-size: 0.64rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: rgba(235,237,240,0.58);
+      margin-bottom: 0.25rem;
+    }
+
+    .sensor-chip .v {
+      font-family: 'Clash Display', sans-serif;
+      font-size: clamp(1rem, 1.4vw, 1.3rem);
+      letter-spacing: -0.02em;
+      color: #c5ffee;
+    }
+
+    .filter-rack {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      right: 1rem;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.65rem;
+      pointer-events: none;
+    }
+
+    .filter-module {
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: linear-gradient(180deg, rgba(15, 24, 30, 0.84), rgba(9, 16, 20, 0.75));
+      padding: 0.78rem;
+      opacity: 0;
+      transform: translateY(16px) scale(0.96);
+      will-change: transform, opacity;
+    }
+
+    .filter-module strong {
+      display: block;
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(235,237,240,0.68);
+      margin-bottom: 0.35rem;
+    }
+
+    .filter-module span {
+      display: block;
+      color: rgba(235,237,240,0.88);
+      line-height: 1.55;
+      font-size: 0.9rem;
+    }
+
+    .filter-bar {
+      margin-top: 0.55rem;
+      height: 0.35rem;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(109, 214, 255, 0.25), rgba(124, 255, 207, 0.9));
+      transform-origin: left center;
+      transform: scaleX(0.45);
+      opacity: 0.82;
+    }
+
+    .solution-copy-block { position: relative; z-index: 1; }
+    .solution-title { font-size: clamp(2.3rem, 4.8vw, 5.3rem); max-width: 11ch; }
+    .solution-title .accent { color: var(--primary); text-shadow: 0 0 32px rgba(57,255,20,0.28); }
+    .feature { display: grid; grid-template-columns: auto 1fr; gap: 0.9rem; padding: 1rem 1.05rem; border-radius: 18px; background: rgba(15, 17, 20, 0.6); border: 1px solid rgba(255,255,255,0.08); }
+    .feature i { width: 2rem; height: 2rem; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-weight: 700; color: var(--primary); background: rgba(57,255,20,0.12); box-shadow: inset 0 0 0 1px rgba(57,255,20,0.18); }
+    .feature h3 { font-size: 1.05rem; margin-bottom: 0.25rem; letter-spacing: -0.02em; }
+    .feature p { margin: 0; color: rgba(235,237,240,0.76); line-height: 1.75; }
+
+    .cta-card { padding: 1.4rem; border-radius: var(--radius); }
+    label { display: block; font-size: 0.76rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.6rem; }
+    .input-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.9rem; align-items: center; }
+    input {
+      width: 100%;
+      border: 0;
+      border-bottom: 2px solid rgba(235, 237, 240, 0.4);
+      background: transparent;
+      color: var(--text);
+      padding: 0.8rem 0;
+      font: inherit;
+      font-size: clamp(1rem, 1.8vw, 1.2rem);
+      outline: none;
+      transition: border-color 180ms ease, box-shadow 180ms ease;
+    }
+    input::placeholder { color: rgba(235, 237, 240, 0.3); }
+    input:focus { border-bottom-color: var(--primary); box-shadow: 0 14px 24px -18px rgba(57, 255, 20, 0.55); }
+    .form-note { color: rgba(235, 237, 240, 0.68); line-height: 1.7; margin: 0; }
+    .success { display: none; margin-top: 0.9rem; padding-top: 1rem; border-top: 1px solid rgba(57,255,20,0.35); color: var(--primary); letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.86rem; }
+
+    .climax-panel {
+      border-radius: var(--radius);
+      padding: 1.55rem;
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(160deg, rgba(181, 245, 255, 0.14), rgba(109, 214, 255, 0.08) 42%, rgba(124, 255, 207, 0.11)),
+        rgba(13, 20, 25, 0.84);
+    }
+
+    .climax-card { display: grid; gap: 1.1rem; position: relative; z-index: 1; }
+    .climax-title { font-size: clamp(2.6rem, 5vw, 5.8rem); max-width: 11ch; }
+
+    .climax-grid {
+      align-items: center;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: clamp(1.2rem, 2.6vw, 2.6rem);
+      min-height: clamp(30rem, 66vh, 40rem);
+    }
+
+    .climax-copy-block {
+      align-self: center;
+      max-width: 48rem;
+      padding: clamp(0.4rem, 1.2vw, 0.9rem) 0;
+    }
+
+    .climax-panel {
+      align-self: center;
+      width: 100%;
+      max-width: 36.5rem;
+      margin-left: auto;
+    }
+
+    #waitlist-form {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .conversion-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      width: fit-content;
+      padding: 0.55rem 0.82rem;
+      border: 1px solid rgba(171, 246, 255, 0.4);
+      border-radius: 999px;
+      background: rgba(13, 22, 28, 0.55);
+      color: rgba(220, 249, 255, 0.95);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-size: 0.68rem;
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    .conversion-badge::before {
+      content: "";
+      width: 0.45rem;
+      height: 0.45rem;
+      border-radius: 50%;
+      background: #9bffe4;
+      box-shadow: 0 0 16px rgba(155, 255, 228, 0.75);
+    }
+
+    .conversion-points {
+      display: grid;
+      gap: 0.68rem;
+      margin-top: 1.15rem;
+    }
+
+    .conv-item {
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 15px;
+      background: rgba(8, 16, 21, 0.48);
+      padding: 0.86rem 0.9rem;
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    .conv-item strong {
+      display: block;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: rgba(174, 238, 255, 0.86);
+      margin-bottom: 0.4rem;
+    }
+
+    .conv-item span {
+      display: block;
+      color: rgba(235, 246, 252, 0.9);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .trust-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.6rem;
+      margin-top: 0.25rem;
+    }
+
+    .trust-pill {
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(10, 18, 22, 0.58);
+      padding: 0.65rem;
+      text-align: center;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(230, 246, 255, 0.86);
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .climax-glow {
+      position: absolute;
+      inset: -20% 18% auto;
+      height: 42vh;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(178, 242, 255, 0.32), rgba(0,212,255,0.09) 38%, transparent 74%);
+      filter: blur(40px);
+      mix-blend-mode: screen;
+      opacity: 0.2;
+      transform: translate3d(calc((var(--mx) - 0.5) * 3vw), calc((var(--my) - 0.5) * 2vh), 0);
+    }
+
+    .track-dots {
+      position: fixed;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 70;
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .site-links {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 75;
+      display: flex;
+      gap: 0.55rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .flat-scroll .story-track { min-height: 0; }
+    .flat-scroll .viewport-stage {
+      height: auto;
+      min-height: 100vh;
+      overflow: visible;
+    }
+    .flat-scroll .scene-bg,
+    .flat-scroll .scanline,
+    .flat-scroll .motion-veil,
+    .flat-scroll .track-dots {
+      display: none;
+    }
+    .flat-scroll .scene-layer {
+      position: relative;
+      inset: auto;
+      opacity: 1;
+      visibility: visible;
+      display: grid;
+      pointer-events: auto;
+      min-height: 100svh;
+      transform: none !important;
+    }
+    .flat-scroll .stage-footer { display: none; }
+
+    .site-link {
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 0.58rem 0.74rem;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      background: rgba(15, 17, 20, 0.7);
+      color: rgba(235, 237, 240, 0.86);
+      backdrop-filter: blur(12px);
+    }
+
+    .site-link:hover {
+      border-color: rgba(57, 255, 20, 0.45);
+      background: rgba(57, 255, 20, 0.08);
+    }
+
+    .track-dot {
+      appearance: none;
+      border: 0;
+      padding: 0;
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.24);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.08);
+      cursor: pointer;
+    }
+
+    .track-dot.active { background: var(--primary); box-shadow: 0 0 18px rgba(57,255,20,0.65); }
+
+    .cursor {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 120;
+      background: var(--primary);
+      mix-blend-mode: difference;
+      transform: translate(-50%, -50%);
+      opacity: 0.92;
+    }
+
+    .cursor.is-cta { width: 78px; height: 78px; opacity: 0.28; }
+    .cursor.is-solution { width: 56px; height: 56px; opacity: 0.24; }
+
+    .stage-footer {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 0 0 1.1rem;
+      z-index: 4;
+      pointer-events: none;
+      color: rgba(235,237,240,0.52);
+      font-size: 0.88rem;
+    }
+
+    .footer-line { display: flex; justify-content: space-between; gap: 1rem; align-items: center; }
+    .mono-note { letter-spacing: 0.16em; text-transform: uppercase; font-size: 0.68rem; }
+    .mobile-only-note { display: none; margin-top: 1rem; color: rgba(235,237,240,0.58); font-size: 0.85rem; }
+
+    .workflow-timeline {
+      position: relative;
+      margin: 2rem auto 3rem;
+      width: min(var(--max), calc(100% - 2rem));
+      border: 1px solid rgba(57, 255, 20, 0.2);
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(57, 255, 20, 0.16), transparent 28%),
+        radial-gradient(circle at 92% 16%, rgba(0, 212, 255, 0.14), transparent 22%),
+        linear-gradient(180deg, rgba(10, 14, 16, 0.95), rgba(9, 12, 14, 0.98));
+      padding: clamp(1.2rem, 2.5vw, 2.2rem);
+      box-shadow: 0 26px 88px rgba(0, 0, 0, 0.42);
+      overflow: hidden;
+    }
+
+    .workflow-timeline::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 3.8rem 3.8rem;
+      opacity: 0.2;
+      mask-image: radial-gradient(circle at center, black 45%, transparent 95%);
+    }
+
+    .workflow-head {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 0.8rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .workflow-kicker {
+      width: fit-content;
+      padding: 0.48rem 0.74rem;
+      border-radius: 999px;
+      border: 1px solid rgba(57, 255, 20, 0.35);
+      background: rgba(57, 255, 20, 0.1);
+      color: rgba(216, 255, 210, 0.95);
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .workflow-title {
+      font-family: 'Clash Display', sans-serif;
+      font-size: clamp(2rem, 4.5vw, 3.8rem);
+      letter-spacing: -0.04em;
+      line-height: 0.96;
+      text-transform: uppercase;
+      margin: 0;
+      max-width: 16ch;
+    }
+
+    .workflow-copy {
+      margin: 0;
+      color: rgba(235, 237, 240, 0.8);
+      line-height: 1.75;
+      max-width: 68ch;
+    }
+
+    .timeline-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.8rem;
+    }
+
+    .timeline-grid::before {
+      content: "";
+      position: absolute;
+      left: 1rem;
+      right: 1rem;
+      top: 1.2rem;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(57, 255, 20, 0.2), rgba(57, 255, 20, 0.9), rgba(57, 255, 20, 0.2));
+      pointer-events: none;
+      opacity: 0.8;
+    }
+
+    .timeline-phase {
+      position: relative;
+      display: grid;
+      gap: 0.55rem;
+      padding: 1.15rem 0.95rem 0.95rem;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: linear-gradient(180deg, rgba(13, 18, 21, 0.85), rgba(9, 13, 15, 0.88));
+      box-shadow: 0 14px 42px rgba(0,0,0,0.35);
+      transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease, background 220ms ease;
+    }
+
+    .timeline-phase::before {
+      content: "";
+      width: 0.62rem;
+      height: 0.62rem;
+      border-radius: 50%;
+      border: 2px solid rgba(57, 255, 20, 0.92);
+      background: rgba(10, 14, 16, 0.9);
+      box-shadow: 0 0 0 5px rgba(57, 255, 20, 0.12), 0 0 24px rgba(57, 255, 20, 0.5);
+      position: absolute;
+      top: 0.85rem;
+      left: 0.9rem;
+      animation: pulse-dot 2.2s ease-in-out infinite;
+    }
+
+    .timeline-phase:hover,
+    .timeline-phase:focus-within {
+      transform: translateY(-6px);
+      border-color: rgba(57, 255, 20, 0.46);
+      box-shadow: 0 22px 56px rgba(57, 255, 20, 0.14), 0 18px 48px rgba(0,0,0,0.45);
+      background-size: cover !important;
+      background-blend-mode: overlay;
+    }
+
+    .timeline-phase:nth-child(1):hover {
+      background: linear-gradient(180deg, rgba(16, 24, 19, 0.8), rgba(10, 15, 12, 0.85)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"><filter id="b"><feGaussianBlur stdDeviation="12"/></filter><rect width="100%" height="100%" fill="%230d1a15" filter="url(%23b)"/><circle cx="200" cy="200" r="150" fill="%232b6041" opacity="0.4" filter="url(%23b)"/></svg>') center/cover;
+    }
+    .timeline-phase:nth-child(2):hover {
+      background: linear-gradient(180deg, rgba(16, 24, 19, 0.8), rgba(10, 15, 12, 0.85)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"><filter id="b"><feGaussianBlur stdDeviation="12"/></filter><rect width="100%" height="100%" fill="%230d1a15" filter="url(%23b)"/><circle cx="100" cy="100" r="100" fill="%231f4e5a" opacity="0.4" filter="url(%23b)"/></svg>') center/cover;
+    }
+    .timeline-phase:nth-child(3):hover {
+      background: linear-gradient(180deg, rgba(16, 24, 19, 0.8), rgba(10, 15, 12, 0.85)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"><filter id="b"><feGaussianBlur stdDeviation="12"/></filter><rect width="100%" height="100%" fill="%230d1a15" filter="url(%23b)"/><circle cx="300" cy="300" r="120" fill="%234a5d23" opacity="0.4" filter="url(%23b)"/></svg>') center/cover;
+    }
+    .timeline-phase:nth-child(4):hover {
+      background: linear-gradient(180deg, rgba(16, 24, 19, 0.8), rgba(10, 15, 12, 0.85)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"><filter id="b"><feGaussianBlur stdDeviation="12"/></filter><rect width="100%" height="100%" fill="%230d1a15" filter="url(%23b)"/><circle cx="200" cy="100" r="140" fill="%23193a2a" opacity="0.4" filter="url(%23b)"/></svg>') center/cover;
+    }
+
+    .phase-step {
+      margin-top: 1.2rem;
+      color: rgba(164, 177, 189, 0.9);
+      font-size: 0.66rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .phase-name {
+      margin: 0;
+      font-family: 'Clash Display', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: -0.02em;
+      color: rgba(237, 251, 239, 0.96);
+    }
+
+    .phase-desc {
+      margin: 0;
+      color: rgba(227, 235, 241, 0.8);
+      font-size: 0.94rem;
+      line-height: 1.68;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { box-shadow: 0 0 0 5px rgba(57, 255, 20, 0.12), 0 0 24px rgba(57, 255, 20, 0.5); }
+      50% { box-shadow: 0 0 0 8px rgba(57, 255, 20, 0.08), 0 0 30px rgba(57, 255, 20, 0.72); }
+    }
+
+    .market-matrix {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto 3rem;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 12% 10%, rgba(57,255,20,0.12), transparent 28%),
+        linear-gradient(180deg, rgba(8, 11, 14, 0.96), rgba(11, 14, 16, 0.98));
+      box-shadow: 0 22px 72px rgba(0,0,0,0.42);
+      padding: clamp(1.1rem, 2.3vw, 1.9rem);
+    }
+
+    .matrix-head {
+      display: grid;
+      gap: 0.72rem;
+      margin-bottom: 1rem;
+    }
+
+    .matrix-kicker {
+      width: fit-content;
+      border-radius: 999px;
+      border: 1px solid rgba(57,255,20,0.34);
+      background: rgba(57,255,20,0.09);
+      color: rgba(215,255,205,0.94);
+      padding: 0.48rem 0.72rem;
+      font-size: 0.67rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .matrix-title {
+      margin: 0;
+      font-family: 'Clash Display', sans-serif;
+      font-size: clamp(1.9rem, 4.1vw, 3.4rem);
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+      text-transform: uppercase;
+      max-width: 20ch;
+    }
+
+    .matrix-copy {
+      margin: 0;
+      color: rgba(235,237,240,0.78);
+      line-height: 1.72;
+      max-width: 70ch;
+    }
+
+    .matrix-wrap {
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 18px;
+      overflow: hidden;
+      background: rgba(10, 14, 16, 0.7);
+    }
+
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 740px;
+    }
+
+    .matrix-table thead th {
+      text-align: left;
+      font-size: 0.66rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(186, 197, 206, 0.9);
+      padding: 0.85rem 0.8rem;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .matrix-table td {
+      padding: 0.82rem 0.8rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      color: rgba(236, 240, 243, 0.88);
+      font-size: 0.93rem;
+      line-height: 1.6;
+      vertical-align: top;
+    }
+
+    .matrix-table tbody tr:last-child td { border-bottom: 0; }
+
+    .matrix-table tbody tr:hover {
+      background: rgba(255,255,255,0.03);
+    }
+
+    .brand-col {
+      font-family: 'Clash Display', sans-serif;
+      letter-spacing: -0.01em;
+      font-size: 1.05rem;
+      color: rgba(242, 247, 251, 0.95);
+      white-space: nowrap;
+    }
+
+    .vr-row {
+      background: linear-gradient(90deg, rgba(57,255,20,0.2), rgba(57,255,20,0.05));
+      box-shadow: inset 0 0 0 1px rgba(57,255,20,0.4);
+    }
+
+    .vr-row .brand-col {
+      color: #bfff9e;
+      text-shadow: 0 0 24px rgba(57,255,20,0.4);
+      font-weight: 700;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.16);
+      padding: 0.2rem 0.5rem;
+      font-size: 0.66rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(229,236,241,0.9);
+      background: rgba(255,255,255,0.04);
+      white-space: nowrap;
+    }
+
+    .tag.win {
+      border-color: rgba(57,255,20,0.58);
+      color: #c8ffb8;
+      background: rgba(57,255,20,0.12);
+    }
+
+    .matrix-note {
+      margin-top: 0.8rem;
+      color: rgba(178, 191, 201, 0.78);
+      font-size: 0.84rem;
+      letter-spacing: 0.03em;
+    }
+
+    @media (max-width: 960px) {
+      body { cursor: auto; }
+      .scene-layer { overflow: hidden; }
+      .hero-grid, .problem-grid, .solution-grid, .climax-grid, .input-row { grid-template-columns: 1fr; }
+      .hero-visual { min-height: 20rem; }
+      .hero-stat-row { grid-template-columns: 1fr; }
+      .sensor-hud,
+      .filter-rack,
+      .trust-strip { grid-template-columns: 1fr; }
+      .track-dots { right: 0.55rem; }
+      .site-links { right: 0.6rem; left: 2.2rem; }
+      .cursor { display: none; }
+      .headline { max-width: 10ch; }
+      .solution-title { max-width: 10ch; }
+      .climax-grid { min-height: auto; align-items: start; }
+      .climax-copy-block { max-width: none; padding: 0; }
+      .climax-panel { max-width: none; margin-left: 0; }
+      .timeline-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .timeline-grid::before { display: none; }
+      .matrix-wrap { overflow-x: auto; }
+    }
+
+    @media (max-height: 780px) {
+      .stage-footer { display: none; }
+      .headline { font-size: clamp(2.35rem, 5.6vw, 4.7rem); }
+      .hero-stat-row { margin-top: 1rem; }
+    }
+
+    @media (max-width: 640px) {
+      .wrap { width: min(var(--max), calc(100% - 1.1rem)); }
+      .button { width: 100%; }
+      .track-dots { display: none; }
+      .site-links {
+        position: static;
+        margin: 0.8rem 0.55rem 0;
+        justify-content: center;
+      }
+      .site-link { flex: 1 1 auto; text-align: center; }
+      .headline { font-size: clamp(2.7rem, 17vw, 4.7rem); }
+      .climax-title { font-size: clamp(2.2rem, 14vw, 4rem); }
+      .particle.a, .particle.b, .particle.c, .particle.d, .particle.e, .particle.f { transform: scale(0.78); transform-origin: center; }
+      .mobile-only-note { display: block; }
+      .timeline-grid { grid-template-columns: 1fr; }
+      .matrix-table td,
+      .matrix-table thead th { padding: 0.72rem 0.6rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+      .cursor { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor" id="cursor" aria-hidden="true"></div>
+  <nav class="site-links" aria-label="Site pages">
+    <div style="display:inline-flex; gap:0.5rem; margin-right:auto; align-items:center;">
+      <span class="site-link" style="border:none; background:transparent; padding:0; letter-spacing:0.1em; color:var(--primary);">TEAM AIRALGAE</span>
+      <span class="site-link" style="font-size:0.65rem;">Technical Architect</span>
+      <span class="site-link" style="font-size:0.65rem;">Team Lead</span>
+    </div>
+    <a class="site-link" href="index.html">Home</a>
+    <a class="site-link" href="vision.html">Science and Vision</a>
+    <a class="site-link" href="purifier.html">Product</a>
+  </nav>
+  <div class="track-dots" aria-hidden="true">
+    <button class="track-dot active" type="button" data-scene-index="0" aria-label="Go to hero"></button>
+    <button class="track-dot" type="button" data-scene-index="1" aria-label="Go to problem"></button>
+    <button class="track-dot" type="button" data-scene-index="2" aria-label="Go to catalyst"></button>
+    <button class="track-dot" type="button" data-scene-index="3" aria-label="Go to solution"></button>
+    <button class="track-dot" type="button" data-scene-index="4" aria-label="Go to waitlist"></button>
+  </div>
+
+  <div class="page">
+    <main class="story-track" id="story-track">
+      <div class="viewport-stage" id="viewport-stage">
+        <div class="scene-bg bg-hero"></div>
+        <div class="scene-bg bg-problem"></div>
+        <div class="scene-bg bg-catalyst"></div>
+        <div class="scene-bg bg-solution"></div>
+        <div class="scene-bg bg-climax"></div>
+        <div class="scanline" id="scanline"></div>
+        <div class="motion-veil"></div>
+
+        <section class="scene-layer layer-shell scene-layer-hero" id="hero" data-scene="hero">
+          <div class="hero-grid">
+            <div class="scene-copy-block hero-copy-block">
+              <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> India-first clean air system</div>
+              <h1 class="headline">Urban air, reengineered for <span class="accent">real Indian routines.</span></h1>
+              <p class="scene-copy">Vayu Raksha combines real-time IoT sensing, reusable filter architecture, and Made in India manufacturing into one practical clean-air platform. Built for families, working professionals, and Student Hostels & PGs who need premium-grade results without premium-only cost.</p>
+              <div class="hero-actions">
+                <a class="button button-primary cta-link" href="#problem">See the threat clearly</a>
+                <a class="button button-secondary cta-link" href="#waitlist">Reserve priority access</a>
+                <a class="button button-secondary" href="vision.html">Science and Vision</a>
+                <a class="button button-secondary" href="purifier.html">See Product Specs</a>
+              </div>
+              <div class="hero-stat-row">
+                <div class="stat"><span class="label">Launch Band</span><span class="value">&#8377;8k-12k</span></div>
+                <div class="stat"><span class="label">Local Sourcing</span><span class="value">90%+</span></div>
+                <div class="stat"><span class="label">Control Layer</span><span class="value">Live IoT</span></div>
+              </div>
+              <div class="mobile-only-note">Swipe or scroll. The scene stays pinned while everything transforms in place.</div>
+            </div>
+
+            <div class="hero-visual" aria-hidden="true">
+              <div class="hero-grid-lines"></div>
+              <div class="orb-ring"></div>
+              <div class="hero-halo"></div>
+              <div class="hero-orb"></div>
+              <div class="floating-chip a">PM2.5 live tracking</div>
+              <div class="floating-chip b">High-static exhaust fan</div>
+              <div class="floating-chip c">CR-Box style design</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="scene-layer layer-shell" id="problem" data-scene="problem">
+          <div class="problem-grid">
+            <div class="panel-card metric-stack problem-copy-block" style="padding: 1.2rem; border-radius: var(--radius);">
+              <div class="metric">
+                <div class="title"><span>PM2.5 count</span><span>Live</span></div>
+                <div class="ticker ticker-pm"><span class="ticker-pm-value">145</span> <span style="color: rgba(235,237,240,.45); font-size: .6em;">ug/m3</span></div>
+              </div>
+              <div class="metric">
+                <div class="title"><span>VOC density</span><span>Live</span></div>
+                <div class="ticker ticker-voc"><span class="ticker-voc-value">862</span> <span style="color: rgba(235,237,240,.45); font-size: .6em;">ppb</span></div>
+              </div>
+              <div class="hazard">
+                <div class="title" style="color: rgba(235,237,240,.7); font-size: .7rem; text-transform: uppercase; letter-spacing: .16em; margin-bottom: .5rem;">Air quality index</div>
+                <div class="ticker ticker-aqi">Hazardous</div>
+              </div>
+            </div>
+
+            <div class="panel-card swarm-stage">
+              <div class="swarm-grid"></div>
+              <div class="particle a"></div>
+              <div class="particle b"></div>
+              <div class="particle c"></div>
+              <div class="particle d"></div>
+              <div class="particle e"></div>
+              <div class="particle f"></div>
+              <div class="threat-copy problem-copy-block">
+                <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> The problem</div>
+                <div class="threat-line"><span>Invisible.</span></div>
+                <div class="threat-line"><span>Insidious.</span></div>
+                <div class="threat-line"><span>Inevitable.</span></div>
+                <p class="scene-copy">The pressure rises in place. The particles do not leave the viewport; they accumulate inside it.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="scene-layer layer-shell" id="catalyst" data-scene="catalyst">
+          <div class="problem-grid">
+            <div class="panel-card problem-copy-block" style="padding: 1.2rem; border-radius: var(--radius);">
+              <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> The catalyst</div>
+              <h2 class="section-heading" style="font-size: clamp(2.1rem, 4.2vw, 4.8rem); margin-top: .9rem;">The old way: trap and hold.</h2>
+              <p class="scene-copy">The middle beat hardens into a grid. It is efficient, architectural, and limited. The page should feel locked here before the organic reveal begins.</p>
+              <div class="metric-stack" style="margin-top: 1.3rem;">
+                <div class="mini" style="padding: 1rem; border-radius: 18px; background: rgba(15,17,20,0.62); border: 1px solid rgba(255,255,255,0.08);">
+                  <strong style="display:block; margin-bottom:0.35rem; text-transform:uppercase; letter-spacing:.14em; font-size:.72rem; color:var(--muted);">What HEPA does</strong>
+                  <p style="margin:0; color:rgba(235,237,240,.76); line-height:1.75;">It captures pollutants. It does not metabolize them. The chamber eventually fills.</p>
+                </div>
+                <div class="mini" style="padding: 1rem; border-radius: 18px; background: rgba(15,17,20,0.62); border: 1px solid rgba(255,255,255,0.08);">
+                  <strong style="display:block; margin-bottom:0.35rem; text-transform:uppercase; letter-spacing:.14em; font-size:.72rem; color:var(--muted);">Why it matters</strong>
+                  <p style="margin:0; color:rgba(235,237,240,.76); line-height:1.75;">A better filter needs a different behavior, not just a finer mesh.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel-card panel-card" style="padding: 1.2rem; border-radius: var(--radius); background:
+              linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px),
+              linear-gradient(180deg, rgba(15,17,20,0.98), rgba(10,12,14,0.98)); background-size: 5vw 5vw, 5vw 5vw, auto;">
+              <div style="display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; min-height: 24rem; align-items: stretch;">
+                <div style="border-radius: 18px; border:1px solid rgba(255,255,255,.08); background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));"></div>
+                <div style="border-radius: 18px; border:1px solid rgba(255,255,255,.08); background: linear-gradient(180deg, rgba(217,92,20,.35), rgba(255,255,255,.03));"></div>
+                <div style="border-radius: 18px; border:1px solid rgba(255,255,255,.08); background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));"></div>
+                <div style="border-radius: 18px; border:1px solid rgba(255,255,255,.08); background: linear-gradient(180deg, rgba(217,92,20,.22), rgba(255,255,255,.03));"></div>
+                <div style="border-radius: 18px; border:1px solid rgba(255,255,255,.08); background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));"></div>
+                <div style="border-radius: 18px; border:1px solid rgba(255,255,255,.08); background: linear-gradient(180deg, rgba(217,92,20,.3), rgba(255,255,255,.03));"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="scene-layer layer-shell" id="solution" data-scene="solution">
+          <div class="solution-grid">
+            <div class="solution-copy-block">
+              <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> The product shift</div>
+              <h2 class="solution-title" style="margin-top: .95rem;">From silent danger to visible, smart protection.</h2>
+              <p class="scene-copy">Vayu Raksha translates air quality into live clarity. Smart sensors stream PM2.5, VOC, and comfort signals in real time, while a reusable, easy-to-replace filtration system keeps protection accessible without a constant cartridge burden.</p>
+              <div class="hero-actions" style="margin-top: 1.4rem;">
+                <a class="button button-secondary cta-link" href="#waitlist">Join the first release</a>
+              </div>
+            </div>
+
+            <div class="solution-stage solution-right">
+              <div class="blob-layer" aria-hidden="true">
+                <div class="blob one"></div>
+                <div class="blob two"></div>
+                <div class="blob three"></div>
+              </div>
+
+              <div class="sensor-hud" aria-hidden="true">
+                <div class="sensor-chip">
+                  <span class="k">PM2.5 Live</span>
+                  <span class="v">32 ug/m3</span>
+                </div>
+                <div class="sensor-chip">
+                  <span class="k">VOC Trend</span>
+                  <span class="v">Down 44%</span>
+                </div>
+                <div class="sensor-chip">
+                  <span class="k">Air Score</span>
+                  <span class="v">Good / Stabilizing</span>
+                </div>
+              </div>
+
+              <div class="solution-copy-block" style="position: relative; z-index: 1; padding: 1.2rem; display:grid; gap: 0.9rem; align-items: center;">
+                <div class="feature">
+                  <i>1</i>
+                  <div><h3>Real-time sensor awareness</h3><p>PM2.5 and VOC data become instantly readable, so families can see risk before they feel it.</p></div>
+                </div>
+                <div class="feature">
+                  <i>2</i>
+                  <div><h3>No Lock-In Filter Core</h3><p>A service-friendly, open-source maintenance module reduces recurring disposal and supports low-friction upkeep without proprietary lock-ins.</p></div>
+                </div>
+                <div class="feature">
+                  <i>3</i>
+                  <div><h3>Standardized Class-F Filtration</h3><p>Swap-ready Standardized Class-F design keeps maintenance practical, fast, and accessible to everyday users.</p></div>
+                </div>
+              </div>
+
+              <div class="filter-rack" aria-hidden="true">
+                <div class="filter-module">
+                  <strong>Reusable Filter Cartridge</strong>
+                  <span>Slide-lock body with guided alignment for clean, tool-free servicing.</span>
+                  <div class="filter-bar"></div>
+                </div>
+                <div class="filter-module">
+                  <strong>Quick Replace Rail</strong>
+                  <span>Magnetic assist and keyed fit reduce errors and replacement time.</span>
+                  <div class="filter-bar"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="scene-layer layer-shell" id="waitlist" data-scene="climax">
+          <div class="climax-grid">
+            <div class="climax-copy-block">
+              <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> Final beat</div>
+              <div class="conversion-badge">Made in India. Bright air. Local build.</div>
+              <h2 class="climax-title" style="margin-top: .95rem;">Cleaner mornings for urban homes and fast lives.</h2>
+              <p class="scene-copy">Built for families, working professionals, and Student Hostels & PGs, Vayu Raksha delivers high-efficiency purification with approachable ownership. We are proudly Made in India with more than 90% locally sourced components, engineered as an affordable alternative to premium imported brands.</p>
+              <div class="conversion-points">
+                <div class="conv-item">
+                  <strong>Made in India</strong>
+                  <span>Over 90% locally sourced parts support resilient supply, faster service, and trusted quality at home.</span>
+                </div>
+                <div class="conv-item">
+                  <strong>Efficiency without premium-only pricing</strong>
+                  <span>Performance targets stay high while ongoing cost stays realistic for everyday urban households.</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="climax-panel">
+              <div class="climax-glow"></div>
+              <div class="climax-card">
+                <div class="trust-strip" aria-hidden="true">
+                  <div class="trust-pill">90%+ Local Sourcing</div>
+                  <div class="trust-pill">High-Efficiency Core</div>
+                  <div class="trust-pill">Affordable Upkeep</div>
+                </div>
+                <form id="waitlist-form">
+                  <label for="email">Reserve early access</label>
+                  <div class="input-row">
+                    <input id="email" name="email" type="email" placeholder="[ Student/University, Work, or Family email ]" autocomplete="email" required />
+                    <button class="button button-primary cta-link" type="submit">Get Priority Invite</button>
+                  </div>
+                  <p class="form-note">Join the first launch wave for metro families, professionals, and student PGs. Product updates only, no clutter.</p>
+                  <div class="success" id="success-message">[ You are on the priority list. We will notify your launch window. ]</div>
+                </form>
+                <div class="panel-card" style="padding: 1rem; border-radius: 18px; background: rgba(15,17,20,0.5); border: 1px solid rgba(255,255,255,0.08);">
+                  <p class="form-note" style="margin: 0;">Engineered in India for India-first realities: dense cities, long commutes, and practical maintenance expectations.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="stage-footer wrap" aria-hidden="true">
+          <div class="footer-line">
+          <span class="mono-note">Pinned viewport / scrubbed transition / interactive atmosphere</span>
+          <span class="mono-note">Proudly 90%+ Locally Sourced | Made in India</span>
+          <span class="mono-note">Scroll continues, the scene morphs in place</span>
+        </div>
+        </div>
+      </div>
+    </main>
+
+    <section class="workflow-timeline" id="workflow">
+      <div class="workflow-head">
+        <span class="workflow-kicker">Team AirAlgae Workflow</span>
+        <h2 class="workflow-title">From Silicon University Origins To Scaled Urban Impact</h2>
+        <p class="workflow-copy">Our operating playbook began at Silicon University and now drives execution across research, engineering, market launch, and continuous scaling. Hover through each phase to explore how we move from insight to measurable air-quality outcomes.</p>
+      </div>
+
+      <div class="timeline-grid" role="list" aria-label="Four phase business workflow timeline">
+        <article class="timeline-phase" role="listitem" tabindex="0">
+          <span class="phase-step">Phase 01</span>
+          <h3 class="phase-name">Understanding / Research</h3>
+          <p class="phase-desc">Map real indoor pollution behavior in dense city routines, then validate user pain points with family and professional households.</p>
+        </article>
+
+        <article class="timeline-phase" role="listitem" tabindex="0">
+          <span class="phase-step">Phase 02</span>
+          <h3 class="phase-name">Product Development</h3>
+          <p class="phase-desc">Translate insights into hardware: smart sensing, reusable filtration, and service-friendly mechanics designed for daily reliability.</p>
+        </article>
+
+        <article class="timeline-phase" role="listitem" tabindex="0">
+          <span class="phase-step">Phase 03</span>
+          <h3 class="phase-name">Branding / Launch</h3>
+          <p class="phase-desc">Introduce a premium yet practical proposition to urban India through trust-first communication and clear value storytelling.</p>
+        </article>
+
+        <article class="timeline-phase" role="listitem" tabindex="0">
+          <span class="phase-step">Phase 04</span>
+          <h3 class="phase-name">Feedback / Scaling</h3>
+          <p class="phase-desc">Convert early customer feedback into product iterations, stronger service loops, and scalable deployment across cities.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="market-matrix" id="market-analysis">
+      <div class="matrix-head">
+        <span class="matrix-kicker">Market Analysis Matrix</span>
+        <h2 class="matrix-title">Positioned Between Premium Performance And Practical Ownership</h2>
+        <p class="matrix-copy">This snapshot maps where Vayu Raksha sits against premium leaders and budget/smart alternatives. Our strongest edge is the balance: smart IoT visibility, no proprietary consumable lock-ins, and a medium pricing window built for real adoption.</p>
+      </div>
+
+      <div class="matrix-wrap" role="region" aria-label="Competitive comparison table">
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th>Brand Segment</th>
+              <th>Typical Price Band</th>
+              <th>Filter Ecosystem</th>
+              <th>Smart IoT Integration</th>
+              <th>Positioning Signal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="vr-row">
+              <td class="brand-col">Vayu Raksha</td>
+              <td>&#8377;8k-12k <span class="tag win">Medium Range</span></td>
+              <td>No proprietary lock-ins <span class="tag win">Open Maintenance</span></td>
+              <td>Real-time app insights and sensor dashboard <span class="tag win">IoT Native</span></td>
+              <td>High-efficiency + affordable for urban families and professionals</td>
+            </tr>
+            <tr>
+              <td class="brand-col">Dyson (Premium)</td>
+              <td>&#8377;35k+</td>
+              <td>Proprietary consumables, premium replacement cycle</td>
+              <td>Strong connected app experience</td>
+              <td>Design-first premium category</td>
+            </tr>
+            <tr>
+              <td class="brand-col">IQAir (Premium)</td>
+              <td>&#8377;45k+</td>
+              <td>High-grade but expensive replacement path</td>
+              <td>Limited mainstream smart-home convenience</td>
+              <td>Clinical-grade performance at top-tier pricing</td>
+            </tr>
+            <tr>
+              <td class="brand-col">Honeywell (Budget / Mid)</td>
+              <td>&#8377;10k-20k</td>
+              <td>Moderate lock-in on replacement ecosystem</td>
+              <td>Mixed smart features by model</td>
+              <td>Utility-focused mainstream option</td>
+            </tr>
+            <tr>
+              <td class="brand-col">Xiaomi (Budget / Smart)</td>
+              <td>&#8377;8k-16k</td>
+              <td>Brand-specific filter path</td>
+              <td>Good app controls and automation</td>
+              <td>Value-smart ecosystem for connected users</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="matrix-note">Pricing bands are indicative market ranges and vary by model, city, and channel. Strategic takeaway: Vayu Raksha owns the affordability-performance-IoT intersection without locking users into proprietary upkeep.</p>
+    </section>
+  </div>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const flatScrollMode = true;
+    const root = document.documentElement;
+    const cursor = document.getElementById('cursor');
+    const stage = document.getElementById('viewport-stage');
+    const track = document.getElementById('story-track');
+    const scanline = document.getElementById('scanline');
+    const sceneLayers = Array.from(document.querySelectorAll('.scene-layer'));
+    const sceneBackgrounds = Array.from(document.querySelectorAll('.scene-bg'));
+    const dots = Array.from(document.querySelectorAll('.track-dot'));
+    const particleEls = Array.from(document.querySelectorAll('.particle'));
+    const solutionBlobs = Array.from(document.querySelectorAll('.blob'));
+    const sensorChips = Array.from(document.querySelectorAll('.sensor-chip'));
+    const filterModules = Array.from(document.querySelectorAll('.filter-module'));
+    const filterBars = Array.from(document.querySelectorAll('.filter-bar'));
+    const heroCopy = document.querySelector('.hero-copy-block');
+    const heroVisual = document.querySelector('.hero-visual');
+    const problemCopy = document.querySelector('.problem-copy-block');
+    const solutionCopy = document.querySelector('.solution-copy-block');
+    const climaxCopy = document.querySelector('.climax-copy-block');
+    const conversionBadge = document.querySelector('.conversion-badge');
+    const conversionItems = Array.from(document.querySelectorAll('.conv-item'));
+    const trustPills = Array.from(document.querySelectorAll('.trust-pill'));
+    const pmValue = document.querySelector('.ticker-pm-value');
+    const vocValue = document.querySelector('.ticker-voc-value');
+    const aqiValue = document.querySelector('.ticker-aqi');
+    const form = document.getElementById('waitlist-form');
+    const success = document.getElementById('success-message');
+    const submitButton = form.querySelector('button');
+
+    const sceneState = { current: 0 };
+    const sceneCount = sceneLayers.length;
+    const pointer = { x: 0.5, y: 0.5 };
+    const sceneAnchors = ['hero', 'problem', 'catalyst', 'solution', 'waitlist'];
+    const counters = {
+      pm: { value: 245 },
+      voc: { value: 980 }
+    };
+    
+    // Quick count up on load
+    gsap.from(counters.pm, { value: 0, duration: 2.5, ease: 'power3.out', onUpdate: () => { pmValue.textContent = Math.round(counters.pm.value); } });
+    gsap.from(counters.voc, { value: 0, duration: 2.5, ease: 'power3.out', onUpdate: () => { vocValue.textContent = Math.round(counters.voc.value); } });
+    let storyTrigger = null;
+
+    const quickCursorX = gsap.quickTo(cursor, 'x', { duration: 0.18, ease: 'power3.out' });
+    const quickCursorY = gsap.quickTo(cursor, 'y', { duration: 0.18, ease: 'power3.out' });
+
+    function setSceneIndex(index) {
+      sceneState.current = index;
+      dots.forEach((dot, dotIndex) => dot.classList.toggle('active', dotIndex === index));
+    }
+
+    function showScene(index) {
+      if (index === sceneState.current) {
+        return;
+      }
+
+      sceneLayers.forEach((layer, layerIndex) => {
+        const isActive = layerIndex === index;
+        layer.classList.toggle('is-active', isActive);
+        gsap.to(layer, {
+          autoAlpha: isActive ? 1 : 0,
+          y: isActive ? 0 : 20,
+          duration: 0.46,
+          overwrite: true,
+          ease: 'power2.out'
+        });
+      });
+
+      sceneBackgrounds.forEach((bg, bgIndex) => {
+        gsap.to(bg, {
+          autoAlpha: bgIndex === index ? 1 : 0,
+          duration: 0.44,
+          overwrite: true,
+          ease: 'power1.out'
+        });
+      });
+
+      setSceneIndex(index);
+    }
+
+    function setBaseLayerState() {
+      sceneLayers.forEach((layer, index) => {
+        gsap.set(layer, {
+          autoAlpha: index === 0 ? 1 : 0,
+          y: index === 0 ? 0 : 24
+        });
+        layer.classList.toggle('is-active', index === 0);
+      });
+      sceneBackgrounds.forEach((bg, index) => gsap.set(bg, { autoAlpha: index === 0 ? 1 : 0 }));
+      setSceneIndex(0);
+    }
+
+    function updateAtmosphere(x, y) {
+      root.style.setProperty('--mx', x.toFixed(4));
+      root.style.setProperty('--my', y.toFixed(4));
+    }
+
+    function setCursorMode(mode) {
+      cursor.classList.toggle('is-cta', mode === 'cta');
+      cursor.classList.toggle('is-solution', mode === 'solution');
+    }
+
+    function onMove(event) {
+      quickCursorX(event.clientX);
+      quickCursorY(event.clientY);
+      const x = event.clientX / window.innerWidth;
+      const y = event.clientY / window.innerHeight;
+      pointer.x = x;
+      pointer.y = y;
+      updateAtmosphere(x, y);
+
+      if (sceneState.current === 0) {
+        gsap.to('.floating-chip.a', { x: (x - 0.5) * 50, y: (y - 0.5) * 34, duration: 0.35, overwrite: true });
+        gsap.to('.floating-chip.b', { x: (0.5 - x) * 40, y: (y - 0.5) * 26, duration: 0.35, overwrite: true });
+        gsap.to('.floating-chip.c', { x: (x - 0.5) * 34, y: (0.5 - y) * 34, duration: 0.35, overwrite: true });
+      }
+
+      if (sceneState.current === 1) {
+        particleEls.forEach((particle) => {
+          const rect = particle.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+          const dx = event.clientX - centerX;
+          const dy = event.clientY - centerY;
+          const dist = Math.max(Math.hypot(dx, dy), 1);
+          const strength = Math.max(0, 260 - dist) / 260;
+          gsap.to(particle, {
+            x: -dx * strength * 0.08,
+            y: -dy * strength * 0.08,
+            rotate: strength * 8,
+            duration: 0.32,
+            overwrite: true
+          });
+        });
+        gsap.to(problemCopy, { x: (x - 0.5) * 18, y: (y - 0.5) * 16, duration: 0.3, overwrite: true });
+      }
+
+      if (sceneState.current === 3) {
+        solutionBlobs.forEach((blob, index) => {
+          gsap.to(blob, {
+            x: (x - 0.5) * (index === 1 ? -26 : 20),
+            y: (y - 0.5) * (index === 2 ? -18 : 16),
+            duration: 0.35,
+            overwrite: true
+          });
+        });
+        gsap.to(solutionCopy, { x: (x - 0.5) * 12, y: (y - 0.5) * 8, duration: 0.35, overwrite: true });
+        sensorChips.forEach((chip, index) => {
+          gsap.to(chip, {
+            x: (x - 0.5) * (index === 1 ? -10 : 12),
+            y: (y - 0.5) * (index === 2 ? 8 : -8),
+            duration: 0.35,
+            overwrite: true
+          });
+        });
+        filterModules.forEach((module, index) => {
+          gsap.to(module, {
+            x: (x - 0.5) * (index === 0 ? 9 : -9),
+            y: (y - 0.5) * 7,
+            duration: 0.35,
+            overwrite: true
+          });
+        });
+      }
+
+      if (sceneState.current === 4) {
+        gsap.to('.climax-glow', { x: (x - 0.5) * 28, y: (y - 0.5) * 22, duration: 0.4, overwrite: true });
+        gsap.to(climaxCopy, { x: (x - 0.5) * 10, y: (y - 0.5) * 8, duration: 0.4, overwrite: true });
+        conversionItems.forEach((item, index) => {
+          gsap.to(item, {
+            x: (x - 0.5) * (index === 0 ? 8 : -8),
+            y: (y - 0.5) * 6,
+            duration: 0.4,
+            overwrite: true
+          });
+        });
+      }
+    }
+
+    if (!reducedMotion && !flatScrollMode) {
+      setBaseLayerState();
+
+      const timeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: track,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 0.8,
+          pin: stage,
+          anticipatePin: 1,
+          pinSpacing: true,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            const progress = gsap.utils.clamp(0, 0.999999, self.progress);
+            const segment = 1 / sceneCount;
+            const index = Math.min(sceneCount - 1, Math.floor(progress / segment));
+            if (index !== sceneState.current) {
+              showScene(index);
+            }
+          }
+        }
+      });
+
+      storyTrigger = timeline.scrollTrigger;
+
+      timeline
+        .to(scanline, { yPercent: 130, duration: 0.9, ease: 'none' }, 0)
+        .to('.hero-copy-block', { y: -30, opacity: 0.25, scale: 0.96, duration: 0.85, ease: 'none' }, 0)
+        .to('.hero-visual', { scale: 1.12, filter: 'blur(4px)', duration: 0.85, ease: 'none' }, 0)
+        .to('.particle', { y: -16, x: 20, rotate: 12, stagger: 0.05, duration: 0.8, ease: 'none' }, 1.05)
+        .to(problemCopy, { y: -12, opacity: 0.95, duration: 0.6, ease: 'none' }, 1.1)
+        .fromTo('.scene-layer[data-scene="catalyst"] .mini', { x: -22, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.08, duration: 0.7, ease: 'none' }, 1.95)
+        .to('.particle', { x: 1200, opacity: 0, stagger: 0.05, duration: 0.6, ease: 'power2.in' }, 2.65)
+        .to('.swarm-stage', { filter: 'saturate(70%) blur(1px)', duration: 0.6, ease: 'none' }, 2.7)
+        .to(counters.pm, { value: 15, duration: 0.6, ease: 'power2.out', onUpdate: () => { pmValue.textContent = Math.round(counters.pm.value); } }, 2.7)
+        .to(counters.voc, { value: 45, duration: 0.6, ease: 'power2.out', onUpdate: () => { vocValue.textContent = Math.round(counters.voc.value); } }, 2.7)
+        .to(aqiValue, { onStart: () => { aqiValue.textContent = 'Good'; aqiValue.style.color = '#39ff14'; }, onReverseComplete: () => { aqiValue.textContent = 'Hazardous'; aqiValue.style.color = '#ff9b67'; } }, 2.8)
+        .fromTo('.blob', { scale: 0.55, opacity: 0 }, { scale: 1, opacity: 1, stagger: 0.08, duration: 0.7, ease: 'power2.out' }, 2.95)
+        .fromTo('.sensor-chip', { y: 16, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.08, duration: 0.65, ease: 'power2.out' }, 3.02)
+        .fromTo('.filter-module', { y: 20, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, scale: 1, stagger: 0.1, duration: 0.65, ease: 'power2.out' }, 3.08)
+        .fromTo('.filter-bar', { scaleX: 0.45 }, { scaleX: 1, stagger: 0.06, duration: 0.6, ease: 'power1.out' }, 3.16)
+        .to('.solution-copy-block', { x: 0, y: 0, opacity: 1, duration: 0.6, ease: 'none' }, 3.05)
+        .to(scanline, { opacity: 0.08, duration: 0.48, ease: 'none' }, 3.85)
+        .to('.motion-veil', { opacity: 0.45, duration: 0.5, ease: 'none' }, 3.86)
+        .to('.climax-glow', { opacity: 1, scale: 1.06, duration: 0.72, ease: 'power1.out' }, 3.95)
+        .fromTo('.climax-copy-block, .climax-panel', { y: 18, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.08, duration: 0.62, ease: 'power2.out' }, 4.02)
+        .fromTo(conversionBadge, { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: 'power2.out' }, 4.07)
+        .fromTo('.conv-item', { y: 18, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.12, duration: 0.56, ease: 'power2.out' }, 4.1)
+        .fromTo('.trust-pill', { y: 10, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.08, duration: 0.5, ease: 'power2.out' }, 4.16);
+
+      dots.forEach((dot) => {
+        dot.addEventListener('click', () => {
+          if (!storyTrigger) return;
+          const index = Number(dot.dataset.sceneIndex);
+          if (Number.isNaN(index) || index < 0 || index >= sceneCount) return;
+          const targetY = storyTrigger.start + ((storyTrigger.end - storyTrigger.start) * (index / (sceneCount - 1)));
+          window.scrollTo({ top: targetY, behavior: 'smooth' });
+        });
+      });
+
+    } else {
+      if (flatScrollMode) {
+        document.body.classList.add('flat-scroll');
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const index = sceneLayers.indexOf(entry.target);
+            if (index === -1) return;
+            setSceneIndex(index);
+            gsap.fromTo(entry.target, { y: 24, autoAlpha: 0.7 }, { y: 0, autoAlpha: 1, duration: 0.55, ease: 'power2.out', overwrite: true });
+          });
+        }, { threshold: 0.56 });
+
+        sceneLayers.forEach((layer) => observer.observe(layer));
+      }
+      gsap.set(sceneLayers, { autoAlpha: 1, clearProps: 'transform,visibility,opacity' });
+      sceneLayers.forEach((layer) => {
+        layer.classList.add('is-active');
+        layer.style.display = 'grid';
+        layer.style.position = 'relative';
+        layer.style.minHeight = '100svh';
+      });
+      gsap.set(sceneBackgrounds, { autoAlpha: 0, display: 'none' });
+      if (reducedMotion) {
+        cursor.style.display = 'none';
+      } else {
+        cursor.style.display = '';
+      }
+    }
+
+    if (!reducedMotion) {
+      document.addEventListener('pointermove', onMove);
+      document.querySelectorAll('.cta-link, .button, input, button').forEach((el) => {
+        el.addEventListener('pointerenter', () => setCursorMode(el.tagName === 'INPUT' || el.classList.contains('button-primary') ? 'cta' : 'solution'));
+        el.addEventListener('pointerleave', () => setCursorMode(''));
+      });
+    }
+
+    setSceneIndex(0);
+    updateAtmosphere(0.5, 0.5);
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const email = document.getElementById('email');
+
+      if (!email.checkValidity()) {
+        email.reportValidity();
+        return;
+      }
+
+      submitButton.disabled = true;
+      submitButton.textContent = 'Added';
+      success.style.display = 'block';
+
+      if (!reducedMotion) {
+        gsap.fromTo(success, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' });
+      }
+
+      email.value = '';
+    });
+
+    window.addEventListener('pointermove', (event) => {
+      if (reducedMotion) return;
+      const x = event.clientX / window.innerWidth;
+      const y = event.clientY / window.innerHeight;
+      updateAtmosphere(x, y);
+    }, { passive: true });
+
+    window.addEventListener('resize', () => {
+      updateAtmosphere(pointer.x, pointer.y);
+      if (storyTrigger) {
+        ScrollTrigger.refresh();
+      }
+    });
+
+    window.addEventListener('hashchange', () => {
+      if (!storyTrigger) return;
+      const hash = window.location.hash.replace('#', '');
+      const index = sceneAnchors.indexOf(hash);
+      if (index === -1) return;
+      const targetY = storyTrigger.start + ((storyTrigger.end - storyTrigger.start) * (index / (sceneCount - 1)));
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

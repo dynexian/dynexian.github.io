@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vayuraksha Smart - Forecast &amp; Peaks</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed-dim": "#95d4b3",
+                    "primary-fixed": "#b1f0ce",
+                    "inverse-on-surface": "#eff1f0",
+                    "tertiary": "#713638",
+                    "error-container": "#ffdad6",
+                    "surface-dim": "#d8dada",
+                    "outline": "#707973",
+                    "inverse-primary": "#95d4b3",
+                    "on-tertiary-fixed-variant": "#6f3537",
+                    "tertiary-fixed": "#ffdad9",
+                    "error": "#ba1a1a",
+                    "surface-bright": "#f8faf9",
+                    "secondary-fixed": "#92f7c3",
+                    "tertiary-container": "#8d4d4e",
+                    "background": "#f8faf9",
+                    "surface-container-highest": "#e1e3e2",
+                    "secondary-fixed-dim": "#75daa8",
+                    "on-primary-fixed-variant": "#0e5138",
+                    "tertiary-fixed-dim": "#ffb3b3",
+                    "surface-container": "#eceeed",
+                    "on-primary": "#ffffff",
+                    "on-primary-container": "#a8e7c5",
+                    "primary-container": "#2d6a4f",
+                    "surface-container-high": "#e6e9e8",
+                    "on-primary-fixed": "#002114",
+                    "surface": "#f8faf9",
+                    "on-surface": "#191c1c",
+                    "on-secondary-fixed-variant": "#005235",
+                    "on-background": "#191c1c",
+                    "outline-variant": "#bfc9c1",
+                    "on-surface-variant": "#404943",
+                    "on-tertiary-container": "#ffcfce",
+                    "on-error": "#ffffff",
+                    "on-secondary-container": "#00734d",
+                    "on-secondary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "surface-container-low": "#f2f4f3",
+                    "on-tertiary": "#ffffff",
+                    "surface-variant": "#e1e3e2",
+                    "secondary": "#006c48",
+                    "on-tertiary-fixed": "#390b0e",
+                    "surface-tint": "#2c694e",
+                    "secondary-container": "#92f7c3",
+                    "on-secondary-fixed": "#002113",
+                    "primary": "#0f5238",
+                    "inverse-surface": "#2e3131"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "1.5rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        }
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-manrope { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bezier-curve {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 0;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed antialiased">
+<!-- TopAppBar -->
+<header class="bg-[#f8faf9] dark:bg-[#0a0d0c] fixed top-0 w-full z-50">
+<div class="flex justify-between items-center px-6 h-16 w-full max-w-screen-xl mx-auto">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#0f5238] dark:text-[#92f7c3]">wifi</span>
+<h1 class="text-xl font-manrope font-extrabold text-[#0f5238] dark:text-[#92f7c3] tracking-tight">Vayuraksha</h1>
+</div>
+<div class="h-10 w-10 rounded-full bg-surface-container-highest overflow-hidden">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="close-up portrait of a professional man with a neutral background, soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoZlDSDP7nKyw5_xYNLgw_Etzt6tKoL6-ShCRm1AvTKt3GkKPpXdL5SC_bWIGI5XSdMCaTAPCbBLNQTsmZ5Ify0XmBB_6vTO85dqLYSIVkQBN6W4hBkvwaH8ZM_JU3V9ZOgERB2Z9ZxMo_4zOz2boo6C0lgLxUaLZfsgpd7CpoT0UN8E5g19fvioHc-eI1y5Xi_Kt8qhwbx2dgjSK4QCSVf1fj-0ZSk7paN6Nomh1U-PN7jd3mFF1v8Z9sf92L6M1VZLUIG4RM6w"/>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-screen-xl mx-auto min-h-screen">
+<!-- Hero Section: The "Breathing" Question -->
+<section class="mb-12">
+<h2 class="text-4xl md:text-6xl font-manrope font-extrabold tracking-tight text-on-surface mb-4">When will pollution peak?</h2>
+<p class="text-on-surface-variant font-body max-w-lg leading-relaxed">
+                Our atmospheric intelligence engine analyzes local traffic patterns and humidity to predict your air quality for the next 24 hours.
+            </p>
+</section>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Main Forecast Card (Asymmetric Span) -->
+<div class="md:col-span-2 bg-surface-container-lowest rounded-xl p-8 flex flex-col gap-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<span class="font-label text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-2 block">24-HOUR PROJECTION</span>
+<h3 class="text-2xl font-manrope font-bold text-on-surface">Peak pollution usually 7:30–10:00 PM</h3>
+</div>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+<span class="text-xs font-label font-semibold text-on-surface-variant">INDOOR</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-outline-variant"></div>
+<span class="text-xs font-label font-semibold text-on-surface-variant">OUTDOOR</span>
+</div>
+</div>
+</div>
+<!-- Custom SVG Graph: Atmospheric Precision -->
+<div class="relative h-64 w-full mt-4">
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 800 200">
+<!-- Background Zones -->
+<rect fill="#f2f4f3" height="100" opacity="0.5" width="800" x="0" y="0"></rect>
+<rect fill="#8d4d4e" height="200" opacity="0.05" width="200" x="550" y="0"></rect> <!-- Peak Highlight -->
+<!-- Gridless X-Axis -->
+<line stroke="#bfc9c1" stroke-opacity="0.2" stroke-width="1" x1="0" x2="800" y1="180" y2="180"></line>
+<!-- Outdoor Curve (Faded) -->
+<path d="M 0 160 Q 150 140 300 170 T 500 120 T 700 40 T 800 130" fill="none" stroke="#bfc9c1" stroke-dasharray="4 4" stroke-width="2"></path>
+<!-- Indoor Curve (Primary) -->
+<path class="bezier-curve" d="M 0 170 Q 100 175 200 160 T 400 165 T 600 120 T 750 150" fill="none" stroke="#0f5238" stroke-width="4"></path>
+<!-- Peak Indicator Dot -->
+<circle cx="680" cy="85" fill="#ba1a1a" r="6"></circle>
+<text fill="#ba1a1a" font-family="Manrope" font-size="12" font-weight="700" text-anchor="middle" x="680" y="70">PEAK</text>
+</svg>
+<!-- X-Axis Labels -->
+<div class="flex justify-between w-full mt-4 text-[10px] font-label font-bold text-on-surface-variant uppercase tracking-tighter">
+<span>12 PM</span>
+<span>4 PM</span>
+<span>8 PM</span>
+<span>12 AM</span>
+<span>4 AM</span>
+<span>8 AM</span>
+</div>
+</div>
+</div>
+<!-- Recommendation Block (High-End Card) -->
+<div class="bg-primary-container text-on-primary rounded-xl p-8 flex flex-col justify-between relative overflow-hidden">
+<!-- Background texture-like image -->
+<div class="absolute inset-0 opacity-10 mix-blend-overlay">
+<img alt="texture" class="w-full h-full object-cover" data-alt="abstract macro photography of flowing smoke or clean air currents in deep teal tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvekoYvoH7wI7A6UzaL1ei71ZfOlUiCEJYt8r1NcOu5t77qbNcM4CSO2tiPvctv8d5rPJugcRzBirSbrIIvD2Fs1keyyi2t16HkRrJY_UHq_TLSzekyJQnJ0mC1ZRGOlPJXbt-JyLc1sk3JuQcOAx7uEj0lmb9lyH2UfjfhX9RrCSCRJ656KFbG9HXPTsZBO2JQv5rN2D2i1TCY--qdry6B5ME2SRmiUaja7pKCFZdzBhS5KysdlmFT-1a2Df_sRBr2HSbF0Y04g"/>
+</div>
+<div class="relative z-10">
+<span class="material-symbols-outlined text-4xl mb-6" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<h4 class="text-xl font-manrope font-bold mb-4 leading-tight">Smart Action Required</h4>
+<p class="font-body text-sm opacity-90 leading-relaxed mb-6">
+                        Outdoor PM2.5 is projected to spike by 45% this evening. We recommend a pre-emptive cycle.
+                    </p>
+</div>
+<div class="relative z-10 bg-surface-container-lowest/10 backdrop-blur-md rounded-xl p-4 border border-on-primary/10">
+<p class="font-label text-xs uppercase tracking-widest font-bold mb-2 opacity-80">RECOMMENDATION</p>
+<p class="font-manrope font-bold text-lg">Run purifier in Auto mode before peak begins</p>
+</div>
+</div>
+<!-- Stats Column -->
+<div class="bg-surface-container-low rounded-xl p-8">
+<span class="font-label text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-6 block text-center">AIR INTEGRITY SCORE</span>
+<div class="flex flex-col items-center">
+<div class="relative flex items-center justify-center w-40 h-40">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-surface-container-highest" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-dasharray="440" stroke-dashoffset="110" stroke-width="12"></circle>
+</svg>
+<div class="absolute flex flex-col items-center">
+<span class="text-5xl font-manrope font-extrabold tracking-tighter">74</span>
+<span class="text-[10px] font-label font-bold text-on-surface-variant">GOOD</span>
+</div>
+</div>
+<div class="mt-8 space-y-6 w-full">
+<div class="flex justify-between items-center">
+<span class="text-xs font-label font-semibold text-on-surface-variant">HUMIDITY</span>
+<span class="text-sm font-manrope font-bold">42%</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs font-label font-semibold text-on-surface-variant">TEMP</span>
+<span class="text-sm font-manrope font-bold">24°C</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs font-label font-semibold text-on-surface-variant">PM2.5</span>
+<span class="text-sm font-manrope font-bold text-error">12 μg/m³</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Small Insight Card -->
+<div class="bg-surface-container-lowest rounded-xl p-6 flex items-center gap-6">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined">wb_sunny</span>
+</div>
+<div>
+<h5 class="text-sm font-manrope font-bold">Clear Skies Ahead</h5>
+<p class="text-xs text-on-surface-variant">Pollutants will disperse by 6:00 AM tomorrow.</p>
+</div>
+</div>
+<!-- Small Insight Card -->
+<div class="bg-surface-container-lowest rounded-xl p-6 flex items-center gap-6">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed">
+<span class="material-symbols-outlined">filter_alt</span>
+</div>
+<div>
+<h5 class="text-sm font-manrope font-bold">Filter Life</h5>
+<p class="text-xs text-on-surface-variant">Operating at 88% efficiency. No change needed.</p>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-3xl bg-[#f8faf9]/80 dark:bg-[#0a0d0c]/80 backdrop-blur-xl shadow-[0_-4px_24px_rgba(0,0,0,0.04)]">
+<div class="flex justify-around items-center h-24 pb-safe px-4 w-full">
+<!-- Home -->
+<a href="app-dashboard.html" class="flex flex-col items-center justify-center text-[#404943] dark:text-gray-500 px-5 py-1.5 hover:bg-[#f2f4f3] dark:hover:bg-gray-800 transition-all scale-90 duration-500 ease-in-out">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="font-inter text-[10px] uppercase tracking-widest font-semibold">Home</span>
+</a>
+<!-- Control -->
+<a href="app-control.html" class="flex flex-col items-center justify-center text-[#404943] dark:text-gray-500 px-5 py-1.5 hover:bg-[#f2f4f3] dark:hover:bg-gray-800 transition-all scale-90 duration-500 ease-in-out">
+<span class="material-symbols-outlined mb-1">tune</span>
+<span class="font-inter text-[10px] uppercase tracking-widest font-semibold">Control</span>
+</a>
+<!-- Forecast (Active) -->
+<a href="app-forecast.html" class="flex flex-col items-center justify-center bg-[#2d6a4f] text-white rounded-full px-5 py-1.5 scale-90 duration-500 ease-in-out">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">wb_sunny</span>
+<span class="font-inter text-[10px] uppercase tracking-widest font-semibold">Forecast</span>
+</a>
+<!-- Assist -->
+<a href="app-assist.html" class="flex flex-col items-center justify-center text-[#404943] dark:text-gray-500 px-5 py-1.5 hover:bg-[#f2f4f3] dark:hover:bg-gray-800 transition-all scale-90 duration-500 ease-in-out">
+<span class="material-symbols-outlined mb-1">auto_awesome</span>
+<span class="font-inter text-[10px] uppercase tracking-widest font-semibold">Assist</span>
+</a>
+</div>
+</nav>
+</body></html>

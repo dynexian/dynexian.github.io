@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vayu Raksha | Science and Vision</title>
+  <meta name="description" content="Science deep-dive and long-term AirAlgae vision for Vayu Raksha." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #ebedf0;
+      --muted: #9ba7b2;
+      --line: rgba(255, 255, 255, 0.14);
+      --bg0: #0d1013;
+      --bg1: #111920;
+      --bg2: #0a0f13;
+      --aqua: #39ff14;
+      --teal: #7befff;
+      --shadow: 0 18px 48px rgba(0, 0, 0, 0.35);
+      --radius: 20px;
+      --max: 1160px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body {
+      color: var(--ink);
+      font-family: 'Space Grotesk', sans-serif;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(57, 255, 20, 0.16), transparent 28%),
+        radial-gradient(circle at 85% 20%, rgba(123, 239, 255, 0.15), transparent 24%),
+        linear-gradient(160deg, var(--bg0), var(--bg1) 45%, var(--bg2));
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+
+    .shell { width: min(var(--max), calc(100% - 2rem)); margin: 0 auto; }
+
+    .top {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(15, 17, 20, 0.92), rgba(15, 17, 20, 0.52));
+      backdrop-filter: blur(14px);
+    }
+
+    .top-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.9rem 0;
+    }
+
+    .brand {
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(235, 237, 240, 0.9);
+    }
+
+    .nav { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+    .nav a {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0.52rem 0.75rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(235, 237, 240, 0.88);
+      background: rgba(255, 255, 255, 0.03);
+      transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+    }
+
+    .nav a:hover {
+      border-color: rgba(57, 255, 20, 0.45);
+      background: rgba(57, 255, 20, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .hero {
+      padding: clamp(2.2rem, 8vw, 5rem) 0 1.2rem;
+      display: grid;
+      gap: 1rem;
+    }
+
+    h1, h2 {
+      margin: 0;
+      font-family: 'Clash Display', sans-serif;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+    }
+
+    h1 { font-size: clamp(2.3rem, 7.5vw, 5.6rem); max-width: 14ch; }
+    .lede { margin: 0; max-width: 68ch; color: var(--muted); line-height: 1.75; }
+
+    .stack {
+      display: grid;
+      gap: 1rem;
+      padding: 1.2rem 0 2.4rem;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(4, 15, 24, 0.58);
+      box-shadow: var(--shadow);
+      padding: 1.2rem;
+      opacity: 0;
+      transform: translateY(14px);
+      animation: fade-up 620ms ease forwards;
+    }
+
+    .card:nth-of-type(2) { animation-delay: 90ms; }
+    .card:nth-of-type(3) { animation-delay: 180ms; }
+
+    .card h2 { font-size: clamp(1.6rem, 4vw, 2.8rem); margin-bottom: 0.8rem; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.85rem;
+      margin-top: 0.8rem;
+    }
+
+    .mini {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.9rem;
+    }
+
+    .mini strong {
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--aqua);
+      display: block;
+      margin-bottom: 0.45rem;
+    }
+
+    .mini p,
+    .card p {
+      margin: 0;
+      color: rgba(245, 248, 251, 0.86);
+      line-height: 1.75;
+    }
+
+    .phase-list {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .phase {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 0.9rem;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .phase .k {
+      display: block;
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 0.45rem;
+    }
+
+    .phase .v {
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    footer {
+      padding: 1.1rem 0 2rem;
+      color: rgba(235, 237, 240, 0.62);
+      font-size: 0.86rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 920px) {
+      .grid,
+      .phase-list { grid-template-columns: 1fr; }
+      .top-inner { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="shell top-inner">
+      <div class="brand">Vayu Raksha | Science and Vision</div>
+      <nav class="nav" aria-label="Site navigation">
+        <a href="index.html">Home</a>
+        <a href="vision.html">Science and Vision</a>
+        <a href="purifier.html">Product</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <h1>AirAlgae Research Program and Long-Term Direction</h1>
+      <p class="lede">This page holds the scientific narrative behind Vayu Raksha: what we are validating now, how the AirAlgae team is translating biology into reliable hardware, and how each execution phase maps to measurable outcomes.</p>
+    </section>
+
+    <section class="stack">
+      <article class="card">
+        <h2>Deep-Dive Research</h2>
+        <p>The hybrid system combines mechanical particulate capture with a biologically active chamber. Our active study tracks particulate reduction, volatile organic compound conversion behavior, algae vitality under urban load, and safe maintenance intervals for long-running deployments.</p>
+        <div class="grid">
+          <div class="mini">
+            <strong>Filtration science</strong>
+            <p>Modeling particle residence time through staged airflow paths to identify minimum dwell time for effective capture and conversion.</p>
+          </div>
+          <div class="mini">
+            <strong>Bioreactor behavior</strong>
+            <p>Monitoring growth curves, pH drift, and nutrient cycling to maintain algae health while preserving predictable purification output.</p>
+          </div>
+          <div class="mini">
+            <strong>Sensor validation</strong>
+            <p>Cross-checking PM2.5, VOC, and humidity streams with calibrated reference instruments to maintain confidence in user-facing data.</p>
+          </div>
+          <div class="mini">
+            <strong>Lifecycle and safety</strong>
+            <p>Studying cleaning windows, contamination risk, and fail-safe shutdown conditions for household-safe operation.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>AirAlgae Team Vision</h2>
+        <p>The long-term ambition is to move from passive filtering devices to adaptive indoor ecosystems. AirAlgae is building toward a modular respiratory platform where each unit learns local air patterns, tunes conversion behavior, and contributes to shared city-scale environmental intelligence.</p>
+        <div class="grid">
+          <div class="mini">
+            <strong>1 to 2 year horizon</strong>
+            <p>Reliable household units with transparent metrics, repeatable maintenance, and strong user trust in measured outcomes.</p>
+          </div>
+          <div class="mini">
+            <strong>3 to 5 year horizon</strong>
+            <p>Networked systems for schools and offices with predictive alerts and centralized diagnostics.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>Workflow Phases</h2>
+        <p>Execution is organized into four linked phases from your deck, each ending with tangible outputs and review gates.</p>
+        <div class="phase-list">
+          <div class="phase">
+            <span class="k">Understanding</span>
+            <span class="v">Map user pain points, indoor pollution realities, and policy constraints across target locations.</span>
+          </div>
+          <div class="phase">
+            <span class="k">Product Development</span>
+            <span class="v">Prototype the hybrid filtration stack, instrument tests, and confirm repeatable sensor-driven control.</span>
+          </div>
+          <div class="phase">
+            <span class="k">Branding</span>
+            <span class="v">Translate science into an understandable story with trust-first communication and visual clarity.</span>
+          </div>
+          <div class="phase">
+            <span class="k">Scaling</span>
+            <span class="v">Expand manufacturing readiness, service workflows, and post-sale support for broader deployment.</span>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="shell">AirAlgae research track | Documentation page for science and roadmap</footer>
+</body>
+</html>
