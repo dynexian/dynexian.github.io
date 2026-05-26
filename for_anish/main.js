@@ -122,51 +122,46 @@ async function buildSceneAsync() {
   await nextFrame();
   buildLights();
 
-  // Step 2 — Island
-  setLoaderProgress(20, 'Shaping the island…');
-  await nextFrame();
-  buildIsland();
-
-  // Step 3 — Tree skeleton
-  setLoaderProgress(32, 'Growing the trunk and branches…');
+  // Step 2 — Tree skeleton
+  setLoaderProgress(20, 'Growing the trunk and branches…');
   await nextFrame();
   const { treeMeshGroup, tips } = generateTreeGeometry();
   treeGroup = treeMeshGroup;
   treeGroup.position.y = -1.1;
   scene.add(treeGroup);
 
-  // Step 4 — Foliage blobs (heaviest step)
-  setLoaderProgress(48, 'Filling the canopy with leaves…');
+  // Step 3 — Foliage blobs (heaviest step)
+  setLoaderProgress(36, 'Filling the canopy with leaves…');
   await nextFrame();
   spawnFoliage(tips);
 
-  // Step 5 — Canopy glow + orbs
-  setLoaderProgress(58, 'Hanging the glowing wish orbs…');
+  // Step 4 — Canopy glow + orbs
+  setLoaderProgress(52, 'Hanging the glowing wish orbs…');
   await nextFrame();
   buildCanopyGlow();
   spawnWishOrbs(tips);
 
-  // Step 6 — Fireflies
+  // Step 5 — Fireflies
   setLoaderProgress(65, 'Waking the fireflies…');
   await nextFrame();
   spawnFireflies();
 
-  // Step 7 — Ground, mountains, rocks
+  // Step 6 — Ground, mountains, rocks
   setLoaderProgress(72, 'Sculpting the mountains…');
   await nextFrame();
   buildSurroundings();
 
-  // Step 8 — Butterflies
+  // Step 7 — Butterflies
   setLoaderProgress(84, 'Calling the butterflies…');
   await nextFrame();
   spawnButterflies();
 
-  // Step 9 — Animals
+  // Step 8 — Animals
   setLoaderProgress(93, 'Waking the deer and birds…');
   await nextFrame();
   spawnAnimals();
 
-  // Step 10 — Event listeners + intro text
+  // Step 9 — Event listeners + intro text
   setLoaderProgress(100, 'The grove is ready ✨');
   await nextFrame();
   setupEventListeners();
@@ -254,22 +249,6 @@ function buildLights() {
   scene.add(rimLight);
   const hemisphereLight = new THREE.HemisphereLight(0xffe6f0, 0x2f241f, 0.12);
   scene.add(hemisphereLight);
-}
-
-// 5b. Build Floating Island
-function buildIsland() {
-  const islandGeo = new THREE.CylinderGeometry(5.1, 4.3, 0.8, 8, 1);
-  islandGeo.translate(0, -0.4, 0);
-  const islandMat = new THREE.MeshStandardMaterial({
-    color: 0x3a7130,
-    roughness: 0.98,
-    metalness: 0.0,
-    flatShading: true
-  });
-  floatingIsland = new THREE.Mesh(islandGeo, islandMat);
-  floatingIsland.position.y = -1.1;
-  floatingIsland.receiveShadow = true;
-  scene.add(floatingIsland);
 }
 
 // 5c. Canopy internal glow point light
@@ -616,7 +595,8 @@ function spawnWishOrbs(tips) {
     const orbColor = orbColors[idx % orbColors.length];
 
     // Core Orb Mesh
-    const orbGeo = new THREE.SphereGeometry(0.22, 12, 12);
+    const orbRadius = isMobile ? 0.32 : 0.22;
+    const orbGeo = new THREE.SphereGeometry(orbRadius, 12, 12);
     const orbMat = new THREE.MeshBasicMaterial({
       color: orbColor,
       transparent: true,
@@ -651,7 +631,7 @@ function spawnWishOrbs(tips) {
     orbsArray.push(orbMesh);
 
     // Outer Glow Mesh (Additive blending)
-    const outerGeo = new THREE.SphereGeometry(0.45, 12, 12);
+    const outerGeo = new THREE.SphereGeometry(isMobile ? 0.62 : 0.45, 12, 12);
     const outerMat = new THREE.MeshBasicMaterial({
       color: orbColor,
       transparent: true,
@@ -1479,11 +1459,6 @@ function animate() {
   requestAnimationFrame(animate);
 
   const time = clock.getElapsedTime();
-
-  // Floating Island subtle breathing rotation
-  if (floatingIsland) {
-    floatingIsland.rotation.y = time * 0.035;
-  }
 
   // Sprawling tree flexing/rotation
   if (treeGroup) {
