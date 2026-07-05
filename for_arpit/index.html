@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Sakura Path — A Birthday Wish for Arpit</title>
+  <!-- SEO & Meta Tags -->
+  <meta name="description" content="Step into a serene, interactive 3D Japanese garden. Spin the glowing sakura tree and tap on floating lanterns to reveal sweet, admiring wishes.">
+  <meta name="theme-color" content="#1a1a2e">
+  
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+  
+  <!-- Styling -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ═══ LOADING SCREEN ═══ -->
+  <div id="loading-screen">
+    <div class="loader-inner">
+
+      <!-- Animated tree icon -->
+      <div class="loader-tree" aria-hidden="true">
+        <div class="tree-trunk"></div>
+        <div class="tree-canopy c1"></div>
+        <div class="tree-canopy c2"></div>
+        <div class="tree-canopy c3"></div>
+        <div class="tree-glow"></div>
+      </div>
+
+      <h1 class="loader-title">The Sakura Path</h1>
+      <p class="loader-subtitle">A serene space is taking shape…</p>
+
+      <!-- Progress bar -->
+      <div class="loader-bar-wrap" id="loader-bar-wrap">
+        <div class="loader-bar" id="loader-bar"></div>
+      </div>
+      <p class="loader-status" id="loader-status">Preparing the ground…</p>
+      
+      <button id="enter-garden-btn" class="enter-garden-btn" style="display: none;">Enter The Garden</button>
+    </div>
+  </div>
+  <!-- ═══════════════════════ -->
+
+  <!-- Serene Background Music Loop -->
+  <audio id="bg-music" loop src="bgm.mp3"></audio>
+
+  <!-- Fullscreen Minimalist Intro Sequence Overlay -->
+  <div id="intro-sequence">
+    <div class="intro-content">
+      <p id="intro-text" class="intro-text-active">Paths rarely stay straight...</p>
+      <div class="intro-tap-prompt">Tap anywhere to continue</div>
+      <button id="skip-intro-btn" class="skip-intro-btn">Skip →</button>
+    </div>
+    <div class="intro-progress-bar">
+      <div class="intro-progress-fill" id="intro-progress"></div>
+    </div>
+  </div>
+
+  <!-- Debug console (visible when errors occur) -->
+  <div id="debug-console" style="display:none;position:fixed;left:12px;bottom:12px;z-index:9999;padding:10px;background:rgba(0,0,0,0.7);color:#fff;border-radius:8px;max-width:320px;font-family:monospace;font-size:12px;">Debug: <span id="debug-text">no issues</span></div>
+
+  <!-- Background Gradient Canvas -->
+  <div class="sunset-background"></div>
+
+  <!-- Three.js Canvas Container -->
+  <div id="canvas-container"></div>
+
+  <!-- UI Overlay: Main Title and Interactive Instructions -->
+  <header class="app-header">
+    <h1>The Sakura Path</h1>
+    <p class="subtitle">A serene space of admiration and warmth</p>
+  </header>
+
+  <!-- Instructional Toast -->
+  <div class="instruction-toast" id="instruction-toast">
+    <div class="toast-icon">✨</div>
+    <span>Swipe or drag to orbit. Tap a glowing orb to read a wish.</span>
+    <button class="read-wishes-btn" id="open-first-orb-btn">Read Wishes</button>
+  </div>
+
+  <!-- Premium Glassmorphism Wish Card (Initially Hidden) -->
+  <div class="wish-overlay-container" id="wish-overlay-container">
+    <div class="wish-card" id="wish-card">
+      <div class="wish-card-glow"></div>
+      <button class="close-btn" id="close-btn" aria-label="Close wish">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/>
+        </svg>
+      </button>
+      <div class="wish-card-content">
+        <span class="wish-tag">A Message of Warmth</span>
+        <blockquote class="wish-text" id="wish-text">
+          "Wishing you a year filled with great adventures, loud laughs, and quiet, peaceful moments. You absolutely deserve the best!"
+        </blockquote>
+        <div class="wish-divider"></div>
+        <cite class="wish-author" id="wish-author">— The Grapevine</cite>
+      </div>
+      <div class="wish-card-actions">
+        <button class="action-btn next-wish-btn" id="next-wish-btn">Next Wish →</button>
+        <button class="action-btn back-grove-btn" id="back-grove-btn">Back to Grove</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio element for a subtle ambient sound (Optional/Premium touch if they interact) -->
+  <!-- Audio Toggle Button -->
+  <div class="ambient-audio-btn" id="audio-toggle" title="Toggle serene ambient sound" style="display: none;">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+      <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+    </svg>
+  </div>
+  
+  <!-- Night Mode Toggle Button -->
+  <div class="night-mode-btn" id="night-mode-toggle" title="Toggle Night Mode" style="display: none;">
+    <svg id="moon-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+      <path d="M9.37 5.51A7.35 7.35 0 009.1 7.5c0 4.08 3.32 7.4 7.4 7.4.68 0 1.35-.09 1.99-.27A7.014 7.014 0 0112 19c-3.86 0-7-3.14-7-7 0-2.93 1.81-5.45 4.37-6.49zM12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 01-4.4 2.26 5.403 5.403 0 01-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/>
+    </svg>
+    <svg id="sun-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="display: none;">
+      <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 00-1.41 0 .996.996 0 000 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 00-1.41 0 .996.996 0 000 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96a.996.996 0 000-1.41.996.996 0 00-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36a.996.996 0 000-1.41.996.996 0 00-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/>
+    </svg>
+  </div>
+
+  <!-- CDN Dependencies -->
+  <!-- 1. Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- 2. OrbitControls -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <!-- 3. GSAP (for animations) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  
+  <!-- Custom Logic -->
+  <script src="main.js"></script>
+</body>
+</html>
