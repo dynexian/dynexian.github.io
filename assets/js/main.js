@@ -291,13 +291,64 @@
                     
 
                     <div class="timeline-container">
-
                         <div class="timeline-line"></div>
-
                         
+                        <!-- Exia AMM -->
+                        <div class="timeline-node" style="animation: fadeIn 0.4s var(--ease-glide) forwards;">
+                            <div class="timeline-indicator"></div>
+                            <div class="glass-card timeline-card">
+                                <div class="timeline-date-badge">Solana / Rust</div>
+                                <h3>Exia AMM</h3>
+                                <div class="timeline-org">Decentralised Exchange Primitive</div>
+                                <div class="timeline-domain-indicator d-web3">Web3, Blockchain & Rust Concurrency</div>
+                                
+                                <div class="timeline-meta-box">
+                                    <div class="timeline-meta-col">
+                                        <label>Where (Context)</label>
+                                        <span>Solana Devnet, Anchor Framework, strictly validated fixed-point math.</span>
+                                    </div>
+                                    <div class="timeline-meta-col">
+                                        <label>Why & How</label>
+                                        <span>Automated Market Maker enforcing constant-product invariant x*y=k.</span>
+                                    </div>
+                                </div>
+                                <div class="tag-group" style="margin-top: 1rem;">
+                                    <span class="tag">Rust</span>
+                                    <span class="tag">Anchor</span>
+                                    <span class="tag">Solana</span>
+                                    <span class="tag">TypeScript SDK</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- minish -->
+                        <div class="timeline-node" style="animation: fadeIn 0.45s var(--ease-glide) forwards;">
+                            <div class="timeline-indicator"></div>
+                            <div class="glass-card timeline-card">
+                                <div class="timeline-date-badge">Systems / CLI</div>
+                                <h3>minish</h3>
+                                <div class="timeline-org">Zero-dependency Unix Shell</div>
+                                <div class="timeline-domain-indicator d-iot">Embedded & Systems Architecture</div>
+                                
+                                <div class="timeline-meta-box">
+                                    <div class="timeline-meta-col">
+                                        <label>Where (Context)</label>
+                                        <span>Independent POSIX shell written entirely from scratch in pure Rust.</span>
+                                    </div>
+                                    <div class="timeline-meta-col">
+                                        <label>Why & How</label>
+                                        <span>Concurrent multi-stage command execution, file redirections, and tokenizing.</span>
+                                    </div>
+                                </div>
+                                <div class="tag-group" style="margin-top: 1rem;">
+                                    <span class="tag">Rust</span>
+                                    <span class="tag">CLI</span>
+                                    <span class="tag">Concurrency</span>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- Solana & Rust Intern -->
-
                         <div class="timeline-node" style="animation: fadeIn 0.5s var(--ease-glide) forwards;">
 
                             <div class="timeline-indicator"></div>
@@ -596,8 +647,49 @@
 
                     <div class="archive-grid" id="project-archive-grid">
 
-                        <!-- Project 1 -->
+                        <!-- Project: Exia AMM -->
+                        <div class="glass-card archive-card interactable" data-proj-domain="web3" style="animation: glassReveal 0.4s var(--ease-glide) forwards;">
+                            <div class="archive-header">
+                                <span class="archive-badge web3">Solana DeFi</span>
+                                <div class="archive-icon"><i class="fa-brands fa-rust"></i></div>
+                            </div>
+                            <div>
+                                <h3>Exia AMM</h3>
+                                <p style="color:var(--text-muted);">A constant-product Automated Market Maker (CPMM) built on the Solana Virtual Machine. Features sovereign PDA vaults, dual protocol fee treasuries, and a TWAP oracle using fixed-point math.</p>
+                                <div class="archive-meta-block">
+                                    <div class="archive-meta-row"><label>Where</label><span>Solana Devnet / Anchor Framework</span></div>
+                                    <div class="archive-meta-row"><label>Why</label><span>Decentralised exchange primitive</span></div>
+                                    <div class="archive-meta-row"><label>How</label><span>Rust + Anchor + TypeScript SDK</span></div>
+                                </div>
+                            </div>
+                            <div class="archive-footer">
+                                <div class="mono" style="font-size:0.72rem; color:var(--text-muted);">Rust // Anchor // Solana SVM</div>
+                                <a href="https://github.com/dynexian/exia_amm" target="_blank" class="cred-link interactable">Repository <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                            </div>
+                        </div>
 
+                        <!-- Project: minish -->
+                        <div class="glass-card archive-card interactable" data-proj-domain="web3" style="animation: glassReveal 0.45s var(--ease-glide) forwards;">
+                            <div class="archive-header">
+                                <span class="archive-badge web3">Rust CLI Systems</span>
+                                <div class="archive-icon"><i class="fa-solid fa-terminal"></i></div>
+                            </div>
+                            <div>
+                                <h3>minish</h3>
+                                <p style="color:var(--text-muted);">A small Unix shell written from scratch in pure Rust. Handles tokenizer pipelines, concurrent multi-stage commands, and file redirections with zero unsafe dependencies.</p>
+                                <div class="archive-meta-block">
+                                    <div class="archive-meta-row"><label>Where</label><span>Independent Systems Utility</span></div>
+                                    <div class="archive-meta-row"><label>Why</label><span>Zero-dependency POSIX shell implementation</span></div>
+                                    <div class="archive-meta-row"><label>How</label><span>Rust (Standard Library Only)</span></div>
+                                </div>
+                            </div>
+                            <div class="archive-footer">
+                                <div class="mono" style="font-size:0.72rem; color:var(--text-muted);">Rust // CLI // Concurrency</div>
+                                <a href="https://github.com/dynexian/minish" target="_blank" class="cred-link interactable">Repository <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- Project 1 -->
                         <div class="glass-card archive-card interactable" data-proj-domain="iot" style="animation: glassReveal 0.5s var(--ease-glide) forwards;">
 
                             <div class="archive-header">
@@ -1078,16 +1170,28 @@
 
                                 <section class="resume-section">
 
-                                    <h2>Key Projects</h2>
+                                    <div class="resume-section">
+                                        <h2>Key Projects</h2>
 
-                                    
+                                        <div class="resume-timeline-item">
+                                            <div class="resume-timeline-header">
+                                                <h3>Exia AMM (Solana DEX Protocol)</h3>
+                                                <span class="resume-timeline-date">Rust / Anchor</span>
+                                            </div>
+                                            <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.45; margin-top:0.35rem;">A constant-product Automated Market Maker (CPMM) built on the Solana Virtual Machine. Features sovereign PDA vaults, dual protocol fee treasuries, and a Time-Weighted Average Price (TWAP) oracle using strict fixed-point math.</p>
+                                        </div>
 
-                                    <div class="resume-timeline-item">
+                                        <div class="resume-timeline-item">
+                                            <div class="resume-timeline-header">
+                                                <h3>minish (Unix Shell)</h3>
+                                                <span class="resume-timeline-date">Rust (Standard Library)</span>
+                                            </div>
+                                            <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.45; margin-top:0.35rem;">A lightweight Unix shell written from scratch in pure Rust. Handles tokenizer pipelines, concurrent multi-stage command execution, and file redirections with zero external crate dependencies.</p>
+                                        </div>
 
-                                        <div class="resume-timeline-header">
-
-                                            <h3>The Rayon Purge (Rust Concurrency CLI Tool)</h3>
-
+                                        <div class="resume-timeline-item">
+                                            <div class="resume-timeline-header">
+                                                <h3>The Rayon Purge (Rust Concurrency CLI Tool)</h3>
                                             <span class="resume-timeline-date">Standalone Systems Program</span>
 
                                         </div>
