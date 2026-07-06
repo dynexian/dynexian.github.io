@@ -10,7 +10,7 @@ const wishData = [
   },
   {
     author: "From the Sidelines",
-    message: "We don't talk like we used to, and that's okay. But just know — whenever I hear you're doing well, it genuinely makes my day."
+    message: "We don't talk like we used to, and that's okay. But just know that whenever I hear you're doing well, it genuinely makes my day."
   },
   {
     author: "A Fellow Traveller",
@@ -66,7 +66,7 @@ const introTexts = [
   "It's been a long time since we walked the same road.",
   "But the roots of old connections don't just disappear.",
   "I might not know exactly where your path has led you today...",
-  "...but I hope you are standing somewhere beautiful. Happy Birthday."
+  "...but I hope you are standing somewhere beautiful. Happy Birthday, dear Arpit."
 ];
 
 // Interaction and Camera Defaults
