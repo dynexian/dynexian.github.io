@@ -5,24 +5,24 @@
 // 1. Wish Data Array
 const wishData = [
   {
-    author: "An Old Friend",
-    message: "Time and distance change a lot of things, but they never managed to change the respect I have for you. You've always been someone worth knowing."
+    author: "From Shubham",
+    message: "...carrying a blazing, protective heart underneath it all. A truly rare kind of person."
   },
   {
-    author: "From the Sidelines",
-    message: "We don't talk like we used to, and that's okay. But just know that whenever I hear you're doing well, it genuinely makes my day."
+    author: "Also from Shubham",
+    message: "Time goes by so fast, and we are nearly adults now. I may not know this exact version of you today..."
   },
   {
-    author: "A Fellow Traveller",
-    message: "You were always the kind of person who figured things out on your own terms. I admire that more now than I ever said back then."
+    author: "Still me, hehe",
+    message: "...but I admire all of you. Your past, your present, and your future. What I know, and even what I don't."
   },
   {
-    author: "Someone Who Remembers",
-    message: "The good times we had weren't small. They shaped parts of who I am. I hope your birthday reminds you of how many lives you've quietly touched."
+    author: "Shubham",
+    message: "I know you've always been the one looking out for your family. I wish that you and all your loved ones are doing incredibly well. Please send them my regards."
   },
   {
-    author: "A Quiet Well-Wisher",
-    message: "Here's to another year of you being unapologetically you. The world needs more of that. Happy Birthday, Arpit."
+    author: "Your well-wisher, Shubham",
+    message: "Happy 22nd Birthday, Arpit. Just know you will always have a place in my life, hehe."
   }
 ];
 
@@ -61,12 +61,11 @@ const fireworks = []; // Array of active firework particle systems
 let appState = 'INTRO_PHASE'; // 'INTRO_PHASE' | 'TREE_PHASE'
 let introStep = 0;
 const introTexts = [
-  "Paths rarely stay straight...",
-  "...and people rarely stay the same.",
-  "It's been a long time since we walked the same road.",
-  "But the roots of old connections don't just disappear.",
-  "I might not know exactly where your path has led you today...",
-  "...but I hope you are standing somewhere beautiful. Happy Birthday, dear Arpit."
+  "Out of the hundred billion people who have ever lived on this planet...",
+  "...I happened to meet you. Among trillions of cosmic exceptions, your existence is one truly worth celebrating.",
+  "You've been here for 22 years now. That’s 8,035.5 days. 192,852 hours. 11,571,120 minutes. 694,267,200 seconds. (I don't know your exact birth time, so this one's rounded, hehe).",
+  "I’ve always admired your hardened ways of doing things. Building from scratch, manually crafting 3D models and art, pulling things apart just to truly understand and learn them.",
+  "You look at nature and the world with a uniquely beautiful perspective. You’ve been through a lot silently, yet you remained peaceful, calm, and quiet..."
 ];
 
 // Interaction and Camera Defaults
