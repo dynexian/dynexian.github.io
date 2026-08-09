@@ -5,24 +5,28 @@
 // 1. Wish Data Array
 const wishData = [
   {
-    author: "An Old Friend",
-    message: "Time and distance change a lot of things, but they never managed to change the respect I have for you. You've always been someone worth knowing."
+    author: "From Shubham",
+    message: "Wishing you the best on your special day."
   },
   {
-    author: "From the Sidelines",
-    message: "We don't talk like we used to, and that's okay. But just know that whenever I hear you're doing well, it genuinely makes my day."
+    author: "Also Shubham",
+    message: "May you and all your loved ones cherish in good health, well-being, and prosperity throughout the years to come."
   },
   {
-    author: "A Fellow Traveller",
-    message: "You were always the kind of person who figured things out on your own terms. I admire that more now than I ever said back then."
+    author: "Yep, still Shubham",
+    message: "May you achieve all that you worked hard for."
   },
   {
-    author: "Someone Who Remembers",
-    message: "The good times we had weren't small. They shaped parts of who I am. I hope your birthday reminds you of how many lives you've quietly touched."
+    author: "Shubham again",
+    message: "May you find the love that stays forever with you. Forever blooming together."
   },
   {
-    author: "A Quiet Well-Wisher",
-    message: "Here's to another year of you being unapologetically you. The world needs more of that. Happy Birthday, Dhananjay."
+    author: "Yours truly, Shubham",
+    message: "May your journey ahead be filled with moments of clarity, peace, and quiet victories that make it all worth it."
+  },
+  {
+    author: "Hehe",
+    message: "May you always find a reason to smile, even on the longest days. Enjoy the view along the way."
   }
 ];
 
@@ -61,12 +65,12 @@ const fireworks = []; // Array of active firework particle systems
 let appState = 'INTRO_PHASE'; // 'INTRO_PHASE' | 'TREE_PHASE'
 let introStep = 0;
 const introTexts = [
-  "Paths rarely stay straight...",
-  "...and people rarely stay the same.",
-  "It's been a long time since we walked the same road.",
-  "But the roots of old connections don't just disappear.",
-  "I might not know exactly where your path has led you today...",
-  "...but I hope you are standing somewhere beautiful. Happy Birthday, dear Dhananjay."
+  "Out of all the people that have ever lived...",
+  "...and all that are alive, and all that will ever come,",
+  "you being here is a one-in-a-trillion odds.",
+  "For such a miracle you are.",
+  "Glad I am to share this time with you. Happy birthday, Dhananjay.",
+  "You have been around for 201,624 hours, 12,097,440 minutes, and 725,846,400 seconds... rounded to the nearest 24 hours, hehe."
 ];
 
 // Interaction and Camera Defaults
@@ -727,7 +731,7 @@ function buildSurroundings() {
   hCtx.font = 'bold 90px "Comic Sans MS", cursive';
   hCtx.textAlign = 'center';
   hCtx.textBaseline = 'middle';
-  hCtx.fillText("psst... happy birthday, dhananjay!", 512, 128);
+  hCtx.fillText("psst... took me 201,624 hours to find you in this trillion-to-one odds.", 512, 128);
   
   const hiddenTex = new THREE.CanvasTexture(hiddenCanvas);
   hiddenTex.needsUpdate = true;
