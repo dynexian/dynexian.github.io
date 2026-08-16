@@ -5,27 +5,27 @@
 // 1. Wish Data Array
 const wishData = [
   {
-    author: "From Shubham",
-    message: "Wishing you the best on your special day."
+    author: "For Nishu",
+    message: "Wishing you the best on your special day, Nishu."
   },
   {
-    author: "Also Shubham",
+    author: "For Nishu",
     message: "May you and all your loved ones cherish in good health, well-being, and prosperity throughout the years to come."
   },
   {
-    author: "Yep, still Shubham",
+    author: "For Nishu",
     message: "May you achieve all that you worked hard for."
   },
   {
-    author: "Shubham again",
+    author: "For Nishu",
     message: "May you find the love that stays forever with you. Forever blooming together."
   },
   {
-    author: "Yours truly, Shubham",
+    author: "For Nishu",
     message: "May your journey ahead be filled with moments of clarity, peace, and quiet victories that make it all worth it."
   },
   {
-    author: "Hehe",
+    author: "For Nishu",
     message: "May you always find a reason to smile, even on the longest days. Enjoy the view along the way."
   }
 ];
@@ -69,7 +69,7 @@ const introTexts = [
   "...and all that are alive, and all that will ever come,",
   "you being here is a one-in-a-trillion odds.",
   "For such a miracle you are.",
-  "Glad I am to share this time with you. Happy birthday, Dhananjay.",
+  "Glad I am to share this time with you. Happy birthday, Nishu.",
   "You have been around for 201,624 hours, 12,097,440 minutes, and 725,846,400 seconds... rounded to the nearest 24 hours, hehe."
 ];
 
