@@ -70,7 +70,7 @@ const introTexts = [
   "you being here is a one-in-a-trillion odds.",
   "For such a miracle you are.",
   "Glad I am to share this time with you. Happy birthday, Nishu.",
-  "You have been around for 201,624 hours, 12,097,440 minutes, and 725,846,400 seconds... rounded to the nearest 24 hours, hehe."
+  "You have been around for 192,840 hours, 11,570,400 minutes, and 694,224,000 seconds... rounded to the nearest 24 hours, hehe. (I did not yet ask about which year you were born so I am assuming it to be 2004 hehe sorry)"
 ];
 
 // Interaction and Camera Defaults
@@ -731,7 +731,7 @@ function buildSurroundings() {
   hCtx.font = 'bold 90px "Comic Sans MS", cursive';
   hCtx.textAlign = 'center';
   hCtx.textBaseline = 'middle';
-  hCtx.fillText("psst... took me 201,624 hours to find you in this trillion-to-one odds.", 512, 128);
+  hCtx.fillText("psst... took me 192,840 hours to find you in this trillion-to-one odds.", 512, 128);
   
   const hiddenTex = new THREE.CanvasTexture(hiddenCanvas);
   hiddenTex.needsUpdate = true;
